@@ -1,0 +1,1343 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Valoração Atest.AI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+/* Layout: canvas 16:9 de 1600×900 escalado para caber na janela (estilo PowerPoint); em telas estreitas vira leitura rolável.
+   Identidade herdada do deck DataCraft: azul Itaú, laranja de destaque, verde para "medido".
+   Gráficos: hard money = laranja, soft money = azul (validados para daltonismo nos dois temas). */
+:root{
+  --brand:#001E62; --brand2:#06348A; --accent:#FF6200; --accent2:#FF8A2A; --ok:#008A22;
+  --bg:#F7F8FB; --card:#FFFFFF; --card2:#FBFCFF; --line:#DDE3EF;
+  --ink:#0B2E7A; --txt:#101B3D; --body:#40506E; --muted:#62708B;
+  --soft-o:#FFF1E7; --line-o:#FFD4AF; --ink-o:#C85A00;
+  --soft-b:#EEF3FF; --line-b:#D8E2F5;
+  --soft-g:#E3F5E9; --line-g:#BFE3CC; --ink-g:#0E7A3A;
+  --soft-p:#F3EEFC; --line-p:#DCCFF5; --ink-p:#5B2DB0;
+  --head:#001E62; --onhead:#FFFFFF; --onhead-sub:#C9D6F2;
+  --cta1:#001E62; --cta2:#06348A;
+  --frame:#E4E8F0; --glow1:rgba(255,98,0,.10); --glow2:rgba(0,30,98,.10); --grad-end:#EEF2F8;
+  --shadow:0 16px 44px rgba(0,30,98,.10); --chrome:rgba(255,255,255,.88);
+  --veil:rgba(2,12,34,.58);
+  --c-hard:#E85A00; --c-soft:#2E6BD9; --c-neutral:#B9C4D9; --track:#EEF3FF; --grid:#E3E8F2;
+  --tip-bg:#0A1838; --tip-fg:#FFFFFF;
+  --font:"Inter","Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#091324; --card:#0F1B31; --card2:#12203A; --line:#243453;
+    --ink:#F5F8FF; --txt:#F3F7FF; --body:#D4E0F7; --muted:#A7B6D1;
+    --soft-o:#2B1A12; --line-o:#7A4D2B; --ink-o:#FFB577;
+    --soft-b:#13233F; --line-b:#2F4D85;
+    --soft-g:#0E2618; --line-g:#2C7A4C; --ink-g:#7FE0A3;
+    --soft-p:#1E1636; --line-p:#4A3A80; --ink-p:#C9B5FF;
+    --head:#0A2C7A; --cta1:#0A2C7A; --cta2:#0F3A8F; --ok:#49C76B;
+    --frame:#050B16; --glow1:rgba(255,98,0,.14); --glow2:rgba(65,111,255,.16); --grad-end:#08111D;
+    --shadow:0 18px 44px rgba(0,0,0,.35); --chrome:rgba(15,27,49,.92); --veil:rgba(0,4,12,.72);
+    --c-hard:#E85A00; --c-soft:#5B8FEA; --c-neutral:#3A4E74; --track:#13233F; --grid:#243453;
+    --tip-bg:#F3F7FF; --tip-fg:#0A1838;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#091324; --card:#0F1B31; --card2:#12203A; --line:#243453;
+  --ink:#F5F8FF; --txt:#F3F7FF; --body:#D4E0F7; --muted:#A7B6D1;
+  --soft-o:#2B1A12; --line-o:#7A4D2B; --ink-o:#FFB577;
+  --soft-b:#13233F; --line-b:#2F4D85;
+  --soft-g:#0E2618; --line-g:#2C7A4C; --ink-g:#7FE0A3;
+  --soft-p:#1E1636; --line-p:#4A3A80; --ink-p:#C9B5FF;
+  --head:#0A2C7A; --cta1:#0A2C7A; --cta2:#0F3A8F; --ok:#49C76B;
+  --frame:#050B16; --glow1:rgba(255,98,0,.14); --glow2:rgba(65,111,255,.16); --grad-end:#08111D;
+  --shadow:0 18px 44px rgba(0,0,0,.35); --chrome:rgba(15,27,49,.92); --veil:rgba(0,4,12,.72);
+  --c-hard:#E85A00; --c-soft:#5B8FEA; --c-neutral:#3A4E74; --track:#13233F; --grid:#243453;
+  --tip-bg:#F3F7FF; --tip-fg:#0A1838;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--frame);color:var(--txt);font-family:var(--font);-webkit-font-smoothing:antialiased}
+button,input{font-family:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- palco 16:9 ---------- */
+.viewport{position:fixed;inset:0;overflow:hidden}
+.stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;
+  background:var(--bg);box-shadow:0 30px 80px rgba(0,0,0,.25);overflow:hidden;border-radius:6px}
+.stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 8% 8%,var(--glow1),transparent 30%),radial-gradient(circle at 92% 14%,var(--glow2),transparent 28%),linear-gradient(180deg,transparent 0%,transparent 60%,var(--grad-end) 100%)}
+.slide{position:absolute;inset:0;padding:40px 56px 64px;display:flex;flex-direction:column;gap:18px;
+  opacity:0;visibility:hidden;transform:translateX(24px);transition:opacity .42s ease,transform .42s ease,visibility 0s .42s}
+.slide.active{opacity:1;visibility:visible;transform:none;transition:opacity .42s ease,transform .42s ease}
+.foot{position:absolute;left:56px;right:56px;bottom:20px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px;font-weight:600;z-index:2;pointer-events:none}
+.foot .pg{font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:.04em}
+.progress{position:absolute;left:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .42s ease;z-index:3}
+
+/* ---------- cabeçalho ---------- */
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex:none}
+.chap-tag{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;margin-bottom:10px;border-radius:999px;background:var(--soft-o);border:1px solid var(--line-o);color:var(--ink-o);font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.pip{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.title h1{margin:0;color:var(--ink);font-size:36px;line-height:1.06;letter-spacing:-.025em;font-weight:800;text-wrap:balance}
+.title p{margin:8px 0 0;color:var(--accent);font-weight:700;font-size:17px;max-width:95ch;line-height:1.35}
+.logo{flex:none;height:46px;min-width:92px;padding:6px 14px;border-radius:12px;background:#FFFFFF;display:grid;place-items:center;box-shadow:0 10px 24px rgba(0,30,98,.12);border:1px solid rgba(0,0,0,.04)}
+.logo span{color:#EC7000;font-weight:900;font-size:15px;letter-spacing:-.01em}
+.body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:16px}
+
+/* ---------- blocos comuns ---------- */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grow{flex:1 1 auto;min-height:0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.panel-head{background:var(--head);color:var(--onhead);font-weight:800;padding:12px 18px;font-size:17px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.panel-head small{font-size:12px;font-weight:700;color:var(--onhead-sub)}
+.panel-body{padding:16px 18px;display:flex;flex-direction:column;gap:12px;flex:1 1 auto;min-height:0}
+.callout{display:grid;grid-template-columns:52px 1fr auto;gap:16px;align-items:center;padding:16px 22px;border-radius:20px;background:linear-gradient(135deg,var(--cta1),var(--cta2));color:#FFFFFF;box-shadow:0 14px 30px rgba(0,30,98,.16);flex:none}
+.callout .icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--accent);font-size:22px;font-weight:900}
+.callout b{display:block;font-size:18px;margin-bottom:4px}
+.callout span{display:block;font-size:14.5px;line-height:1.5;color:#E6ECFF}
+.callout span b{display:inline;font-size:inherit;color:#FFD4B8;margin:0}
+.mbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 16px;font-size:14px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.18s;white-space:nowrap}
+.mbtn:hover{border-color:var(--accent);background:var(--soft-o);color:var(--ink-o)}
+.mbtn::after{content:"↗";color:var(--accent);font-weight:900}
+.callout .mbtn{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);color:#FFFFFF}
+.callout .mbtn:hover{background:#FFFFFF;color:var(--brand)}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;border:1px solid}
+.tag.med{background:var(--soft-g);border-color:var(--line-g);color:var(--ink-g)}
+.tag.sup{background:var(--soft-o);border-color:var(--line-o);color:var(--ink-o)}
+.tag.hard{background:var(--soft-o);border-color:var(--line-o);color:var(--ink-o)}
+.tag.soft{background:var(--soft-b);border-color:var(--line-b);color:var(--ink)}
+.tag i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.tag.hard i{background:var(--c-hard)}.tag.soft i{background:var(--c-soft)}
+
+/* ---------- capa ---------- */
+.cover{display:grid;grid-template-columns:minmax(0,1fr) 540px;gap:64px;align-items:center;height:100%;padding-top:8px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;width:max-content;max-width:100%;padding:8px 14px;border-radius:999px;background:var(--soft-o);border:1px solid var(--line-o);color:var(--ink-o);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.brand-title{margin:22px 0 0;font-size:128px;line-height:.92;letter-spacing:-.05em;font-weight:900;color:var(--ink)}
+.brand-title .acc{color:var(--accent)}
+.brand-sub{margin:18px 0 0;font-size:30px;line-height:1.18;font-weight:800;color:var(--ink);letter-spacing:-.02em;max-width:24ch;text-wrap:balance}
+.rule{width:96px;height:6px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--brand));margin:24px 0 0}
+.lead{margin:20px 0 0;font-size:18px;line-height:1.55;color:var(--body);max-width:58ch}
+.proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:26px;max-width:760px}
+.proof div{padding:14px 16px;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-top:4px solid var(--accent)}
+.proof b{display:block;color:var(--ink);font-size:28px;line-height:1;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.proof span{display:block;margin-top:6px;color:var(--body);font-size:13.5px;line-height:1.35;font-weight:600}
+.agenda{border:1px solid var(--line);border-radius:26px;padding:24px 28px;background:var(--card);box-shadow:var(--shadow)}
+.agenda-head{font-size:13px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);padding-bottom:12px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+.agb{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:grid;grid-template-columns:52px 1fr 20px;gap:16px;align-items:center;padding:11px 8px;border-radius:14px;font-family:inherit;transition:background .18s}
+.agb + .agb{border-top:1px dashed var(--line);border-radius:0}
+.agb:hover{background:var(--soft-o)}
+.agb:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.agb .n{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:var(--accent);color:#FFFFFF;font-size:16px;font-weight:900}
+.agb b{display:block;color:var(--ink);font-size:18px;line-height:1.2;margin-bottom:2px}
+.agb span{display:block;color:var(--muted);font-size:13.5px;line-height:1.4}
+.agb > i{font-style:normal;font-weight:900;color:var(--accent);font-size:18px;opacity:.5}
+.agb:hover > i{opacity:1}
+
+/* ---------- KPIs de baseline ---------- */
+.kp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kp > div{padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card2);min-width:0}
+.kp small{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kp b{display:block;font-size:27px;font-weight:900;color:var(--ink);margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.02em;white-space:nowrap}
+.kp span{display:block;font-size:12.5px;line-height:1.35;color:var(--body);margin-top:2px}
+.kp .hot{background:var(--soft-o);border-color:var(--line-o)}
+.kp .hot b{color:var(--ink-o)}
+.src{font-size:12px;color:var(--muted);font-weight:600;line-height:1.4}
+.src b{color:var(--body)}
+.mini{display:flex;flex-direction:column;gap:6px;flex:1 1 auto;min-height:0}
+.mini-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.mini-h b{color:var(--ink);font-size:14.5px}
+.mini-h span{font-size:12px;color:var(--muted);font-weight:700}
+.mbars{position:relative;flex:1 1 auto;min-height:120px;display:grid;grid-template-columns:repeat(22,minmax(0,1fr));gap:3px;align-items:end;padding-top:18px;border-bottom:1px solid var(--grid)}
+.mbars .mb{position:relative;height:100%;display:flex;align-items:flex-end;cursor:default}
+.mbars .mb i{display:block;width:100%;border-radius:4px 4px 0 0;background:var(--c-neutral);min-height:2px;transition:height .7s cubic-bezier(.2,.8,.2,1)}
+.mbars .mb.ltm i{background:var(--c-hard)}
+.mbars .mb.part i{background:repeating-linear-gradient(135deg,var(--c-neutral) 0 3px,transparent 3px 6px)}
+.mbars .mb em{position:absolute;bottom:calc(var(--h) + 4px);left:50%;transform:translateX(-50%);font-style:normal;font-size:10.5px;font-weight:800;color:var(--body);white-space:nowrap;font-variant-numeric:tabular-nums}
+.mbars .ref{position:absolute;left:0;right:0;border-top:1px dashed var(--muted);pointer-events:none}
+.mbars .ref span{position:absolute;left:0;top:-16px;font-size:10.5px;font-weight:800;color:var(--muted)}
+.maxis{display:grid;grid-template-columns:repeat(22,minmax(0,1fr));gap:3px;font-size:10px;color:var(--muted);font-weight:700;text-align:center}
+.mleg{display:flex;gap:14px;font-size:12px;font-weight:700;color:var(--body);flex-wrap:wrap}
+.mleg span{display:inline-flex;align-items:center;gap:6px}
+.mleg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* ---------- régua: barras de exposição ---------- */
+.expo{display:flex;flex-direction:column;gap:20px}
+.ex-row{display:flex;flex-direction:column;gap:8px}
+.ex-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.ex-h b{color:var(--ink);font-size:17px}
+.ex-h span{color:var(--muted);font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.ex-bar{display:flex;gap:2px;height:46px}
+.ex-bar > div{position:relative;height:100%;border-radius:6px;display:flex;align-items:center;padding:0 12px;font-size:13.5px;font-weight:900;white-space:nowrap;overflow:hidden;cursor:default;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.ex-bar .cont{background:var(--c-neutral);color:var(--txt)}
+.ex-bar .nao{background:var(--c-hard);color:#FFFFFF}
+.ex-bar .cont.slim{padding:0}
+.ex-out{display:flex;align-items:flex-start;gap:8px;margin-top:-2px;font-size:13.5px;font-weight:900;color:var(--txt);font-variant-numeric:tabular-nums}
+.ex-out i{flex:none;width:2px;height:14px;margin-left:14px;background:var(--c-neutral);border-radius:2px}
+.ex-out span{padding-top:2px}
+.ex-out em{font-style:normal;font-weight:700;color:var(--muted)}
+.ex-note{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;border:1px dashed var(--line);background:var(--card2)}
+.ex-note b.big{font-size:26px;color:var(--ink);font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ex-note span{font-size:14px;color:var(--body);line-height:1.45}
+.ex-note span strong{color:var(--ink)}
+.rules{display:flex;flex-direction:column}
+.rl{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:13px 0}
+.rl + .rl{border-top:1px dashed var(--line)}
+.rl .ic{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:var(--soft-o);font-size:20px}
+.rl.no .ic{background:var(--soft-b)}
+.rl b{display:block;color:var(--ink);font-size:17px;line-height:1.25;margin-bottom:3px}
+.rl span{display:block;color:var(--body);font-size:14.5px;line-height:1.48}
+.rl span strong{color:var(--ink)}
+
+/* ---------- alavancas ---------- */
+.lv-head,.lv{display:grid;grid-template-columns:52px minmax(0,.95fr) minmax(0,1.3fr) minmax(0,1.35fr) 180px 24px;gap:22px;align-items:center}
+.lv-head{padding:14px 18px 12px;background:var(--soft-b);font-size:11.5px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--line-b)}
+.lv-head span{display:flex;align-items:center;gap:7px}
+.lv-head span i{font-style:normal;font-size:13px}
+.lv{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:52px minmax(0,.95fr) minmax(0,1.3fr) minmax(0,1.35fr) 180px 24px;gap:22px;align-items:center;padding:9px 18px;border-bottom:1px solid var(--line);cursor:pointer;font-family:inherit;transition:background .18s}
+.lv .simp{font-size:14px;color:var(--txt);line-height:1.45}
+.lv .tec{font-size:13.5px;color:var(--body);line-height:1.45;padding-left:14px;border-left:2px solid var(--line)}
+.lv .tec em{font-style:normal;font-weight:800;color:var(--ink)}
+.lv .vcol{display:flex;flex-direction:column;gap:8px;min-width:0}
+.lv .vcol .val{text-align:left}
+.lv:hover{background:var(--soft-b)}
+.lv:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+.vline{display:flex;align-items:center;gap:8px}
+.info{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line-b);background:var(--card);color:var(--ink);font:italic 900 12px Georgia,"Times New Roman",serif;display:grid;place-items:center;cursor:pointer;padding:0;transition:.15s}
+.info:hover,.info.on{background:var(--accent);border-color:var(--accent);color:#FFFFFF}
+.info:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.lv .code{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:900;font-size:16px;color:#FFFFFF}
+.lv .code.h{background:var(--c-hard)}.lv .code.s{background:var(--c-soft)}
+.lv .nm b{display:block;color:var(--ink);font-size:17px;line-height:1.2}
+.lv .nm span{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.lv .fx{font-size:14px;color:var(--body);line-height:1.45}
+.lv .fx em{font-style:normal;font-weight:800;color:var(--ink)}
+.lv .val{font-size:22px;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.lv .bar{height:12px;border-radius:999px;background:var(--track);overflow:hidden}
+.lv .bar i{display:block;height:100%;border-radius:999px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.lv .bar i.h{background:var(--c-hard)}.lv .bar i.s{background:var(--c-soft)}
+.lv .go{font-size:18px;font-weight:900;color:var(--accent);text-align:right;opacity:.55;transition:opacity .18s,transform .18s}
+.lv:hover .go{opacity:1;transform:translate(2px,-2px)}
+.lv-tot{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:10px 18px;font-weight:800;color:var(--ink)}
+.lv-tot span{font-size:14px;color:var(--body);font-weight:700}
+.lv-tot b{font-size:24px;font-variant-numeric:tabular-nums}
+.lv-read{margin:auto 18px 22px;padding:14px 20px;border-radius:16px;background:var(--soft-o);border:1px solid var(--line-o);display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:center;font-size:15px;color:var(--body);line-height:1.5}
+.lv-read > i{font-style:normal;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#FFFFFF;font-size:18px}
+.lv-read b{color:var(--ink)}
+body.flow .lv-read{grid-template-columns:1fr}
+body.flow .lv-read > i{display:none}
+
+/* ---------- seletor de cenário ---------- */
+.scen{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+.scen button{border:0;background:transparent;color:var(--ink);font-weight:800;font-size:14px;padding:8px 16px;border-radius:999px;cursor:pointer}
+.scen button.on{background:var(--brand);color:#FFFFFF}
+.scen button:hover:not(.on){background:var(--soft-o);color:var(--ink-o)}
+.scen-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;flex:none}
+.scen-row .lbl{font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.scen-row .note{font-size:13.5px;color:var(--body);font-weight:600;max-width:70ch}
+.custom-pill{display:none;padding:6px 12px;border-radius:999px;background:var(--soft-o);border:1px solid var(--line-o);color:var(--ink-o);font-size:12.5px;font-weight:900}
+body.custom .custom-pill{display:inline-flex}
+
+/* ---------- tiles de benefício ---------- */
+.bn{display:grid;grid-template-columns:1fr 1fr 1fr 1.08fr;gap:14px;flex:none}
+.bt{border:1px solid var(--line);border-radius:22px;background:var(--card);box-shadow:var(--shadow);padding:20px 22px 18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.bt .st{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bt .st small{font-size:11.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bt .v{white-space:nowrap;font-size:42px;line-height:1;font-weight:900;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums;margin-top:6px}
+.bt .cap2{font-size:13.5px;color:var(--muted);font-weight:700;line-height:1.4}
+.bt.hard{border-top:5px solid var(--c-hard)}
+.bt.soft{border-top:5px solid var(--c-soft)}
+.bt.anc{border-color:var(--line-g);background:linear-gradient(180deg,var(--soft-g),var(--card) 75%)}
+.bt.anc .v{color:var(--ink-g)}
+.bt.tot{border:0;background:linear-gradient(145deg,var(--cta1),var(--cta2));box-shadow:0 18px 40px rgba(0,30,98,.28);position:relative;overflow:hidden}
+.bt.tot::after{content:"";position:absolute;right:-60px;top:-70px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,98,0,.4),transparent 70%);pointer-events:none}
+.bt.tot > *{position:relative;z-index:1}
+.bt.tot .st small,.bt.tot .cap2{color:#C9D6F2}
+.bt.tot .v{color:#FFB577}
+
+/* ---------- barras empilhadas por esteira ---------- */
+.stk{display:flex;flex-direction:column;gap:18px}
+.stk-row{display:grid;grid-template-columns:70px 1fr 120px;gap:14px;align-items:center}
+.stk-row > b{color:var(--ink);font-size:17px}
+.stk-row > em{font-style:normal;text-align:right;font-weight:900;color:var(--ink);font-size:20px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stk-bar{display:flex;gap:2px;height:40px;background:transparent}
+.stk-bar > div{height:100%;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:900;color:#FFFFFF;white-space:nowrap;overflow:hidden;transition:width .8s cubic-bezier(.2,.8,.2,1);cursor:default}
+.stk-bar > div:first-child{border-radius:6px 0 0 6px}
+.stk-bar > div:last-child{border-radius:0 6px 6px 0}
+.stk-bar .h{background:var(--c-hard)}
+.stk-bar .s{background:var(--c-soft)}
+.cap-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cap-grid > div{padding:16px;border-radius:16px;border:1px solid var(--line);background:var(--card2)}
+.cap-grid small{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cap-grid b{display:block;font-size:30px;font-weight:900;color:var(--ink);margin-top:6px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cap-grid span{display:block;font-size:13px;color:var(--body);line-height:1.4;margin-top:4px}
+
+/* ---------- simulador ---------- */
+.sim{display:grid;grid-template-columns:1.12fr .88fr;gap:16px}
+.sl-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 22px}
+.sl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.sl label{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13.5px;font-weight:700;color:var(--body)}
+.sl label output{font-weight:900;color:var(--ink);font-size:16px;font-variant-numeric:tabular-nums}
+.sl input[type=range]{width:100%;accent-color:var(--accent);height:22px;margin:0}
+.sl small{font-size:11.5px;color:var(--muted);font-weight:600}
+.sub-h{font-size:11.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-o);display:flex;align-items:center;gap:10px}
+.sub-h::after{content:"";flex:1;height:1px;background:var(--line)}
+.in-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.in{display:flex;flex-direction:column;gap:5px;min-width:0}
+.in label{font-size:12px;font-weight:800;color:var(--body);line-height:1.25}
+.in input{width:100%;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.in input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--soft-o)}
+.in.cost input{background:var(--soft-o);border-color:var(--line-o)}
+.sim-act{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ghost{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:800;cursor:pointer}
+.ghost:hover{border-color:var(--accent);color:var(--ink-o);background:var(--soft-o)}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.res > div{padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card2);min-width:0}
+.res small{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.res b{display:block;font-size:26px;font-weight:900;color:var(--ink);margin-top:4px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.res .wide{grid-column:1/-1;background:linear-gradient(145deg,var(--cta1),var(--cta2));border:0}
+.res .wide small{color:#C9D6F2}.res .wide b{color:#FFB577;font-size:36px}
+.res .wide span{display:block;font-size:12.5px;color:#DCE6FF;margin-top:4px}
+.res .h{border-top:4px solid var(--c-hard)}.res .s{border-top:4px solid var(--c-soft)}
+.res .g{background:var(--soft-g);border-color:var(--line-g)}.res .g b{color:var(--ink-g)}
+.fin{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.fin > div{padding:10px 12px;border-radius:12px;border:1px dashed var(--line-o);background:var(--soft-o)}
+.fin small{display:block;font-size:10.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-o)}
+.fin b{display:block;font-size:20px;font-weight:900;color:var(--ink);margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---------- VPL ---------- */
+.vpl{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+.cols{position:relative;flex:1 1 auto;min-height:240px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px;align-items:end;padding:28px 16px 0 56px;border-bottom:1px solid var(--grid)}
+.cols .gl{position:absolute;left:56px;right:0;border-top:1px solid var(--grid);pointer-events:none}
+.cols .gl span{position:absolute;left:-56px;top:-8px;width:50px;text-align:right;font-size:11px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.col{position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;cursor:default;z-index:1}
+.col i{display:block;width:100%;transition:height .8s cubic-bezier(.2,.8,.2,1)}
+.col i.h{background:var(--c-hard);border-radius:0 0 0 0}
+.col i.s{background:var(--c-soft);border-radius:4px 4px 0 0}
+.col em{position:absolute;left:50%;transform:translateX(-50%);font-style:normal;font-size:15px;font-weight:900;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.caxis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px;padding:8px 16px 0 56px;text-align:center}
+.caxis b{display:block;color:var(--ink);font-size:14px}
+.caxis span{display:block;color:var(--muted);font-size:12px;font-weight:700}
+.vk{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vk > div{padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:var(--card2)}
+.vk > div.big{grid-column:1/-1;background:linear-gradient(145deg,var(--cta1),var(--cta2));border:0}
+.vk small{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.vk b{display:block;font-size:30px;font-weight:900;color:var(--ink);margin-top:4px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.vk span{display:block;font-size:13px;color:var(--body);line-height:1.4;margin-top:3px}
+.vk .big small{color:#C9D6F2}.vk .big b{color:#FFB577;font-size:44px}.vk .big span{color:#DCE6FF}
+.vk .g{background:var(--soft-g);border-color:var(--line-g)}.vk .g b{color:var(--ink-g)}
+.sens{display:flex;flex-direction:column;gap:9px}
+.sn{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 96px;gap:12px;align-items:center;font-size:13.5px;color:var(--body);font-weight:700}
+.sn .tr{height:12px;border-radius:999px;background:var(--track);overflow:hidden}
+.sn .tr i{display:block;height:100%;border-radius:999px;background:var(--brand2);transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.sn.h .tr i{background:var(--c-hard)}.sn.s .tr i{background:var(--c-soft)}
+.sn b{text-align:right;color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---------- Fase 0 ---------- */
+.f0{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:14px;flex:1 1 auto;min-height:0}
+.fz{border:1px solid var(--line);border-radius:20px;background:var(--card);box-shadow:var(--shadow);padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.fz.hi{border-color:var(--line-o);background:linear-gradient(180deg,var(--soft-o),var(--card) 70%)}
+.fz-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.fz-h small{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fz b{display:block;color:var(--ink);font-size:18px;line-height:1.25}
+.fz .now{font-size:13.5px;color:var(--body)}
+.fz .now strong{color:var(--ink)}
+.fz p{margin:0;color:var(--body);font-size:14px;line-height:1.48}
+.fz .how{margin-top:auto;padding:9px 12px;border-radius:12px;background:var(--soft-b);border:1px solid var(--line-b);font-size:13.5px;color:var(--body);line-height:1.45}
+.fz .how strong{color:var(--ink)}
+.imp{padding:3px 9px;border-radius:999px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--line);color:var(--body);background:var(--card2);white-space:nowrap}
+.imp.alto{background:var(--accent);border-color:var(--accent);color:#FFFFFF}
+
+/* ---------- fechamento ---------- */
+.close-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;flex:1 1 auto;min-height:0}
+.tks{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;flex:1 1 auto}
+.tk-item{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:center;padding:16px 18px;border:1px solid var(--line);border-radius:18px;background:var(--card2);font-family:inherit;transition:transform .18s ease,border-color .18s}
+.tk-item:hover{transform:translateY(-2px);border-color:var(--accent)}
+.tk-item:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tk-item .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--soft-o);font-size:22px}
+.tk-item small{display:block;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-o)}
+.tk-item b{display:block;color:var(--ink);font-size:20px;line-height:1.2;margin-top:3px}
+.tk-item span{display:block;color:var(--body);font-size:14.5px;line-height:1.45;margin-top:6px}
+.nx{display:grid;grid-template-columns:6px 1fr;gap:14px;padding:12px 0}
+.nx + .nx{border-top:1px dashed var(--line)}
+.nx > i{border-radius:6px;background:var(--c)}
+.nx small{display:block;font-size:11.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-o)}
+.nx b{display:block;color:var(--ink);font-size:18px;line-height:1.25;margin-top:2px}
+.nx span{display:block;color:var(--body);font-size:14.5px;line-height:1.45;margin-top:3px}
+.thanks{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:22px 30px;border-radius:24px;background:linear-gradient(135deg,var(--cta1),var(--cta2));color:#FFFFFF;box-shadow:0 14px 30px rgba(0,30,98,.16);flex:none;position:relative;overflow:hidden}
+.thanks::after{content:"";position:absolute;right:-60px;top:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,98,0,.45),transparent 70%);pointer-events:none}
+.thanks h2{margin:0;font-size:40px;line-height:1;letter-spacing:-.03em;font-weight:900}
+.thanks h2 span{color:#FFB577}
+.thanks p{margin:8px 0 0;font-size:16px;line-height:1.5;color:#E6ECFF;max-width:76ch}
+.thanks .sig{position:relative;z-index:1;text-align:right}
+.thanks .sig b{display:block;font-size:30px;font-weight:900;letter-spacing:-.03em}
+.thanks .sig b span{color:#FFB577}
+.thanks .sig small{display:block;margin-top:4px;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#C9D6F2}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:24px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
+.modal.open{display:flex}
+.modal-veil{position:absolute;inset:0;background:var(--veil);backdrop-filter:blur(4px)}
+.modal-box{position:relative;z-index:1;width:min(1000px,calc(100vw - 32px));max-height:min(88vh,860px);overflow:auto;border-radius:26px;border:1px solid var(--line);background:var(--card);box-shadow:0 30px 80px rgba(2,12,34,.32);padding:26px 28px;animation:pop .28s ease}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.modal-x{position:absolute;top:16px;right:16px;width:40px;height:40px;border:0;border-radius:50%;background:var(--brand);color:#FFFFFF;font-size:24px;line-height:1;cursor:pointer}
+.modal-x:hover{background:var(--accent)}
+.m-kick{display:inline-flex;padding:5px 11px;border-radius:999px;font-size:11.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;background:var(--soft-o);border:1px solid var(--line-o);color:var(--ink-o)}
+.modal h3{margin:10px 56px 6px 0;color:var(--ink);font-size:27px;line-height:1.12;letter-spacing:-.02em}
+.m-lead{margin:0 0 16px;color:var(--body);font-size:15.5px;line-height:1.55;max-width:80ch}
+.m-lead b{color:var(--ink)}
+.m-formula{margin:0 0 16px;padding:14px 18px;border-radius:16px;background:var(--soft-g);border:1px solid var(--line-g)}
+.m-formula small{display:block;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-g);margin-bottom:4px}
+.m-formula b{color:var(--ink);font-size:16.5px;line-height:1.45}
+.m-tbl{overflow-x:auto}
+.m-tbl table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;min-width:560px}
+.m-tbl th{text-align:left;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+.m-tbl td{padding:9px 10px;border-bottom:1px solid var(--line);color:var(--body)}
+.m-tbl td.n{text-align:right;color:var(--ink);font-weight:800;white-space:nowrap}
+.m-tbl th.n{text-align:right}
+.m-tbl tr.t td{font-weight:900;color:var(--ink);background:var(--soft-b)}
+.m-note{margin-top:14px;font-size:13.5px;color:var(--muted);line-height:1.5}
+.m-note b{color:var(--body)}
+
+/* ---------- tooltip ---------- */
+.tip{position:fixed;z-index:60;pointer-events:none;background:var(--tip-bg);color:var(--tip-fg);border-radius:10px;padding:8px 11px;font-size:12.5px;font-weight:700;line-height:1.4;box-shadow:0 10px 24px rgba(0,0,0,.25);max-width:260px;opacity:0;transition:opacity .12s;font-variant-numeric:tabular-nums}
+.tip.on{opacity:1}
+.tip b{font-weight:900}
+.tip.wide{max-width:380px;padding:12px 14px;font-weight:600}
+.tip .ti-h{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:8px}
+.tip .ti{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:start;padding:5px 0}
+.tip .ti + .ti{border-top:1px solid rgba(127,140,170,.3)}
+.tip .ti em{font-style:normal;justify-self:start;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:#FFFFFF}
+.tip .ti em.ref{background:#0E7A3A}.tip .ti em.prx{background:#2E6BD9}.tip .ti em.pre{background:#C85A00}
+.tip .ti span b{display:block}
+.tip .ti span small{display:block;font-size:11.5px;opacity:.8;font-weight:600}
+.tip .ti-f{display:block;margin-top:8px;font-size:11px;opacity:.75}
+
+/* ---------- animação de entrada ---------- */
+@keyframes riseIn{from{opacity:.001;transform:translateY(14px)}to{opacity:1;transform:none}}
+.slide.active .rise{animation:riseIn .55s ease both}
+.slide.active .d1{animation-delay:.08s}.slide.active .d2{animation-delay:.16s}.slide.active .d3{animation-delay:.24s}.slide.active .d4{animation-delay:.32s}
+
+/* ---------- controles ---------- */
+.chrome{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:6px;padding:7px;border-radius:999px;background:var(--chrome);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(10px);transition:opacity .3s ease,transform .3s ease}
+.chrome.idle{opacity:0;transform:translate(-50%,12px);pointer-events:none}
+.cbtn{border:0;border-radius:999px;background:var(--brand);color:#FFFFFF;font-weight:900;cursor:pointer;height:36px;min-width:36px;padding:0 12px;display:grid;place-items:center;font-size:15px}
+.cbtn:hover{background:var(--accent)}
+.cbtn:disabled{opacity:.35;cursor:default;background:var(--brand)}
+.cbtn.ghostc{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.cbtn.ghostc:hover{background:var(--soft-o);color:var(--ink-o)}
+.cbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.count{font-size:13px;font-weight:800;color:var(--muted);padding:0 6px;font-variant-numeric:tabular-nums;min-width:52px;text-align:center}
+.dots{display:flex;gap:7px;padding:0 6px}
+.dot{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:var(--line-b);cursor:pointer;position:relative;transition:.2s}
+.dot.on{background:var(--accent);width:24px;border-radius:999px}
+.dot span{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);white-space:nowrap;background:var(--brand);color:#FFFFFF;border-radius:8px;padding:6px 9px;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.15s}
+.dot:hover span,.dot:focus-visible span{opacity:1}
+.sep{width:1px;height:22px;background:var(--line);margin:0 2px}
+
+/* ---------- modo leitura (telas estreitas) ---------- */
+body.flow{overflow:auto}
+body.flow .viewport{position:static;overflow:visible}
+body.flow .stage{position:relative;left:auto;top:auto;width:auto;height:auto;transform:none;border-radius:0;box-shadow:none;overflow:visible;padding-bottom:90px}
+body.flow .slide{position:relative;inset:auto;display:none;padding:22px max(16px,env(safe-area-inset-right,0px)) 30px max(16px,env(safe-area-inset-left,0px));opacity:1;visibility:visible;transform:none}
+body.flow .slide.active{display:flex}
+body.flow .foot{position:static;padding:0 max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+body.flow .progress{position:fixed;top:0;bottom:auto}
+body.flow .title h1{font-size:25px}
+body.flow .top{flex-direction:column-reverse}
+body.flow .g2,body.flow .cover,body.flow .sim,body.flow .vpl,body.flow .close-grid,body.flow .tks,body.flow .f0,body.flow .bn,body.flow .proof,body.flow .sl-grid,body.flow .vk,body.flow .res,body.flow .fin,body.flow .cap-grid{grid-template-columns:1fr}
+body.flow .f0{grid-auto-rows:auto}
+body.flow .kp,body.flow .in-grid{grid-template-columns:1fr 1fr}
+body.flow .brand-title{font-size:64px}
+body.flow .brand-sub{font-size:21px}
+body.flow .cover{gap:24px;padding-top:0}
+body.flow .callout{grid-template-columns:1fr}
+body.flow .callout .icon{display:none}
+body.flow .lv-head{display:none}
+body.flow .lv{grid-template-columns:46px 1fr;gap:10px 14px}
+body.flow .lv .simp,body.flow .lv .tec,body.flow .lv .vcol{grid-column:2}
+body.flow .lv .go{display:none}
+body.flow .stk-row{grid-template-columns:56px 1fr;}
+body.flow .stk-row > em{grid-column:2;text-align:left}
+body.flow .bt .v{font-size:34px}
+body.flow .thanks{grid-template-columns:1fr}
+body.flow .thanks .sig{text-align:left}
+body.flow .dots,body.flow #fsBtn{display:none}
+body.flow .cols{gap:16px;padding-left:48px}
+body.flow .caxis{gap:16px;padding-left:48px}
+body.flow .mbars em{display:none}
+body.flow .sn{grid-template-columns:1fr 90px}
+body.flow .sn .tr{grid-column:1/-1;grid-row:2}
+body.flow .ex-bar > div{font-size:11px;padding:0 6px}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+
+<div class="viewport" id="viewport">
+<div class="stage" id="stage">
+
+<!-- ============ CAPA ============ -->
+<section class="slide active" data-label="Capa">
+  <div class="top" style="justify-content:flex-end">
+    <div class="logo"><span>Itaú Unibanco</span></div>
+  </div>
+  <div class="cover">
+    <div>
+      <div class="eyebrow rise"><span class="pip"></span>DataCraft • SETA • SISR</div>
+      <h1 class="brand-title rise d1">Atest<span class="acc">.AI</span></h1>
+      <div class="brand-sub rise d1">Valoração racional nas esteiras SETA e SISR</div>
+      <div class="rule rise d2"></div>
+      <p class="lead rise d3">Quanto vale validar escopo, orçamento e fotos com IA, calculado com os dados reais das duas esteiras e separando o que é medido do que ainda é premissa.</p>
+      <div class="proof rise d3">
+        <div><b data-v="tot.tot" data-f="mm">–</b><span>benefício anual em regime, cenário <span data-scen-name style="display:inline;margin:0">Base</span></span></div>
+        <div><b data-v="tot.anc" data-f="mm">–</b><span>ancorados em dados medidos (L1 + L4)</span></div>
+        <div><b data-v="vplBruto" data-f="mm">–</b><span>VPL dos benefícios em 5 anos, a 25% a.a.</span></div>
+      </div>
+    </div>
+    <div class="agenda rise d2">
+      <div class="agenda-head">Roteiro</div>
+      <button class="agb" type="button" data-go="1"><span class="n">01</span><div><b>Ponto de partida</b><span>O que os dados de SETA e SISR já mostram</span></div><i>→</i></button>
+      <button class="agb" type="button" data-go="2"><span class="n">02</span><div><b>A régua</b><span>O que entra e o que não entra na conta</span></div><i>→</i></button>
+      <button class="agb" type="button" data-go="3"><span class="n">03</span><div><b>Cinco alavancas</b><span>Fórmula, base e grau de evidência de cada uma</span></div><i>→</i></button>
+      <button class="agb" type="button" data-go="4"><span class="n">04</span><div><b>Resultado e simulador</b><span>Três cenários e premissas editáveis</span></div><i>→</i></button>
+      <button class="agb" type="button" data-go="6"><span class="n">05</span><div><b>Valor do produto</b><span>VPL em 5 anos, teto de investimento e sensibilidade</span></div><i>→</i></button>
+      <button class="agb" type="button" data-go="7"><span class="n">06</span><div><b>Fase 0 e próximos passos</b><span>O que medir para trocar premissa por dado</span></div><i>→</i></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1 PONTO DE PARTIDA ============ -->
+<section class="slide" data-label="Ponto de partida">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Capítulo 1 • Ponto de partida</div>
+      <h1>1) O que os dados das duas esteiras já mostram</h1>
+      <p>Volume alto, retrabalho que alonga o ciclo e rejeição concentrada em preço: o espaço onde o Atest.AI atua</p>
+    </div>
+    <div class="logo"><span>Itaú Unibanco</span></div>
+  </div>
+  <div class="body">
+    <div class="g2 grow">
+      <div class="panel rise">
+        <div class="panel-head">SETA • Manutenção predial <small>OTs corretivas • jan–dez/2025</small></div>
+        <div class="panel-body">
+          <div class="kp">
+            <div><small>OTs corretivas</small><b>135.233</b><span>103.336 concluídas • 23,6% canceladas</span></div>
+            <div><small>Cotações analisadas</small><b>85.832</b><span>em 66.135 OTs • 1,3 por OT</span></div>
+            <div><small>Valor pago</small><b>R$ 134,9 MM</b><span>61.941 OTs × ticket de R$ 2.178</span></div>
+            <div class="hot"><small>Retrabalho</small><b>19,4%</b><span>10.608 OTs com 2 ou mais cotações</span></div>
+            <div class="hot"><small>Ciclo até aprovar</small><b>12,9 → 36,8 d</b><span>1 cotação × 2 ou mais cotações</span></div>
+            <div class="hot"><small>Rejeição por custo</small><b>85%</b><span>16.515 de 19.462 rejeições</span></div>
+          </div>
+          <div class="ex-note">
+            <b class="big">−13,5%</b>
+            <span>Quando alguém contesta o preço, a cotação aprovada sai <strong>13,5% mais barata</strong> que a 1ª (R$ 41,5 MM → R$ 35,9 MM, em 9.747 OTs). É a régua do tamanho típico do sobrepreço.</span>
+          </div>
+          <div class="src">Fonte: dashboard <b>Valoração da validação inteligente</b> (DataCraft • SETA), abas Ocorrências e Cotações.</div>
+        </div>
+      </div>
+      <div class="panel rise d1">
+        <div class="panel-head">SISR • Manutenção de segurança <small>base anual out/2025–set/2026</small></div>
+        <div class="panel-body">
+          <div class="kp">
+            <div><small>Orçamentos/ano</small><b data-v="D.sisr.cot" data-f="int">–</b><span>20.750 em 22 meses de base</span></div>
+            <div><small>Valor pago/ano</small><b data-v="D.sisr.valor" data-f="mm1">–</b><span>ticket médio de R$ 2.314</span></div>
+            <div class="hot"><small>Tempo AS IS</small><b data-v="D.sisr.tempo" data-f="d">–</b><span>média do envio à decisão</span></div>
+          </div>
+          <div class="mini">
+            <div class="mini-h"><b>% de orçamentos com retrabalho, por mês</b><span data-v="D.sisr.taxa" data-f="pctlbl">–</span></div>
+            <div class="mbars" id="sisrBars"></div>
+            <div class="maxis" id="sisrAxis"></div>
+            <div class="mleg"><span><i style="background:var(--c-hard)"></i>Base anual usada no modelo</span><span><i style="background:var(--c-neutral)"></i>Fora da base</span><span><i style="background:repeating-linear-gradient(135deg,var(--c-neutral) 0 3px,transparent 3px 6px)"></i>Out/26 parcial</span></div>
+          </div>
+          <div class="src">Fonte: <b>Analise_Orcamentos_Dashboard_Regra_Atualizada.xlsx</b>, aba Dinamica_Mensal. Retrabalho chegou a ~15% nos últimos 3 meses.</div>
+        </div>
+      </div>
+    </div>
+    <div class="callout rise d2">
+      <div class="icon">🔎</div>
+      <div><b>Onde está o ganho</b><span>No SETA, o retrabalho <b>triplica o ciclo</b> de aprovação e 85% das rejeições são por <b>custo</b>. No SISR, o retrabalho está <b>em alta</b>. As duas dores são exatamente o que o checklist mínimo e a validação orçamento × escopo atacam.</span></div>
+      <button class="mbtn" type="button" data-modal="fontes">Fontes e recortes</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 A RÉGUA ============ -->
+<section class="slide" data-label="A régua">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Capítulo 2 • A régua</div>
+      <h1>2) A régua racional: o que entra e o que não entra na conta</h1>
+      <p>O ganho do Atest.AI é o que hoje passa sem contestação. O que as pessoas analistas já capturam não é contado de novo</p>
+    </div>
+    <div class="logo"><span>Itaú Unibanco</span></div>
+  </div>
+  <div class="body">
+    <div class="g2 grow">
+      <div class="panel rise">
+        <div class="panel-head">Onde o dinheiro está exposto <small>valor pago por ano</small></div>
+        <div class="panel-body" style="justify-content:space-around">
+          <div class="expo">
+            <div class="ex-row">
+              <div class="ex-h"><b>SETA</b><span>R$ 134,9 MM pagos</span></div>
+              <div class="ex-bar" id="exSeta"></div>
+            </div>
+            <div class="ex-row">
+              <div class="ex-h"><b>SISR</b><span data-v="D.sisr.valor" data-f="mmlbl">–</span></div>
+              <div class="ex-bar" id="exSisr"></div>
+              <div class="ex-out" id="exSisrOut"></div>
+            </div>
+            <div class="mleg"><span><i style="background:var(--c-neutral)"></i>Contestado: preço já revisado por uma pessoa</span><span><i style="background:var(--c-hard)"></i>Aprovado de primeira: onde o Atest.AI atua</span></div>
+          </div>
+          <div class="ex-note">
+            <b class="big">R$ 5,6 MM</b>
+            <span>É quanto as contestações do SETA já economizaram em 2025. <strong>Esse valor não entra como ganho do Atest.AI</strong>: ele já é capturado hoje. Usamos só a taxa (13,5%) como régua do sobrepreço.</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel rise d1">
+        <div class="panel-head">Regras aplicadas ao cálculo</div>
+        <div class="panel-body" style="gap:0;justify-content:space-around">
+          <div class="rules">
+            <div class="rl"><div class="ic">🎯</div><div><b>Ganho incremental, não ganho bruto</b><span>O hard money vem do valor <strong>aprovado sem contestação</strong> × incidência estimada de sobrepreço × 13,5% × taxa de detecção.</span></div></div>
+            <div class="rl"><div class="ic">🧮</div><div><b>Sem dupla contagem</b><span>Reanálise está no tempo de análise; o retrabalho conta só a conversa com o fornecedor. Preço (L4) e evidência (L5) são problemas distintos.</span></div></div>
+            <div class="rl no"><div class="ic">⏱️</div><div><b>Ciclo e cancelamentos ficam como KPI</b><span>Dias de espera evitados e os 23,6% de OTs canceladas são reportados, <strong>mas não convertidos em R$</strong>.</span></div></div>
+            <div class="rl no"><div class="ic">🧑‍💼</div><div><b>Soft money é capacidade, não caixa</b><span>Horas liberadas só viram economia se houver decisão de realocar ou não repor pessoas.</span></div></div>
+            <div class="rl"><div class="ic">🧪</div><div><b>Toda eficácia é calibrada no modo sombra</b><span>Taxas de detecção e reduções de tempo saem da comparação entre o parecer e a decisão humana na Fase 1.</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 ALAVANCAS ============ -->
+<section class="slide" data-label="Cinco alavancas">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Capítulo 3 • Alavancas</div>
+      <h1>3) Cinco alavancas, cada uma com sua fórmula e sua evidência</h1>
+      <p>Clique em uma alavanca para ver a conta completa por esteira</p>
+    </div>
+    <div class="logo"><span>Itaú Unibanco</span></div>
+  </div>
+  <div class="body">
+    <div class="scen-row">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span class="lbl">Cenário</span><div class="scen" data-scen></div><span class="custom-pill">Premissas personalizadas no simulador</span></div>
+      <div class="mleg"><span class="tag hard"><i></i>Hard money</span><span class="tag soft"><i></i>Soft money</span><span class="tag med">Ancorado em dado</span><span class="tag sup">A comprovar</span></div>
+    </div>
+    <div class="panel grow rise">
+      <div class="lv-head"><span></span><span>Alavanca</span><span><i>💬</i>Em palavras simples</span><span><i>ƒx</i>Como calculamos</span><span>R$/ano e peso no total</span><span></span></div>
+      <div id="levers"></div>
+      <div class="lv-tot"><span>Total SETA + SISR • valores anuais em regime</span><b data-v="tot.tot" data-f="mm">–</b></div>
+      <div class="lv-read"><i>💡</i><div><b>Leitura:</b> as duas alavancas de dinheiro (L4 + L5) somam <b data-v="hardShare" data-f="pct0">–</b> do valor. Só a L5 responde por <b data-v="l5Share" data-f="pct0">–</b> e ainda não tem medição. Por isso, auditar as fotos de OTs já pagas na Fase 0 é o passo que mais reduz a incerteza do número.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 RESULTADO ============ -->
+<section class="slide" data-label="Resultado">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Capítulo 4 • Resultado</div>
+      <h1>4) Resultado: <span data-v="tot.tot" data-f="mm">–</span> por ano no cenário <span data-scen-name>Base</span></h1>
+      <p>Faixa de <span data-v="range.lo" data-f="mm">–</span> a <span data-v="range.hi" data-f="mm">–</span> entre os cenários Conservador e Otimista</p>
+    </div>
+    <div class="logo"><span>Itaú Unibanco</span></div>
+  </div>
+  <div class="body">
+    <div class="scen-row">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span class="lbl">Cenário</span><div class="scen" data-scen></div><span class="custom-pill">Premissas personalizadas no simulador</span></div>
+      <span class="note">Os cenários mudam só a eficácia do Atest.AI. A baseline (volumes, valores, minutos) é a mesma nos três.</span>
+    </div>
+    <div class="bn rise">
+      <div class="bt hard"><div class="st"><small>Hard money</small><span class="tag hard"><i></i>Caixa</span></div><div class="v" data-v="tot.hard" data-f="mm">–</div><span class="cap2">Sobrepreço evitado + desconto por serviço sem evidência</span></div>
+      <div class="bt soft"><div class="st"><small>Soft money</small><span class="tag soft"><i></i>Capacidade</span></div><div class="v" data-v="tot.soft" data-f="mm">–</div><span class="cap2">Horas de análise, atestação e retrabalho × R$/hora</span></div>
+      <div class="bt anc"><div class="st"><small>Ancorado em dados</small><span class="tag med">L1 + L4</span></div><div class="v" data-v="tot.anc" data-f="mm">–</div><span class="cap2">O número para defender no comitê</span></div>
+      <div class="bt tot"><div class="st"><small>Benefício total por ano</small></div><div class="v" data-v="tot.tot" data-f="mm">–</div><span class="cap2"><span data-v="tot.acomp" data-f="mm">–</span> ainda a comprovar na Fase 0</span></div>
+    </div>
+    <div class="g2 grow">
+      <div class="panel rise d1">
+        <div class="panel-head">Por esteira <small>hard + soft, R$/ano</small></div>
+        <div class="panel-body" style="justify-content:center;gap:18px">
+          <div class="stk" id="stk"></div>
+          <div class="mleg"><span><i style="background:var(--c-hard)"></i>Hard money</span><span><i style="background:var(--c-soft)"></i>Soft money</span></div>
+          <div class="src">O SETA concentra <b data-v="share" data-f="pct0">–</b> do valor: tem 7,5 vezes mais cotações e 5 vezes mais valor exposto que o SISR.</div>
+        </div>
+      </div>
+      <div class="panel rise d2">
+        <div class="panel-head">Capacidade e serviço <small>não somados ao financeiro</small></div>
+        <div class="panel-body" style="justify-content:center">
+          <div class="cap-grid">
+            <div><small>Horas liberadas/ano</small><b data-v="tot.horasLib" data-f="h">–</b><span>análise + atestação + devoluções</span></div>
+            <div><small>Equivalente</small><b data-v="tot.fte" data-f="fte">–</b><span>pessoas analistas em tempo integral (1.760 h/ano)</span></div>
+            <div><small>Dias-OT evitados</small><b data-v="dias" data-f="int">–</b><span>espera de agências no SETA, por menos ciclos de devolução</span></div>
+          </div>
+          <div class="ex-note"><b class="big">≈ 24 d</b><span>A mais de espera em cada OT do SETA que precisa de nova cotação. O checklist mínimo devolve o incompleto <strong>no envio</strong> e os apontamentos prontos cortam idas e vindas.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 SIMULADOR ============ -->
+<section class="slide" data-label="Simulador">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Capítulo 4 • Simulador</div>
+      <h1>5) Simulador: ajuste as premissas e veja o valor mudar</h1>
+      <p>Comece por um cenário e mova as premissas; todos os slides acompanham</p>
+    </div>
+    <div class="logo"><span>Itaú Unibanco</span></div>
+  </div>
+  <div class="body">
+    <div class="sim grow">
+      <div class="panel rise">
+        <div class="panel-head">Premissas <div class="sim-act"><div class="scen" data-scen style="box-shadow:none"></div></div></div>
+        <div class="panel-body" style="gap:14px">
+          <div class="sub-h">Eficácia do Atest.AI • calibrar no modo sombra</div>
+          <div class="sl-grid" id="sliders"></div>
+          <div class="sub-h">Baseline • cronometrar na Fase 0</div>
+          <div class="in-grid">
+            <div class="in"><label for="inHora">Custo da hora (R$)</label><input id="inHora" type="number" min="0" step="5" data-p="custoHora"></div>
+            <div class="in"><label for="inMin">Min por cotação</label><input id="inMin" type="number" min="0" step="0.1" data-p="minCot"></div>
+            <div class="in"><label for="inAt">Min por atestação</label><input id="inAt" type="number" min="0" step="0.5" data-p="minAtest"></div>
+            <div class="in"><label for="inDev">Min por devolução</label><input id="inDev" type="number" min="0" step="1" data-p="minDevol"></div>
+          </div>
+          <div class="sub-h">Custo do Atest.AI • para ROI e payback</div>
+          <div class="in-grid">
+            <div class="in cost"><label for="inCapex">Construção, ano 0 (R$)</label><input id="inCapex" type="number" min="0" step="50000" data-p="capex"></div>
+            <div class="in cost"><label for="inOpex">Operação por ano (R$)</label><input id="inOpex" type="number" min="0" step="10000" data-p="opex"></div>
+            <div class="in"><label for="inWacc">Taxa de desconto (% a.a.)</label><input id="inWacc" type="number" min="0" step="0.5" data-p="wacc" data-pct="1"></div>
+            <div class="in" style="justify-content:flex-end"><button class="ghost" type="button" id="resetBtn">↺ Restaurar Base</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel rise d1">
+        <div class="panel-head">Resultado <small>SETA + SISR • R$/ano em regime</small></div>
+        <div class="panel-body" style="gap:12px">
+          <div class="res">
+            <div class="wide"><small>Benefício total por ano</small><b data-v="tot.tot" data-f="mm">–</b><span>VPL 5 anos dos benefícios: <b style="display:inline;font-size:inherit;color:#FFFFFF" data-v="vplBruto" data-f="mm">–</b></span></div>
+            <div class="h"><small>Hard money</small><b data-v="tot.hard" data-f="mm">–</b></div>
+            <div class="s"><small>Soft money</small><b data-v="tot.soft" data-f="mm">–</b></div>
+            <div class="g"><small>Ancorado (L1 + L4)</small><b data-v="tot.anc" data-f="mm">–</b></div>
+            <div><small>Capacidade liberada</small><b data-v="tot.fte" data-f="fte">–</b></div>
+          </div>
+          <div class="sub-h">Com o custo informado</div>
+          <div class="fin">
+            <div><small>VPL do projeto</small><b data-v="vplProj" data-f="mmcost">–</b></div>
+            <div><small>ROI 5 anos</small><b data-v="roi" data-f="roi">–</b></div>
+            <div><small>Payback (hard)</small><b data-v="payback" data-f="pb">–</b></div>
+          </div>
+          <div class="src">ROI soma hard e soft dos 5 anos sobre o custo total (construção + 5 anos de operação). Payback usa só o hard money em regime, a leitura mais conservadora.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 VALOR DO PRODUTO ============ -->
+<section class="slide" data-label="Valor do produto">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Capítulo 5 • Valor do produto</div>
+      <h1>6) Em 5 anos, o Atest.AI vale <span data-v="vplBruto" data-f="mm">–</span> a valor presente</h1>
+      <p>VPL a 25% a.a. • captura gradual: 30% no ano 1 (MVP em modo sombra), 80% no ano 2 e regime do ano 3 ao 5</p>
+    </div>
+    <div class="logo"><span>Itaú Unibanco</span></div>
+  </div>
+  <div class="body">
+    <div class="scen-row">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span class="lbl">Cenário</span><div class="scen" data-scen></div><span class="custom-pill">Premissas personalizadas no simulador</span></div>
+      <div class="mleg"><span><i style="background:var(--c-hard)"></i>Hard money</span><span><i style="background:var(--c-soft)"></i>Soft money</span></div>
+    </div>
+    <div class="vpl grow">
+      <div class="panel rise">
+        <div class="panel-head">Benefício por ano, com a curva de captura <small>R$, valores nominais</small></div>
+        <div class="panel-body" style="gap:0">
+          <div class="cols" id="cols"></div>
+          <div class="caxis" id="caxis"></div>
+        </div>
+      </div>
+      <div class="panel rise d1">
+        <div class="panel-head">Quanto vale e quanto mexe</div>
+        <div class="panel-body">
+          <div class="vk">
+            <div class="big"><small>Teto racional de investimento em 5 anos</small><b data-v="vplBruto" data-f="mm">–</b><span>VPL dos benefícios a 25% a.a. Acima disso, o projeto destrói valor neste horizonte.</span></div>
+            <div class="g"><small>VPL só do sobrepreço (L4)</small><b data-v="vplAnc" data-f="mm">–</b><span>A leitura mais conservadora: só caixa, só com âncora medida</span></div>
+            <div><small>Benefício em regime</small><b data-v="tot.tot" data-f="mm">–</b><span>por ano, a partir do ano 3</span></div>
+          </div>
+          <div class="sub-h">Sensibilidade • quanto cada premissa move o benefício anual</div>
+          <div class="sens" id="sens"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7 FASE 0 ============ -->
+<section class="slide" data-label="Fase 0">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Capítulo 6 • Fase 0</div>
+      <h1>7) Fase 0: trocar cada premissa por um dado medido</h1>
+      <p>Seis medições transformam a faixa de cenários em um número único e auditável</p>
+    </div>
+    <div class="logo"><span>Itaú Unibanco</span></div>
+  </div>
+  <div class="body">
+    <div class="f0">
+      <div class="fz hi rise"><div class="fz-h"><small>Hard money • L5</small><span class="imp alto">Impacto alto</span></div><b>% de serviços pagos sem evidência válida</b><div class="now">Hoje no modelo: <strong>1% a 3%</strong>, sem medição</div><p>Cada ponto percentual vale <strong data-v="sens.evid" data-f="mm">–</strong> por ano. É a maior incógnita do agente de fotos.</p><div class="how"><strong>Como medir:</strong> auditar as fotos de uma amostra de OTs concluídas e pagas.</div></div>
+      <div class="fz hi rise d1"><div class="fz-h"><small>Hard money • L4</small><span class="imp alto">Impacto alto</span></div><b>Sobrepreço nas cotações aprovadas de primeira</b><div class="now">Hoje: <strong>0,25 a 0,75 ×</strong> a taxa de contestação</div><p>Cada ponto percentual de incidência vale <strong data-v="sens.sobre" data-f="mm">–</strong> por ano.</p><div class="how"><strong>Como medir:</strong> rodar o Atest.AI em modo sombra sobre cotações aprovadas sem contestação e auditar os apontamentos.</div></div>
+      <div class="fz hi rise d2"><div class="fz-h"><small>Soft money • L1</small><span class="imp alto">Impacto alto</span></div><b>Minutos por cotação, por faixa de valor</b><div class="now">Hoje: <strong>1 a 20 min</strong> (simulador do dashboard)</div><p>Cada minuto a mais na baseline vale <strong data-v="sens.min" data-f="mm">–</strong> por ano.</p><div class="how"><strong>Como medir:</strong> cronometrar 50 análises reais por esteira, por faixa.</div></div>
+      <div class="fz rise d1"><div class="fz-h"><small>Todas as alavancas</small><span class="imp alto">Impacto alto</span></div><b>Taxas de detecção e reduções de tempo</b><div class="now">Hoje: <strong>cenários Conservador, Base e Otimista</strong></div><p>Definem em qual ponto da faixa de <span data-v="range.lo" data-f="mm">–</span> a <span data-v="range.hi" data-f="mm">–</span> o produto realmente está.</p><div class="how"><strong>Como medir:</strong> concordância entre parecer e decisão humana no modo sombra.</div></div>
+      <div class="fz rise d2"><div class="fz-h"><small>Hard money • L4 SISR</small><span class="imp">Impacto médio</span></div><b>1ª cotação × aprovada no SISR</b><div class="now">Hoje: usa os <strong>13,5% do SETA</strong> como proxy</div><p>O SISR ainda não tem a decomposição que o dashboard do SETA já faz.</p><div class="how"><strong>Como medir:</strong> repetir a análise do SETA na base de orçamentos do SISR.</div></div>
+      <div class="fz rise d3"><div class="fz-h"><small>Soft money • L2 e L3</small><span class="imp">Impacto médio</span></div><b>Minutos por atestação e por devolução</b><div class="now">Hoje: <strong>2 min</strong> e <strong>15 min</strong>, mais o custo de R$ 120/h</div><p>Cada R$ 10 a mais no custo da hora vale <strong data-v="sens.hora" data-f="mm">–</strong> por ano.</p><div class="how"><strong>Como medir:</strong> cronometrar a etapa 13 e as devoluções; custo/hora com a Controladoria.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FECHAMENTO ============ -->
+<section class="slide" data-label="Fechamento">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Fechamento</div>
+      <h1>Atest.AI: um valor defensável hoje e um caminho claro para medir o resto</h1>
+      <p>Quatro mensagens desta valoração e os próximos passos</p>
+    </div>
+    <div class="logo"><span>Itaú Unibanco</span></div>
+  </div>
+  <div class="body">
+    <div class="close-grid">
+      <div class="panel rise">
+        <div class="panel-head">O que levamos desta valoração <small>clique para revisitar</small></div>
+        <div class="panel-body"><div class="tks">
+          <button class="tk-item" type="button" data-go="4"><div class="ic">💰</div><div><small>Resultado</small><b><span data-v="tot.tot" data-f="mm" style="display:inline;margin:0;font-size:inherit;color:inherit">–</span> por ano</b><span>No cenário Base, com faixa de <span data-v="range.lo" data-f="mm" style="display:inline;margin:0">–</span> a <span data-v="range.hi" data-f="mm" style="display:inline;margin:0">–</span>.</span></div></button>
+          <button class="tk-item" type="button" data-go="2"><div class="ic">⚖️</div><div><small>A régua</small><b>Só o ganho incremental</b><span>Os R$ 5,6 MM que a contestação humana já captura ficam fora da conta.</span></div></button>
+          <button class="tk-item" type="button" data-go="3"><div class="ic">🧾</div><div><small>Evidência</small><b>Quase metade ancorada em dado</b><span><span data-v="tot.anc" data-f="mm" style="display:inline;margin:0">–</span> vêm de alavancas com âncora medida; o resto depende da Fase 0.</span></div></button>
+          <button class="tk-item" type="button" data-go="6"><div class="ic">📈</div><div><small>Valor do produto</small><b>Teto de <span data-v="vplBruto" data-f="mm" style="display:inline;margin:0;font-size:inherit;color:inherit">–</span></b><span>VPL dos benefícios em 5 anos, a 25% a.a.: o máximo que faz sentido investir.</span></div></button>
+        </div></div>
+      </div>
+      <div class="panel rise d2">
+        <div class="panel-head">Próximos passos</div>
+        <div class="panel-body" style="justify-content:space-around">
+          <div class="nx" style="--c:var(--accent)"><i></i><div><small>Dados • SISR</small><b>Comparar 1ª cotação × aprovada no SISR</b><span>Mesma decomposição do dashboard do SETA, na base do Charles.</span></div></div>
+          <div class="nx" style="--c:var(--c-soft)"><i></i><div><small>Fase 0 • baseline</small><b>Cronometrar análise, atestação e devolução</b><span>Amostra por esteira e por faixa de valor, com custo/hora da Controladoria.</span></div></div>
+          <div class="nx" style="--c:var(--ok)"><i></i><div><small>Fase 1 • modo sombra</small><b>Medir detecção e auditar fotos</b><span>Parecer sem mudar status, comparado à decisão humana, para fechar L4 e L5.</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="thanks rise d3">
+      <div><h2>Obrigado<span>!</span></h2><p>O modelo completo, com todas as fórmulas, está em <b>AtestAI_Valoracao_SETA_SISR.xlsx</b>. As premissas deste deck e da planilha são as mesmas.</p></div>
+      <div class="sig"><b>Data<span>Craft</span></b><small>Atest.AI • SETA • SISR</small></div>
+    </div>
+  </div>
+</section>
+
+<div class="foot"><span>Corporativo | Interno</span><span class="pg" id="pg">1 / 9</span></div>
+<div class="progress" id="progress"></div>
+</div>
+</div>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-veil" data-close></div>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="modal-x" id="mClose" type="button" aria-label="Fechar">×</button>
+    <div id="mBody"></div>
+  </div>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<nav class="chrome" id="chrome" aria-label="Navegação dos slides">
+  <button class="cbtn" id="prev" aria-label="Slide anterior">←</button>
+  <div class="dots" id="dots"></div>
+  <span class="count" id="count">1 / 9</span>
+  <button class="cbtn" id="next" aria-label="Próximo slide">→</button>
+  <span class="sep"></span>
+  <button class="cbtn ghostc" id="themeBtn" aria-label="Alternar tema claro e escuro" title="Alternar tema">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M8.7 13.6C9.4 14.3 10 15.1 10 16v1h4v-1c0-.9.6-1.7 1.3-2.4A5.8 5.8 0 1 0 8.7 13.6z"/></svg>
+  </button>
+  <button class="cbtn ghostc" id="fsBtn" aria-label="Tela cheia" title="Tela cheia (atalho F) • setas para navegar">
+    <svg viewBox="0 0 24 24" aria-hidden="true" id="fsIcon"><path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></svg>
+  </button>
+</nav>
+
+<script>
+/* ---------- modelo de valoração (espelha AtestAI_Valoracao_SETA_SISR.xlsx) ---------- */
+const SISR_M=[["2025-01",695,1631.62,0.0,5.6],["2025-02",958,1686.29,0.7,6.7],["2025-03",962,1628.36,0.2,9.1],
+["2025-04",1406,1639.92,1.5,9.7],["2025-05",1347,1724.26,5.6,8.6],["2025-06",1048,2424.54,5.3,9.7],
+["2025-07",907,1915.36,1.0,14.5],["2025-08",886,1712.48,2.1,15.2],["2025-09",684,1680.19,1.0,19.2],
+["2025-10",770,2028.57,4.0,19.8],["2025-11",859,2490.27,2.8,28.8],["2025-12",613,1835.48,0.3,36.4],
+["2026-01",724,2263.80,5.0,22.5],["2026-02",788,2069.95,7.2,54.2],["2026-03",989,2388.43,11.8,58.3],
+["2026-04",1027,2610.09,5.6,72.0],["2026-05",895,2176.27,1.7,63.6],["2026-06",1346,2416.31,5.6,47.8],
+["2026-07",735,2032.52,3.5,54.2],["2026-08",1415,2490.35,15.2,33.0],["2026-09",1217,2438.16,15.6,15.8],
+["2026-10",479,1998.32,15.2,6.1]];
+const LTM=SISR_M.filter(m=>m[0]>="2025-10"&&m[0]<="2026-09");
+const D={
+  seta:{cot:85832,cotBand:84044,horasDash:(40994*1+21440*2+7479*3+9684*5+2591*8+1098*10+536*15+222*20)/60,
+    concl:103336,rej:16515+2947,rejCusto:16515,valor:61941*2178,v1a:41533091,vapr:35920924,multi:10608,c1:12.9,cm:36.8},
+  sisr:{cot:LTM.reduce((a,m)=>a+m[1],0),valor:LTM.reduce((a,m)=>a+m[1]*m[2],0),retrab:LTM.reduce((a,m)=>a+m[1]*m[3]/100,0),
+    tempo:LTM.reduce((a,m)=>a+m[1]*m[4],0)/LTM.reduce((a,m)=>a+m[1],0)}
+};
+D.seta.red=1-D.seta.vapr/D.seta.v1a;               // 13,5%
+D.seta.naoCont=D.seta.valor-D.seta.vapr;           // ≈ R$ 99,0 MM
+D.seta.taxa=D.seta.rejCusto/D.seta.cot;            // 19,2%
+D.seta.minMedio=D.seta.horasDash*60/D.seta.cotBand;// 2,37 min
+D.sisr.taxa=D.sisr.retrab/D.sisr.cot;              // 7,4%
+D.sisr.concl=D.sisr.cot-D.sisr.retrab;
+D.sisr.naoCont=D.sisr.valor*(1-D.sisr.taxa);
+
+const PRESET={
+  cons:{redTempo:.40,redCiclos:.20,fator:.25,detPreco:.50,pctSemEvid:.01,detFotos:.40},
+  base:{redTempo:.60,redCiclos:.35,fator:.50,detPreco:.65,pctSemEvid:.02,detFotos:.60},
+  otim:{redTempo:.75,redCiclos:.50,fator:.75,detPreco:.80,pctSemEvid:.03,detFotos:.75}
+};
+const BASELINE={custoHora:120,minCot:D.seta.minMedio,minAtest:2,minDevol:15,glosa:.5,horasFte:1760,
+  ramp:[.30,.80,1.00,1.00,1.00],wacc:.25,capex:0,opex:0};
+
+function calc(p){
+  const out={};
+  const one=(k,e)=>{
+    const hHoje = k==='seta' ? e.cotBand*p.minCot/60 : e.cot*p.minCot/60;
+    const hLib=hHoje*p.redTempo;
+    const nAt = k==='seta'? e.concl : e.concl;
+    const haHoje=nAt*p.minAtest/60, haLib=haHoje*p.redTempo;
+    const nDev = k==='seta'? e.rej : e.retrab;
+    const hdHoje=nDev*p.minDevol/60, hdLib=hdHoje*p.redCiclos;
+    const taxa=e.taxa, inc=taxa*p.fator;
+    const L1=hLib*p.custoHora, L2=haLib*p.custoHora, L3=hdLib*p.custoHora;
+    const L4=e.naoCont*inc*D.seta.red*p.detPreco;
+    const L5=e.valor*p.pctSemEvid*p.glosa*p.detFotos;
+    const hard=L4+L5, soft=L1+L2+L3;
+    return {L1,L2,L3,L4,L5,hard,soft,tot:hard+soft,anc:L1+L4,acomp:L2+L3+L5,
+      hHoje,hLib,haHoje,haLib,hdHoje,hdLib,inc,horasLib:hLib+haLib+hdLib,fte:(hLib+haLib+hdLib)/p.horasFte};
+  };
+  out.seta=one('seta',D.seta); out.sisr=one('sisr',D.sisr);
+  const t={};
+  for(const key of Object.keys(out.seta)) t[key]=out.seta[key]+out.sisr[key];
+  out.tot=t;
+  out.dias=D.seta.multi*(D.seta.cm-D.seta.c1)*p.redCiclos;
+  const yrs=p.ramp.map(r=>({hard:t.hard*r,soft:t.soft*r,anc4:t.L4*r}));
+  const disc=i=>Math.pow(1+p.wacc,i+1);
+  out.yrs=yrs;
+  out.vplBruto=yrs.reduce((a,y,i)=>a+(y.hard+y.soft)/disc(i),0);
+  out.vplAnc=yrs.reduce((a,y,i)=>a+y.anc4/disc(i),0);
+  out.vplProj=-p.capex+yrs.reduce((a,y,i)=>a+(y.hard+y.soft-p.opex)/disc(i),0);
+  const custoN=p.capex+p.ramp.length*p.opex;
+  out.roi=custoN>0? yrs.reduce((a,y)=>a+y.hard+y.soft,0)/custoN-1 : null;
+  out.payback=(p.capex+p.opex)>0 ? (t.hard-p.opex<=0? Infinity : p.capex/((t.hard-p.opex)/12)) : null;
+  // sensibilidade (Base): +1 min, +1 p.p. sobrepreço, +1 p.p. sem evidência, +R$10/h
+  out.sens={
+    min:(D.seta.cotBand+D.sisr.cot)/60*p.redTempo*p.custoHora,
+    sobre:(D.seta.naoCont+D.sisr.naoCont)*.01*D.seta.red*p.detPreco,
+    evid:(D.seta.valor+D.sisr.valor)*.01*p.glosa*p.detFotos,
+    hora:t.soft/p.custoHora*10
+  };
+  return out;
+}
+if(typeof module!=='undefined') module.exports={calc,D,PRESET,BASELINE};
+
+(function(){
+  /* ---------- formatação pt-BR ---------- */
+  const nf=(v,d)=>v.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+  function money(v){
+    if(v==null||!isFinite(v)) return '–';
+    const a=Math.abs(v), s=v<0?'−':'';
+    if(a>=1e6) return s+'R$ '+nf(a/1e6,2)+' MM';
+    if(a>=1e3) return s+'R$ '+nf(a/1e3,0)+' mil';
+    return s+'R$ '+nf(a,0);
+  }
+  const F={
+    mm:money,
+    mm1:v=>'R$ '+nf(v/1e6,1)+' MM',
+    mmlbl:v=>'R$ '+nf(v/1e6,1)+' MM pagos',
+    int:v=>nf(v,0),
+    h:v=>nf(v,0)+' h',
+    fte:v=>nf(v,1)+' FTE',
+    d:v=>nf(v,1)+' dias',
+    pct0:v=>nf(v*100,0)+'%',
+    pctlbl:v=>'média da base: '+nf(v*100,1)+'%',
+    mmcost:v=>(P.capex+P.opex>0)?money(v):'informe o custo',
+    roi:v=>v==null?'informe o custo':nf(v*100,0)+'%',
+    pb:v=>v==null?'informe o custo':(!isFinite(v)?'não se paga':nf(v,1)+' meses')
+  };
+
+  /* ---------- estado ---------- */
+  let scen='base';
+  let P={...BASELINE,...PRESET.base};
+  let R=null;
+  const NAMES={cons:'Conservador',base:'Base',otim:'Otimista'};
+  const get=(o,path)=>path.split('.').reduce((a,k)=>a==null?a:a[k],o);
+
+  const SL=[
+    {k:'redTempo',l:'Redução do tempo de análise',min:0,max:.9,st:.05,f:'pct',h:'vale para análise e atestação'},
+    {k:'redCiclos',l:'Redução de ciclos de devolução',min:0,max:.8,st:.05,f:'pct',h:'checklist mínimo + apontamentos'},
+    {k:'detPreco',l:'Detecção de sobrepreço',min:0,max:1,st:.05,f:'pct',h:'match contextual + LPU'},
+    {k:'fator',l:'Sobrepreço não contestado',min:0,max:1.5,st:.05,f:'x',h:'× taxa de contestação (19,2% SETA, 7,4% SISR)'},
+    {k:'pctSemEvid',l:'Serviços pagos sem evidência',min:0,max:.06,st:.005,f:'pct1',h:'sem medição hoje'},
+    {k:'detFotos',l:'Detecção do agente de fotos',min:0,max:1,st:.05,f:'pct',h:'capacidade completa na Fase 2'}
+  ];
+  const slFmt={pct:v=>nf(v*100,0)+'%',pct1:v=>nf(v*100,1)+'%',x:v=>nf(v,2)+'×'};
+  const slWrap=document.getElementById('sliders');
+  SL.forEach(s=>{
+    const d=document.createElement('div'); d.className='sl';
+    d.innerHTML='<label for="sl_'+s.k+'"><span>'+s.l+'</span><output id="o_'+s.k+'"></output></label><input type="range" id="sl_'+s.k+'" min="'+s.min+'" max="'+s.max+'" step="'+s.st+'"><small>'+s.h+'</small>';
+    slWrap.appendChild(d);
+    const inp=d.querySelector('input');
+    inp.addEventListener('input',()=>{ P[s.k]=parseFloat(inp.value); markCustom(); update(); });
+  });
+  document.querySelectorAll('.in input[data-p]').forEach(inp=>{
+    inp.addEventListener('input',()=>{
+      let v=parseFloat(String(inp.value).replace(',','.')); if(!isFinite(v)||v<0) v=0;
+      P[inp.dataset.p]=inp.dataset.pct?v/100:v;
+      if(!['capex','opex','wacc'].includes(inp.dataset.p)) markCustom();
+      update(true);
+    });
+  });
+  function markCustom(){ scen='custom'; document.body.classList.add('custom'); syncScenButtons(); }
+  function setScen(k){
+    scen=k; document.body.classList.remove('custom');
+    const keep={capex:P.capex,opex:P.opex,wacc:P.wacc};
+    P={...BASELINE,...PRESET[k],...keep};
+    syncInputs(); update();
+  }
+  document.getElementById('resetBtn').onclick=()=>{ P.capex=0;P.opex=0;P.wacc=BASELINE.wacc; setScen('base'); };
+  document.querySelectorAll('[data-scen]').forEach(w=>{
+    ['cons','base','otim'].forEach(k=>{
+      const b=document.createElement('button'); b.type='button'; b.dataset.k=k; b.textContent=NAMES[k];
+      b.onclick=()=>setScen(k); w.appendChild(b);
+    });
+  });
+  function syncScenButtons(){
+    document.querySelectorAll('[data-scen] button').forEach(b=>{ const on=b.dataset.k===scen; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); });
+    document.querySelectorAll('[data-scen-name]').forEach(e=>e.textContent=scen==='custom'?'personalizado':NAMES[scen]);
+  }
+  function syncInputs(skipNumbers){
+    SL.forEach(s=>{ document.getElementById('sl_'+s.k).value=P[s.k]; });
+    if(skipNumbers) return;
+    document.querySelectorAll('.in input[data-p]').forEach(inp=>{
+      const v=P[inp.dataset.p]; inp.value=inp.dataset.pct?+(v*100).toFixed(2):(inp.dataset.p==='minCot'?+v.toFixed(2):v);
+    });
+  }
+
+  /* ---------- render ---------- */
+  function update(fromNumber){
+    R=calc(P);
+    const lo=calc({...P,...PRESET.cons}).tot.tot, hi=calc({...P,...PRESET.otim}).tot.tot;
+    const ctx={...R,D,range:{lo,hi},share:R.seta.tot/R.tot.tot,hardShare:R.tot.hard/R.tot.tot,l5Share:R.tot.L5/R.tot.tot};
+    document.querySelectorAll('[data-v]').forEach(el=>{
+      const v=get(ctx,el.dataset.v); const f=F[el.dataset.f]||money;
+      el.textContent=f(v);
+    });
+    SL.forEach(s=>{ document.getElementById('o_'+s.k).textContent=slFmt[s.f](P[s.k]); if(!fromNumber) document.getElementById('sl_'+s.k).value=P[s.k]; });
+    syncScenButtons();
+    drawLevers(); drawStack(); drawCols(); drawSens();
+  }
+
+  /* ---------- 1: SISR mensal ---------- */
+  (function(){
+    const wrap=document.getElementById('sisrBars'), ax=document.getElementById('sisrAxis');
+    const max=0.18;
+    const ref=document.createElement('div'); ref.className='ref';
+    ref.style.bottom=(D.sisr.taxa/max*100)+'%'; ref.innerHTML='<span>média da base '+nf(D.sisr.taxa*100,1)+'%</span>';
+    wrap.appendChild(ref);
+    SISR_M.forEach((m,i)=>{
+      const inb=m[0]>='2025-10'&&m[0]<='2026-09', part=m[0]==='2026-10';
+      const b=document.createElement('div'); b.className='mb'+(inb?' ltm':'')+(part?' part':'');
+      const h=Math.max(m[3]/100/max*100,1.2);
+      b.style.setProperty('--h',h+'%');
+      b.innerHTML='<i style="height:'+h+'%"></i>'+((m[0]==='2026-09'||m[0]==='2026-03')?'<em>'+nf(m[3],1)+'%</em>':'');
+      const [y,mo]=m[0].split('-');
+      b.dataset.tip='<b>'+mo+'/'+y+(part?' (parcial)':'')+'</b><br>Retrabalho: '+nf(m[3],1)+'%<br>Volume: '+nf(m[1],0)+' orçamentos<br>Tempo médio: '+nf(m[4],1)+' dias';
+      wrap.appendChild(b);
+      const t=document.createElement('span'); t.textContent=(mo==='01'||i===0)?(mo+'/'+y.slice(2)):(+mo%3===1?mo:''); ax.appendChild(t);
+    });
+  })();
+
+  /* ---------- 2: exposição ---------- */
+  (function(){
+    const s=D.seta, totS=s.valor, cS=s.vapr, nS=s.naoCont;
+    document.getElementById('exSeta').innerHTML=
+      '<div class="cont" style="width:'+(cS/totS*100)+'%" data-tip="<b>Contestado</b><br>Valor aprovado após revisão de preço: '+money(cS)+'">'+money(cS)+'</div>'+
+      '<div class="nao" style="width:'+(nS/totS*100)+'%" data-tip="<b>Aprovado de primeira</b><br>'+money(nS)+' sem contestação de preço">'+money(nS)+' sem contestação</div>';
+    const q=D.sisr, cQ=q.valor-q.naoCont;
+    document.getElementById('exSisr').innerHTML=
+      '<div class="cont slim" style="width:'+Math.max(cQ/q.valor*100,1.5)+'%" data-tip="<b>Contestado (com retrabalho)</b><br>'+money(cQ)+' ('+nf(q.taxa*100,1)+'% das cotações)"></div>'+
+      '<div class="nao" style="width:'+(q.naoCont/q.valor*100)+'%" data-tip="<b>Aprovado de primeira</b><br>'+money(q.naoCont)+'">'+money(q.naoCont)+' sem contestação</div>';
+    document.getElementById('exSisrOut').innerHTML='<i></i><span>'+money(cQ)+' contestado <em>• '+nf(q.taxa*100,1)+'% das cotações com retrabalho</em></span>';
+  })();
+
+  /* ---------- 3: alavancas ---------- */
+  const LV=[
+    {k:'L4',c:'L4',t:'h',n:'Sobrepreço evitado',ev:'med',fx:'Valor <em>sem contestação</em> × incidência (<em>fator × taxa de contestação</em>) × <em>13,5%</em> × detecção',
+     simp:'Quando o fornecedor cobra caro ou inclui item fora do pedido, o Atest.AI aponta antes da aprovação e o banco deixa de pagar a diferença.',
+     tec:'Valor aprovado <em>sem contestação</em> × incidência estimada (<em>fator × taxa de contestação</em>) × sobrepreço típico de <em>13,5%</em> × taxa de detecção.'},
+    {k:'L5',c:'L5',t:'h',n:'Desconto por serviço sem evidência',ev:'sup',fx:'Valor pago × <em>% sem evidência</em> × 50% descontado × detecção do agente de fotos',
+     simp:'Se as fotos não provam que o serviço foi feito, parte do pagamento é descontada até o fornecedor comprovar.',
+     tec:'Valor pago × <em>% de serviços sem evidência válida</em> × <em>50%</em> descontado × taxa de detecção do agente de fotos.'},
+    {k:'L1',c:'L1',t:'s',n:'Horas de análise do orçamento',ev:'med',fx:'Cotações × <em>min/cotação</em> ÷ 60 × redução do tempo × R$/hora',
+     simp:'O parecer chega pronto no chamado, e a pessoa analista confere escopo, orçamento e fotos em menos tempo.',
+     tec:'Cotações/ano × <em>min por cotação</em> ÷ 60 × redução do tempo de análise × custo da hora.'},
+    {k:'L2',c:'L2',t:'s',n:'Horas de atestação pós-execução',ev:'sup',fx:'OTs concluídas × <em>2 min</em> ÷ 60 × redução do tempo × R$/hora',
+     simp:'Depois do serviço, conferir se as fotos comprovam o que foi aprovado fica mais rápido.',
+     tec:'OTs concluídas × <em>2 min</em> por atestação ÷ 60 × redução do tempo × custo da hora.'},
+    {k:'L3',c:'L3',t:'s',n:'Retrabalho com fornecedor',ev:'sup',fx:'Devoluções × <em>15 min</em> ÷ 60 × redução de ciclos × R$/hora',
+     simp:'Menos idas e vindas: o pedido incompleto volta na hora e a devolução já vai com os apontamentos prontos.',
+     tec:'Devoluções/ano × <em>15 min</em> ÷ 60 × redução de ciclos × custo da hora. A reanálise já está em L1.'}
+  ];
+  const lvWrap=document.getElementById('levers');
+  LV.forEach(l=>{
+    const b=document.createElement('div'); b.className='lv'; b.dataset.lever=l.k; b.tabIndex=0; b.setAttribute('role','button');
+    b.innerHTML='<span class="code '+l.t+'">'+l.c.replace('L','L')+'</span>'+
+      '<span class="nm"><b>'+l.n+'</b><span><span class="tag '+(l.t==='h'?'hard':'soft')+'"><i></i>'+(l.t==='h'?'Hard':'Soft')+'</span><span class="tag '+l.ev+'">'+(l.ev==='med'?'Ancorado':'A comprovar')+'</span></span></span>'+
+      '<span class="simp">'+l.simp+'</span><span class="tec">'+l.tec+'</span>'+
+      '<span class="vcol"><span class="vline"><span class="val" data-lv="'+l.k+'">–</span><button type="button" class="info" data-info="'+l.k+'" aria-label="De onde vem o número de '+l.n+'">i</button></span><span class="bar"><i class="'+l.t+'" data-lvb="'+l.k+'"></i></span></span><span class="go" title="Ver a conta" aria-hidden="true">↗</span>';
+    b.setAttribute('aria-label',l.n+': ver a conta completa');
+    b.onclick=e=>{ if(e.target.closest('.info')) return; openLever(l,b); };
+    b.onkeydown=e=>{ if(e.target!==b) return; if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLever(l,b); } };
+    lvWrap.appendChild(b);
+  });
+  function drawLevers(){
+    const max=Math.max(...LV.map(l=>R.tot[l.k]));
+    LV.forEach(l=>{
+      document.querySelector('[data-lv="'+l.k+'"]').textContent=money(R.tot[l.k]);
+      const i=document.querySelector('[data-lvb="'+l.k+'"]');
+      i.style.width=(R.tot[l.k]/max*100)+'%';
+      i.parentElement.dataset.tip='<b>'+l.n+'</b><br>'+nf(R.tot[l.k]/R.tot.tot*100,0)+'% do benefício total<br>SETA '+money(R.seta[l.k])+' • SISR '+money(R.sisr[l.k]);
+    });
+  }
+
+  /* ---------- 4: barras por esteira ---------- */
+  function drawStack(){
+    const max=Math.max(R.seta.tot,R.sisr.tot);
+    document.getElementById('stk').innerHTML=[['SETA',R.seta],['SISR',R.sisr]].map(([n,e])=>{
+      const w=e.tot/max*100;
+      return '<div class="stk-row"><b>'+n+'</b><div class="stk-bar" style="width:'+Math.max(w,4)+'%">'+
+        '<div class="h" style="width:'+(e.hard/e.tot*100)+'%" data-tip="<b>'+n+' • hard money</b><br>'+money(e.hard)+'">'+(w>30?money(e.hard):'')+'</div>'+
+        '<div class="s" style="width:'+(e.soft/e.tot*100)+'%" data-tip="<b>'+n+' • soft money</b><br>'+money(e.soft)+'">'+(w>30?money(e.soft):'')+'</div>'+
+        '</div><em>'+money(e.tot)+'</em></div>';
+    }).join('');
+  }
+
+  /* ---------- 6: colunas por ano ---------- */
+  function niceStep(v){ const p=Math.pow(10,Math.floor(Math.log10(v))); const m=v/p; return (m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10)*p; }
+  function drawCols(){
+    const ys=R.yrs, raw=Math.max(...ys.map(y=>y.hard+y.soft))*1.12, step=niceStep(raw/4), nT=Math.ceil(raw/step), max=nT*step;
+    const cols=document.getElementById('cols');
+    let html='';
+    for(let g=0;g<=nT;g++){ const v=step*g; html+='<div class="gl" style="bottom:'+(g/nT*100)+'%"><span>'+(v===0?'0':v>=1e6?nf(v/1e6,v%1e6?1:0)+' MM':nf(v/1e3,0)+' mil')+'</span></div>'; }
+    html+=ys.map((y,i)=>{
+      const t=y.hard+y.soft, hh=y.hard/max*100, hs=y.soft/max*100;
+      return '<div class="col" data-tip="<b>Ano '+(i+1)+' • captura '+nf(P.ramp[i]*100,0)+'%</b><br>Hard: '+money(y.hard)+'<br>Soft: '+money(y.soft)+'<br>Total: '+money(t)+'">'+
+        '<em style="bottom:calc('+(hh+hs)+'% + 8px)">'+money(t)+'</em><i class="s" style="height:'+hs+'%"></i><i class="h" style="height:'+hh+'%"></i></div>';
+    }).join('');
+    cols.innerHTML=html;
+    document.getElementById('caxis').innerHTML=ys.map((y,i)=>'<div><b>Ano '+(i+1)+'</b><span>captura de '+nf(P.ramp[i]*100,0)+'%</span></div>').join('');
+  }
+
+  /* ---------- 6: sensibilidade ---------- */
+  function drawSens(){
+    const S=[
+      ['evid','+1 p.p. de serviços sem evidência','h'],
+      ['min','+1 min por cotação analisada','s'],
+      ['sobre','+1 p.p. de sobrepreço não contestado','h'],
+      ['hora','+R$ 10 no custo da hora','s']
+    ];
+    const max=Math.max(...S.map(s=>R.sens[s[0]]));
+    document.getElementById('sens').innerHTML=S.map(s=>'<div class="sn '+s[2]+'"><span>'+s[1]+'</span><div class="tr"><i style="width:'+(R.sens[s[0]]/max*100)+'%"></i></div><b>+'+money(R.sens[s[0]])+'</b></div>').join('');
+  }
+
+  /* ---------- modais ---------- */
+  const modal=document.getElementById('modal'), mBody=document.getElementById('mBody'), mClose=document.getElementById('mClose');
+  let opener=null;
+  function show(html,btn){ opener=btn||null; mBody.innerHTML=html; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); mClose.focus(); }
+  function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); if(opener) opener.focus(); }
+  mClose.onclick=closeModal; modal.querySelector('[data-close]').onclick=closeModal;
+  const row=(l,a,b,c)=>'<tr><td>'+l+'</td><td class="n">'+a+'</td><td class="n">'+b+'</td><td class="n">'+(c||'')+'</td></tr>';
+  const pc=v=>nf(v*100,1)+'%', hh=v=>nf(v,0)+' h';
+  function openLever(l,btn){
+    const s=R.seta,q=R.sisr; let rows='', lead='', note='';
+    const head='<tr><th>Passo</th><th class="n">SETA</th><th class="n">SISR</th><th class="n">Total</th></tr>';
+    if(l.k==='L4'){
+      lead='O que hoje passa <b>sem contestação de preço</b> e tem sobrepreço. A incidência é uma fração da taxa de contestação observada em cada esteira; o tamanho do sobrepreço é a redução medida no SETA.';
+      rows=row('Valor sem contestação',money(D.seta.naoCont),money(D.sisr.naoCont))+
+        row('Taxa de contestação medida',pc(D.seta.taxa)+' (custo)',pc(D.sisr.taxa)+' (retrab.)')+
+        row('× fator do cenário',nf(P.fator,2)+'×',nf(P.fator,2)+'×')+
+        row('= incidência de sobrepreço',pc(s.inc),pc(q.inc))+
+        row('× sobrepreço típico',pc(D.seta.red),pc(D.seta.red)+' (proxy)')+
+        row('× detecção',pc(P.detPreco),pc(P.detPreco))+
+        '<tr class="t"><td>L4 • Sobrepreço evitado</td><td class="n">'+money(s.L4)+'</td><td class="n">'+money(q.L4)+'</td><td class="n">'+money(R.tot.L4)+'</td></tr>';
+      note='<b>Por que é ancorado:</b> volume, valor, taxa de contestação e os 13,5% são medidos. Só o fator e a detecção são premissas.';
+    } else if(l.k==='L5'){
+      lead='Serviço pago sem foto que comprove a execução. Com o apontamento do agente de fotos, parte do valor deixa de ser paga.';
+      rows=row('Valor pago',money(D.seta.valor),money(D.sisr.valor))+
+        row('× % pago sem evidência',pc(P.pctSemEvid),pc(P.pctSemEvid))+
+        row('× parcela descontada',pc(P.glosa),pc(P.glosa))+
+        row('× detecção do agente de fotos',pc(P.detFotos),pc(P.detFotos))+
+        '<tr class="t"><td>L5 • Desconto por serviço sem evidência</td><td class="n">'+money(s.L5)+'</td><td class="n">'+money(q.L5)+'</td><td class="n">'+money(R.tot.L5)+'</td></tr>';
+      note='<b>Por que é a comprovar:</b> não existe medição de quantos serviços são pagos sem evidência válida. É a premissa que mais move o número.';
+    } else if(l.k==='L1'){
+      lead='Tempo que a pessoa analista deixa de gastar conferindo escopo, orçamento e fotos, porque o parecer já chega pronto no chamado.';
+      rows=row('Cotações/ano',nf(D.seta.cotBand,0),nf(D.sisr.cot,0))+
+        row('× min por cotação ÷ 60',nf(P.minCot,2)+' min',nf(P.minCot,2)+' min')+
+        row('= horas de análise hoje',hh(s.hHoje),hh(q.hHoje),hh(s.hHoje+q.hHoje))+
+        row('× redução do tempo',pc(P.redTempo),pc(P.redTempo))+
+        row('= horas liberadas',hh(s.hLib),hh(q.hLib),hh(s.hLib+q.hLib))+
+        row('× custo da hora',money(P.custoHora),money(P.custoHora))+
+        '<tr class="t"><td>L1 • Horas de análise</td><td class="n">'+money(s.L1)+'</td><td class="n">'+money(q.L1)+'</td><td class="n">'+money(R.tot.L1)+'</td></tr>';
+      note='<b>Por que é ancorado:</b> volumes medidos e minutos por faixa iguais aos do simulador do dashboard SETA (1 a 20 min, média de 2,37 min). No cenário Base, o SETA bate com os R$ 238.703 do dashboard.';
+    } else if(l.k==='L2'){
+      lead='Segundo momento do fluxo: conferir se as fotos após a execução comprovam o escopo aprovado (etapas 10 a 13).';
+      rows=row('Serviços a atestar/ano',nf(D.seta.concl,0),nf(D.sisr.concl,0)+' (proxy)')+
+        row('× min por atestação ÷ 60',nf(P.minAtest,1)+' min',nf(P.minAtest,1)+' min')+
+        row('= horas hoje',hh(s.haHoje),hh(q.haHoje),hh(s.haHoje+q.haHoje))+
+        row('× redução do tempo',pc(P.redTempo),pc(P.redTempo))+
+        row('= horas liberadas',hh(s.haLib),hh(q.haLib),hh(s.haLib+q.haLib))+
+        '<tr class="t"><td>L2 • Horas de atestação</td><td class="n">'+money(s.L2)+'</td><td class="n">'+money(q.L2)+'</td><td class="n">'+money(R.tot.L2)+'</td></tr>';
+      note='<b>Por que é a comprovar:</b> não há medição do tempo de atestação. O SISR usa como proxy as cotações sem retrabalho.';
+    } else {
+      lead='Tempo de idas e vindas com o fornecedor: redigir o motivo, cobrar documento e acompanhar o reenvio. A reanálise já está em L1.';
+      rows=row('Devoluções/ano',nf(D.seta.rej,0),nf(D.sisr.retrab,0))+
+        row('× min por devolução ÷ 60',nf(P.minDevol,0)+' min',nf(P.minDevol,0)+' min')+
+        row('= horas hoje',hh(s.hdHoje),hh(q.hdHoje),hh(s.hdHoje+q.hdHoje))+
+        row('× redução de ciclos',pc(P.redCiclos),pc(P.redCiclos))+
+        row('= horas evitadas',hh(s.hdLib),hh(q.hdLib),hh(s.hdLib+q.hdLib))+
+        '<tr class="t"><td>L3 • Retrabalho evitado</td><td class="n">'+money(s.L3)+'</td><td class="n">'+money(q.L3)+'</td><td class="n">'+money(R.tot.L3)+'</td></tr>';
+      note='<b>Por que é a comprovar:</b> o volume de devoluções é medido (19.462 rejeições no SETA), mas os 15 minutos por devolução são premissa.';
+    }
+    show('<span class="m-kick">'+l.c+' • '+(l.t==='h'?'Hard money':'Soft money')+' • cenário '+(scen==='custom'?'personalizado':NAMES[scen])+'</span><h3 id="mTitle">'+l.n+'</h3>'+
+      '<p class="m-lead">'+lead+'</p><div class="m-formula"><small>Fórmula</small><b>'+l.fx.replace(/<\/?em>/g,'')+'</b></div>'+
+      '<div class="m-tbl"><table>'+head+rows+'</table></div><p class="m-note">'+note+'</p>',btn);
+  }
+  const STATIC={
+    fontes:'<span class="m-kick">Fontes e recortes</span><h3 id="mTitle">De onde vêm os números</h3>'+
+      '<p class="m-lead">Cada esteira usa a base mais recente e completa disponível, sempre anualizada.</p>'+
+      '<div class="m-tbl"><table><tr><th>Esteira</th><th>Fonte</th><th>Recorte</th></tr>'+
+      '<tr><td><b>SETA</b></td><td>Dashboard <b>Valoração da validação inteligente</b> (DataCraft), a partir de BF_tratada_2025.xlsx e report de cotações</td><td>OTs corretivas criadas em jan–dez/2025</td></tr>'+
+      '<tr><td><b>SISR</b></td><td><b>Analise_Orcamentos_Dashboard_Regra_Atualizada.xlsx</b> (Charles Cassiano), aba Dinamica_Mensal</td><td>out/2025–set/2026; out/2026 é parcial e ficou fora</td></tr>'+
+      '<tr><td><b>Custo/hora e minutos</b></td><td>Simulador de capacidade do dashboard SETA</td><td>R$ 120/h • 1 a 20 min por faixa de valor</td></tr>'+
+      '<tr><td><b>Modelo</b></td><td><b>AtestAI_Valoracao_SETA_SISR.xlsx</b></td><td>Mesmas fórmulas e premissas deste deck</td></tr></table></div>'+
+      '<p class="m-note"><b>Aproximação conhecida:</b> o valor sem contestação do SETA subtrai o valor aprovado das OTs contestadas (cotações criadas em 2025) do valor das OTs concluídas. Os recortes são parecidos, mas não idênticos.</p>'
+  };
+  document.querySelectorAll('[data-modal]').forEach(b=>b.onclick=()=>show(STATIC[b.dataset.modal],b));
+
+  /* ---------- tooltip ---------- */
+  const tip=document.getElementById('tip');
+  /* origem de cada número das alavancas: Referência (material), Proxy (empréstimo de outra base) ou Premissa */
+  const SRC={
+    L4:[['ref','Valor sem contestação • SETA','Dashboard SETA: valor das OTs concluídas − valor aprovado das contestadas (aproximação de recortes)'],
+        ['ref','Valor sem contestação • SISR','Planilha do Charles: valor pago × (1 − % retrabalho)'],
+        ['ref','Taxa de contestação','SETA 19,2%: rejeições por custo no dashboard • SISR 7,4%: % retrabalho na planilha do Charles'],
+        ['ref','Sobrepreço de 13,5% • SETA','Dashboard SETA: 1ª cotação × aprovada (R$ 41,5 MM → R$ 35,9 MM)'],
+        ['prx','Sobrepreço de 13,5% • SISR','Usa o número do SETA até o SISR ter a mesma análise'],
+        ['pre','Fator e detecção','Definidos por cenário; calibrar no modo sombra']],
+    L5:[['ref','Valor pago','SETA: dashboard (61.941 OTs × R$ 2.178) • SISR: planilha do Charles'],
+        ['pre','% pago sem evidência','1% a 3% por cenário; não existe medição hoje'],
+        ['ref','50% descontado','Mesma premissa da calculadora da apresentação Atest.AI'],
+        ['pre','Detecção do agente de fotos','Agente novo; capacidade completa só na Fase 2']],
+    L1:[['ref','Cotações/ano','SETA: Pareto por faixa do dashboard • SISR: planilha do Charles'],
+        ['ref','Minutos por cotação • SETA','Simulador do dashboard SETA (1 a 20 min por faixa); valores digitados, não cronometrados'],
+        ['prx','Minutos por cotação • SISR','Média ponderada do SETA (2,37 min)'],
+        ['ref','Custo da hora R$ 120','Simulador do dashboard SETA'],
+        ['pre','Redução do tempo','Base 60%, igual ao simulador do dashboard']],
+    L2:[['ref','OTs concluídas • SETA','Dashboard SETA: 103.336 OTs corretivas'],
+        ['prx','Serviços a atestar • SISR','Cotações sem retrabalho, até extrair as OTs concluídas'],
+        ['pre','2 min por atestação','Sem medição; valor conservador'],
+        ['ref','Custo da hora R$ 120','Simulador do dashboard SETA']],
+    L3:[['ref','Devoluções • SETA','Dashboard SETA: 19.462 rejeições (custo + solução técnica)'],
+        ['ref','Devoluções • SISR','Planilha do Charles: cotações com Retrabalho = Sim'],
+        ['pre','15 min por devolução','Sem medição; cronometrar na Fase 0'],
+        ['pre','Redução de ciclos','Definida por cenário; calibrar no modo sombra']]
+  };
+  const KIND={ref:'Referência',prx:'Proxy',pre:'Premissa'};
+  let pinned=null;
+  function infoHtml(k){
+    return '<span class="ti-h">De onde vem este número</span>'+SRC[k].map(r=>'<div class="ti"><em class="'+r[0]+'">'+KIND[r[0]]+'</em><span><b>'+r[1]+'</b><small>'+r[2]+'</small></span></div>').join('')+
+      '<span class="ti-f">Referência = dado dos materiais • Proxy = emprestado de outra base • Premissa = a medir</span>';
+  }
+  function showInfo(btn){
+    tip.innerHTML=infoHtml(btn.dataset.info); tip.classList.add('wide','on');
+    const r=btn.getBoundingClientRect(), w=tip.offsetWidth, h=tip.offsetHeight;
+    let x=r.right-w, y=r.bottom+10;
+    if(y+h>window.innerHeight-8) y=r.top-h-10;
+    tip.style.left=Math.max(8,Math.min(x,window.innerWidth-w-8))+'px'; tip.style.top=Math.max(8,y)+'px';
+  }
+  function hideInfo(){ if(pinned) pinned.classList.remove('on'); pinned=null; tip.classList.remove('on','wide'); }
+  document.querySelectorAll('.info').forEach(btn=>{
+    btn.addEventListener('mouseenter',()=>{ if(!pinned) showInfo(btn); });
+    btn.addEventListener('mouseleave',()=>{ if(!pinned) tip.classList.remove('on','wide'); });
+    btn.addEventListener('focus',()=>{ if(!pinned) showInfo(btn); });
+    btn.addEventListener('blur',()=>{ if(!pinned) tip.classList.remove('on','wide'); });
+    btn.addEventListener('click',e=>{ e.stopPropagation(); if(pinned===btn){ hideInfo(); return; } hideInfo(); pinned=btn; btn.classList.add('on'); showInfo(btn); });
+  });
+  document.addEventListener('click',e=>{ if(pinned&&!e.target.closest('.info')) hideInfo(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&pinned){ hideInfo(); e.stopImmediatePropagation(); } },true);
+  document.addEventListener('pointerover',e=>{ if(pinned||e.target.closest('.info')) return; const t=e.target.closest('[data-tip]'); if(!t) return; tip.classList.remove('wide'); tip.innerHTML=t.dataset.tip; tip.classList.add('on'); });
+  document.addEventListener('pointermove',e=>{ if(pinned||tip.classList.contains('wide')||!tip.classList.contains('on')) return; const x=Math.min(e.clientX+14,window.innerWidth-tip.offsetWidth-8), y=Math.max(e.clientY-tip.offsetHeight-12,8); tip.style.left=x+'px'; tip.style.top=y+'px'; });
+  document.addEventListener('pointerout',e=>{ if(pinned) return; const t=e.target.closest('[data-tip]'); if(t&&!t.contains(e.relatedTarget)) tip.classList.remove('on'); });
+
+  /* ---------- navegação ---------- */
+  const slides=[...document.querySelectorAll('.slide')];
+  const stage=document.getElementById('stage'), dots=document.getElementById('dots'), count=document.getElementById('count'), pg=document.getElementById('pg'), bar=document.getElementById('progress');
+  const prev=document.getElementById('prev'), next=document.getElementById('next');
+  let idx=0;
+  slides.forEach((s,i)=>{
+    const b=document.createElement('button'); b.className='dot'+(i===0?' on':'');
+    b.setAttribute('aria-label','Ir para o slide '+(i+1)+': '+s.dataset.label);
+    b.innerHTML='<span>'+(i+1)+'. '+s.dataset.label+'</span>'; b.onclick=()=>go(i); dots.appendChild(b);
+  });
+  function go(n){
+    idx=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,i)=>s.classList.toggle('active',i===idx));
+    [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===idx));
+    const t=(idx+1)+' / '+slides.length; count.textContent=t; pg.textContent=t;
+    bar.style.width=((idx+1)/slides.length*100)+'%';
+    prev.disabled=idx===0; next.disabled=idx===slides.length-1;
+    hideInfo();
+    if(document.body.classList.contains('flow')) window.scrollTo(0,0);
+  }
+  prev.onclick=()=>go(idx-1); next.onclick=()=>go(idx+1);
+  document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(+b.dataset.go)));
+  document.addEventListener('keydown',e=>{
+    if(modal.classList.contains('open')){ if(e.key==='Escape') closeModal(); return; }
+    if(e.target.matches('input')) return;
+    if((e.key===' '||e.key==='Enter')&&e.target.closest('button,[role=button]')) return;
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); go(idx+1); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(idx-1); }
+    else if(e.key==='Home') go(0); else if(e.key==='End') go(slides.length-1);
+    else if(e.key==='f'||e.key==='F') toggleFs();
+  });
+  function fit(){
+    const W=window.innerWidth,H=window.innerHeight, flow=W<760;
+    document.body.classList.toggle('flow',flow);
+    if(flow){stage.style.removeProperty('--s');return;}
+    stage.style.setProperty('--s',Math.min(W/1600,H/900).toFixed(4));
+  }
+  window.addEventListener('resize',fit); fit();
+
+  const fsBtn=document.getElementById('fsBtn');
+  if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled)) fsBtn.hidden=true;
+  const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+  function toggleFs(){
+    try{ if(isFs()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}
+      else{ const el=document.documentElement; const r=(el.requestFullscreen||el.webkitRequestFullscreen).call(el); if(r&&r.catch) r.catch(()=>{}); } }catch(e){}
+  }
+  fsBtn.onclick=toggleFs;
+  ['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,()=>setTimeout(fit,60)));
+
+  const chrome=document.getElementById('chrome'); let idleT;
+  function wake(){ chrome.classList.remove('idle'); clearTimeout(idleT); idleT=setTimeout(()=>{ if(!chrome.matches(':hover')&&!chrome.contains(document.activeElement)) chrome.classList.add('idle'); },2600); }
+  ['mousemove','pointerdown','touchstart','keydown'].forEach(ev=>window.addEventListener(ev,wake,{passive:true})); wake();
+
+  const root=document.documentElement;
+  const current=()=>root.getAttribute('data-theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  try{const sv=localStorage.getItem('atestValTheme'); if(sv) root.setAttribute('data-theme',sv);}catch(e){}
+  document.getElementById('themeBtn').onclick=()=>{ const n=current()==='dark'?'light':'dark'; root.setAttribute('data-theme',n); try{localStorage.setItem('atestValTheme',n);}catch(e){} };
+
+  syncInputs(); update(); go(0);
+})();
+</script>
+
+</body></html>
