@@ -821,6 +821,9 @@ body.flow .ex-bar > div{font-size:11px;padding:0 6px}
 .in-grid.c5{grid-template-columns:repeat(5,minmax(0,1fr))}
 .in-grid.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .in .hint.warn{color:var(--ink-o)}
+.in .scen.cdir{display:flex;box-shadow:none;padding:3px;border-radius:10px}
+.in .scen.cdir button{flex:1 1 0;padding:6px 6px;font-size:12.5px;border-radius:8px;white-space:nowrap}
+.in .scen.cdir button.on[data-cd="reduz"]{background:var(--accent)}
 .in.chk{justify-content:flex-end}
 .in.chk label{display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);font-size:12.5px}
 .in.chk input{width:18px;height:18px;padding:0;accent-color:var(--accent);margin:0;flex:none}
@@ -945,12 +948,12 @@ body.flow .alv-i em{grid-column:2;justify-self:start}
       <h1 class="brand-title rise d1">PCP<span class="acc">+PO</span></h1>
       <div class="brand-sub rise d1">Calculadora de soft money da esteira de PCP com pesquisa operacional</div>
       <div class="rule rise d2"></div>
-      <p class="lead rise d3">Quantos gestores de obras o modelo de pesquisa operacional libera para acompanhar a mesma carteira, e quanto essa capacidade vale por ano. Todas as premissas são editáveis: headcount, produtividade e custo completo da pessoa gestora.</p>
+      <p class="lead rise d3">Quantos gestores de obras o modelo de pesquisa operacional libera para acompanhar a mesma carteira, e quanto essa capacidade vale por ano. Todas as premissas são editáveis: gestores e obras executadas sem e com PO, custo e horas da pessoa gestora e a variação da carteira.</p>
     </div>
     <div class="agenda rise d2">
       <div class="agenda-head">Roteiro</div>
       <button class="agb" type="button" data-go="1"><span class="n">01</span><div><b>Alavancas</b><span>Como a pesquisa operacional reduz os gestores necessários</span></div><i>→</i></button>
-      <button class="agb" type="button" data-go="2"><span class="n">02</span><div><b>Calculadora</b><span>Headcount, produtividade e custo do gestor, tudo editável</span></div><i>→</i></button>
+      <button class="agb" type="button" data-go="2"><span class="n">02</span><div><b>Calculadora</b><span>Gestores, obras, custo e horas do gestor, tudo editável</span></div><i>→</i></button>
       <button class="agb" type="button" data-go="3"><span class="n">03</span><div><b>Resultado</b><span>Da conta ao soft money e o que acontece se o backtest errar</span></div><i>→</i></button>
       <button class="agb" type="button" data-go="4"><span class="n">04</span><div><b>Em 5 anos</b><span>Projeção, VPL de 5 anos a 25% a.a. e sensibilidade</span></div><i>→</i></button>
       <button class="agb" type="button" data-go="5"><span class="n">05</span><div><b>Como provar</b><span>Origem e validação de cada premissa</span></div><i>→</i></button>
@@ -1021,40 +1024,35 @@ body.flow .alv-i em{grid-column:2;justify-self:start}
         <div class="panel-head">Premissas <button class="ghost" type="button" id="resetBtn" style="color:var(--ink)">↺ Restaurar padrão</button></div>
         <div class="panel-body" style="gap:10px">
           <div class="sub-h">Dimensionamento dos gestores • calculador de PCP</div>
-          <div class="mode-row"><span class="lbl">Informar por</span><div class="scen" id="hcModo" role="group" aria-label="Como informar o dimensionamento"><button type="button" data-hm="direto">Headcount do backtest</button><button type="button" data-hm="prod">Produtividade por pessoa</button></div><span class="mode-note" id="hcNote"></span></div>
-          <div class="in-grid pane" id="paneDireto">
-            <div class="in"><label for="inHcSem">Gestores sem o modelo (2025)</label><input id="inHcSem" type="number" min="0" step="1" data-p="hcSem"></div>
-            <div class="in"><label for="inHcCom">Gestores com PO (backtest)</label><input id="inHcCom" type="number" min="0" step="1" data-p="hcCom"></div>
-            <div class="in"><label>Gestores liberados</label><div class="calc" data-v="libTxt" data-f="txt">–</div></div>
-            <div class="in"><label>Ganho de produtividade</label><div class="calc" data-v="ganho" data-f="pctplus">–</div><small class="hint">mesma carteira, menos gestores</small></div>
+          <div class="in-grid c3">
+            <div class="in"><label for="inHcSem">Gestores sem o modelo<button type="button" class="info" data-info="hcSem" aria-label="Origem: gestores sem o modelo">i</button></label><input id="inHcSem" type="number" min="0" step="1" data-p="hcSem"></div>
+            <div class="in"><label for="inObrasSem">Obras executadas sem o modelo<button type="button" class="info" data-info="obras" aria-label="Sobre as obras executadas">i</button></label><input id="inObrasSem" type="number" min="0" step="1" data-p="obrasSem"></div>
+            <div class="in"><label>Gestores liberados</label><div class="calc" data-v="libTxt" data-f="txt">–</div><small class="hint" id="hLib">–</small></div>
+            <div class="in"><label for="inHcCom">Gestores com PO<button type="button" class="info" data-info="hcCom" aria-label="Origem: gestores com PO">i</button></label><input id="inHcCom" type="number" min="0" step="1" data-p="hcCom"></div>
+            <div class="in"><label for="inObrasCom">Obras executadas com PO</label><input id="inObrasCom" type="number" min="0" step="1" data-p="obrasCom"></div>
+            <div class="in"><label>Ganho de produtividade<button type="button" class="info" data-info="ganho" aria-label="Como calculamos o ganho">i</button></label><div class="calc" data-v="ganho" data-f="pctplus">–</div><small class="hint" id="hProd">–</small></div>
           </div>
-          <div class="in-grid pane" id="paneProd" hidden>
-            <div class="in"><label for="inObras">Obras acompanhadas/ano<button type="button" class="info" data-info="obras" aria-label="Sobre as obras acompanhadas">i</button></label><input id="inObras" type="number" min="0" step="1" data-p="obras"></div>
-            <div class="in"><label for="inProd">Obras por gestor (sem PO)</label><input id="inProd" type="number" min="0.1" step="0.5" data-p="prodSem"></div>
-            <div class="in"><label for="inGanho">Ganho com PO (%)</label><input id="inGanho" type="number" min="0" step="5" data-p="ganhoProd" data-pct="1"><small class="hint" id="hProdCom">–</small></div>
-            <div class="in chk"><label for="inArred"><input id="inArred" type="checkbox" data-pb="arred">Arredondar para pessoas inteiras</label><small class="hint" id="hHc">–</small></div>
-          </div>
-          <div class="sub-h">Custo da pessoa gestora de obras</div>
-          <div class="mode-row"><span class="lbl">Informar por</span><div class="scen" id="custoModo" role="group" aria-label="Como informar o custo"><button type="button" data-cm="total">Custo mensal total</button><button type="button" data-cm="salario">Salário e encargos</button></div><span class="mode-note" id="custoNote"></span></div>
-          <div class="in-grid pane" id="paneTotal">
+          <div class="sub-h">Pessoa • gestor de obras</div>
+          <div class="mode-row"><div class="scen" id="pessoaAba" role="tablist" aria-label="Dados da pessoa gestora"><button type="button" role="tab" data-pa="custo">Custo mensal total</button><button type="button" role="tab" data-pa="horas">Horas trabalhadas</button></div><span class="mode-note" id="abaNote"></span></div>
+          <div class="in-grid pane" id="paneCusto" role="tabpanel">
             <div class="in"><label for="inCustoMes">Custo mensal c/ encargos (R$)<button type="button" class="info" data-info="custo" aria-label="Origem: custo do gestor">i</button></label><input id="inCustoMes" type="number" min="0" step="500" data-p="custoMes"></div>
             <div class="in"><label for="inMeses">Meses de custo por ano</label><input id="inMeses" type="number" min="0" step="0.5" data-p="mesesAno"><small class="hint">12 se já inclui 13º e férias</small></div>
             <div class="in"><label for="inInd1">Indiretos por gestor/ano (R$)<button type="button" class="info" data-info="indiretos" aria-label="O que são custos indiretos">i</button></label><input id="inInd1" type="number" min="0" step="1000" data-p="indiretos"></div>
             <div class="in"><label>Custo anual por gestor</label><div class="calc" data-v="custoAnual" data-f="brl">–</div><small class="hint" data-v="custoHora" data-f="hora">–</small></div>
           </div>
-          <div class="in-grid c5 pane" id="paneSal" hidden>
-            <div class="in"><label for="inSal">Salário base mensal (R$)</label><input id="inSal" type="number" min="0" step="250" data-p="salario"></div>
-            <div class="in"><label for="inEnc">Encargos (%)<button type="button" class="info" data-info="encargos" aria-label="O que entra nos encargos">i</button></label><input id="inEnc" type="number" min="0" step="0.5" data-p="encargos" data-pct="1"></div>
-            <div class="in"><label for="inBen">Benefícios por mês (R$)</label><input id="inBen" type="number" min="0" step="100" data-p="beneficios"></div>
-            <div class="in"><label for="inPlr">PLR (salários por ano)</label><input id="inPlr" type="number" min="0" step="0.1" data-p="plr"></div>
-            <div class="in"><label for="inInd2">Indiretos/ano (R$)<button type="button" class="info" data-info="indiretos" aria-label="O que são custos indiretos">i</button></label><input id="inInd2" type="number" min="0" step="1000" data-p="indiretos"><small class="hint" data-v="custoAnual" data-f="anuallbl">–</small></div>
+          <div class="in-grid c5 pane" id="paneHoras" role="tabpanel" hidden>
+            <div class="in"><label for="inHd">Horas por dia</label><input id="inHd" type="number" min="0" step="0.5" data-p="horasDia"></div>
+            <div class="in"><label for="inDm">Dias úteis por mês</label><input id="inDm" type="number" min="0" step="1" data-p="diasMes"></div>
+            <div class="in"><label for="inMt">Meses trabalhados/ano</label><input id="inMt" type="number" min="0" max="12" step="0.5" data-p="mesesTrab"><small class="hint">11 se descontar férias</small></div>
+            <div class="in"><label for="inPv">Produtividade (%)<button type="button" class="info" data-info="horas" aria-label="Sobre as horas produtivas">i</button></label><input id="inPv" type="number" min="0" max="100" step="5" data-p="produtiv" data-pct="1"><small class="hint">tempo útil da jornada</small></div>
+            <div class="in"><label>Horas produtivas/ano</label><div class="calc" data-v="P.horasFte" data-f="h">–</div><small class="hint" data-v="custoHora" data-f="hora">–</small></div>
           </div>
           <div class="sub-h">Conversão e projeção</div>
           <div class="in-grid">
             <div class="in"><label for="inCap">Capacidade convertida (%)<button type="button" class="info" data-info="captura" aria-label="O que é capacidade convertida">i</button></label><input id="inCap" type="number" min="0" max="100" step="5" data-p="captura" data-pct="1"><small class="hint">realocação ou não reposição</small></div>
-            <div class="in"><label for="inCresc">Crescimento da carteira (% a.a.)</label><input id="inCresc" type="number" step="1" data-p="cresc" data-pct="1" data-neg="1"><small class="hint">aplicado do ano 2 ao 5</small></div>
-            <div class="in"><label for="inReaj">Reajuste do custo (% a.a.)</label><input id="inReaj" type="number" step="0.5" data-p="reaj" data-pct="1" data-neg="1"><small class="hint">dissídio, do ano 2 ao 5</small></div>
-            <div class="in"><label for="inHf">Horas produtivas por ano (1 FTE)</label><input id="inHf" type="number" min="1" step="8" data-p="horasFte"><small class="hint">8 h × 20 dias × 12 × 85%</small></div>
+            <div class="in"><label>Carteira de obras<button type="button" class="info" data-info="carteira" aria-label="Sobre a variação da carteira">i</button></label><div class="scen cdir" id="cartDir" role="group" aria-label="Sentido da variação da carteira"><button type="button" data-cd="cresce">▲ Crescimento</button><button type="button" data-cd="reduz">▼ Redução</button></div><small class="hint" id="hCartDir">–</small></div>
+            <div class="in"><label for="inCart" id="lCart">Crescimento (% a.a.)</label><input id="inCart" type="number" min="0" max="100" step="1" data-p="cartPct" data-pct="1"><small class="hint">aplicado do ano 2 ao 5</small></div>
+            <div class="in"><label>Carteira no ano 5</label><div class="calc" data-v="cart5" data-f="txt">–</div><small class="hint" data-v="cartVar" data-f="txt">–</small></div>
           </div>
           <div class="sub-h">Custo da solução de PO • para VPL do projeto, ROI e payback</div>
           <div class="in-grid">
@@ -1137,7 +1135,7 @@ body.flow .alv-i em{grid-column:2;justify-self:start}
     <div class="title">
       <div class="chap-tag"><span class="pip"></span>04 • Em 5 anos</div>
       <h1>4) Em 5 anos, o soft money soma <span data-v="vpl" data-f="mm">–</span> a valor presente</h1>
-      <p>VPL a <span data-v="P.wacc" data-f="pct0">–</span> a.a. • <span id="capSub">captura de 100% desde o ano 1</span> • carteira <span data-v="P.cresc" data-f="pctsig">–</span> a.a. • custo <span data-v="P.reaj" data-f="pctsig">–</span> a.a.</p>
+      <p>VPL a <span data-v="P.wacc" data-f="pct0">–</span> a.a. • <span id="capSub">captura de 100% desde o ano 1</span> • carteira <span data-v="P.cresc" data-f="pctsig">–</span> a.a.</p>
     </div>
     <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
   </div>
@@ -1182,14 +1180,14 @@ body.flow .alv-i em{grid-column:2;justify-self:start}
       <table>
         <thead><tr><th>Premissa</th><th>Hoje na calculadora</th><th>Origem</th><th>Como validar</th></tr></thead>
         <tbody>
-          <tr><td><span class="tag soft"><i></i>Headcount</span> <b>Gestores sem o modelo</b></td><td class="hj"><strong data-v="hcSemTxt" data-f="txt">–</strong><small>2025</small></td><td>Calculador de PCP da esteira de obras</td><td>Conferir com o headcount real de 2025 e a carteira que ele acompanhou; o calculador e o quadro real devem fechar.</td></tr>
-          <tr><td><span class="tag soft"><i></i>Headcount</span> <b>Gestores com PO</b></td><td class="hj"><strong data-v="hcComTxt" data-f="txt">–</strong><small>backtest 2025</small></td><td>Backtest do modelo de pesquisa operacional sobre a carteira de 2025</td><td>Repetir o backtest fora da amostra (2026) e testar as restrições reais: região, deslocamento, porte da obra, férias e afastamentos.</td></tr>
-          <tr><td><span class="tag med"><i></i>Derivada</span> <b>Ganho de produtividade</b></td><td class="hj"><strong data-v="ganho" data-f="pctplus">–</strong><small>obras por gestor</small></td><td>Razão entre o headcount sem e com o modelo, para a mesma carteira</td><td>No piloto, medir obras acompanhadas por gestor por mês, antes e depois, e a carga de pico de cada pessoa.</td></tr>
-          <tr><td><span class="tag sup"><i></i>Custo</span> <b>Custo da pessoa gestora</b></td><td class="hj"><strong data-v="custoAnual" data-f="mm">–</strong><small>por ano, com encargos</small></td><td>Padrão: R$ 12.000/mês do analista gestor de obras, usado na valoração do Atest.AI</td><td>Pedir a RH ou Controladoria o custo total do cargo: salário, encargos, benefícios e PLR.</td></tr>
+          <tr><td><span class="tag soft"><i></i>Headcount</span> <b>Gestores sem o modelo</b></td><td class="hj"><strong data-v="hcSemTxt" data-f="txt">–</strong><small><span data-v="P.obrasSem" data-f="int">–</span> obras executadas</small></td><td>Calculador de PCP da esteira de obras</td><td>Conferir com o headcount real de 2025 e a carteira que ele acompanhou; o calculador e o quadro real devem fechar.</td></tr>
+          <tr><td><span class="tag soft"><i></i>Headcount</span> <b>Gestores com PO</b></td><td class="hj"><strong data-v="hcComIn" data-f="txt">–</strong><small><span data-v="P.obrasCom" data-f="int">–</span> obras executadas</small></td><td>Backtest do modelo de pesquisa operacional sobre a carteira de 2025</td><td>Repetir o backtest fora da amostra (2026) e testar as restrições reais: região, deslocamento, porte da obra, férias e afastamentos.</td></tr>
+          <tr><td><span class="tag med"><i></i>Derivada</span> <b>Ganho de produtividade</b></td><td class="hj"><strong data-v="ganho" data-f="pctplus">–</strong><small>obras por gestor</small></td><td>Obras por gestor com PO ÷ obras por gestor sem o modelo</td><td>No piloto, medir obras acompanhadas por gestor por mês, antes e depois, e a carga de pico de cada pessoa.</td></tr>
+          <tr><td><span class="tag sup"><i></i>Custo</span> <b>Custo da pessoa gestora</b></td><td class="hj"><strong data-v="custoAnual" data-f="mm">–</strong><small>por ano, com encargos</small></td><td>Padrão: R$ 12.000/mês do analista gestor de obras, usado na valoração do Atest.AI</td><td>Pedir a RH ou Controladoria o custo mensal total do cargo, já com encargos, benefícios e PLR.</td></tr>
           <tr><td><span class="tag sup"><i></i>Custo</span> <b>Custos indiretos</b></td><td class="hj"><strong data-v="P.indiretos" data-f="brl">–</strong><small>por gestor/ano</small></td><td>Premissa: zero no padrão</td><td>Levantar deslocamento às obras, veículo, viagens e equipamentos por pessoa gestora.</td></tr>
           <tr><td><span class="tag hard"><i></i>Decisão</span> <b>Capacidade convertida</b></td><td class="hj"><strong data-v="P.captura" data-f="pct0">–</strong><small>da capacidade liberada</small></td><td>Decisão de gestão</td><td>Plano de capacidade: realocar para outra frente, não repor saídas ou absorver o crescimento sem contratar.</td></tr>
-          <tr><td><span class="tag soft"><i></i>Projeção</span> <b>Crescimento e reajuste</b></td><td class="hj"><strong><span data-v="P.cresc" data-f="pctsig">–</span> • <span data-v="P.reaj" data-f="pctsig">–</span></strong><small>carteira • custo, a.a.</small></td><td>Premissas: zero no padrão</td><td>Plano de obras dos próximos anos e dissídio previsto.</td></tr>
-          <tr><td><span class="tag soft"><i></i>Capacidade</span> <b>Horas produtivas por ano</b></td><td class="hj"><strong data-v="P.horasFte" data-f="h">–</strong><small>1 FTE</small></td><td>8 h × 20 dias × 12 meses × 85% de produtividade</td><td>Ajustar à jornada real da área; só muda as horas exibidas, não o R$.</td></tr>
+          <tr><td><span class="tag soft"><i></i>Projeção</span> <b>Variação da carteira</b></td><td class="hj"><strong data-v="P.cresc" data-f="pctsig">–</strong><small>a.a., do ano 2 ao 5</small></td><td>Premissa: zero no padrão; negativa quando agências são encerradas</td><td>Plano de obras e de encerramento de agências dos próximos anos.</td></tr>
+          <tr><td><span class="tag soft"><i></i>Capacidade</span> <b>Horas produtivas por ano</b></td><td class="hj"><strong data-v="P.horasFte" data-f="h">–</strong><small>1 FTE</small></td><td>Aba Horas trabalhadas: horas por dia × dias × meses × produtividade</td><td>Ajustar à jornada real da área; muda as horas e o custo por hora, não o R$.</td></tr>
         </tbody>
       </table>
     </div>
@@ -1214,7 +1212,7 @@ body.flow .alv-i em{grid-column:2;justify-self:start}
           <button class="tk-item" type="button" data-go="3"><div class="ic">👷</div><div><small>Headcount</small><b><span data-v="hcSemTxt" data-f="txt">–</span> → <span data-v="hcComTxt" data-f="txt">–</span></b><span>A mesma carteira de 2025 com <span data-v="libTxt" data-f="txt">–</span> a menos no backtest.</span></div></button>
           <button class="tk-item" type="button" data-go="3"><div class="ic">💰</div><div><small>Soft money</small><b><span data-v="soft" data-f="mm">–</span> por ano</b><span>Gestores liberados × custo anual completo × capacidade convertida.</span></div></button>
           <button class="tk-item" type="button" data-go="4"><div class="ic">📈</div><div><small>Em 5 anos</small><b>VPL de <span data-v="vpl" data-f="mm">–</span></b><span>Soft money de 5 anos trazido a valor presente.</span></div></button>
-          <button class="tk-item" type="button" data-go="2"><div class="ic">🎛️</div><div><small>Calculadora</small><b>Tudo parametrizado</b><span>Headcount, produtividade, custo da pessoa e projeção, com versões salvas.</span></div></button>
+          <button class="tk-item" type="button" data-go="2"><div class="ic">🎛️</div><div><small>Calculadora</small><b>Tudo parametrizado</b><span>Gestores, obras, custo e horas da pessoa e carteira, com versões salvas.</span></div></button>
         </div></div>
       </div>
       <div class="panel rise d2">
@@ -1272,44 +1270,39 @@ body.flow .alv-i em{grid-column:2;justify-self:start}
 
 <script>
 /* ---------- modelo de soft money: PCP com pesquisa operacional na esteira de obras ---------- */
-/* Padrões: 8 gestores em 2025 pelo calculador de PCP, 5 no backtest com PO (informados pela área).
+/* Padrões: 8 gestores sem o modelo e 5 com PO para as mesmas 96 obras executadas (informados pela área).
+   Se as obras com PO forem diferentes, os gestores com PO são ajustados para a carteira sem o modelo.
    Custo: R$ 12.000/mês com encargos do analista gestor de obras (mesmo padrão da valoração Atest.AI).
-   No modo produtividade, os padrões (96 obras, 12 obras/gestor, +60%) são ilustrativos e reproduzem 8 → 5. */
+   Horas: 8 h × 20 dias × 12 meses × 85% = 1.632 h produtivas por ano. */
 const DEF={
-  hcModo:'direto', hcSem:8, hcCom:5,
-  obras:96, prodSem:12, ganhoProd:.60, arred:1,
-  custoModo:'total', custoMes:12000, mesesAno:12,
-  salario:6000, encargos:.368, beneficios:2000, plr:2.2,
-  indiretos:0, captura:1, cresc:0, reaj:0, horasFte:1632,
+  hcSem:8, obrasSem:96, hcCom:5, obrasCom:96,
+  custoMes:12000, mesesAno:12, indiretos:0,
+  horasDia:8, diasMes:20, mesesTrab:12, produtiv:.85,
+  captura:1, cartSentido:'cresce', cartPct:0,
   ramp:[1,1,1,1,1], wacc:.25, capex:0, opex:0
 };
-const MESES_SAL=12+1+1/3; /* 12 salários + 13º + 1/3 de férias */
 
+/* obras por gestor sem e com PO; gestores com PO equivalentes para a carteira sem o modelo */
 function hcOf(p,f){
-  if(p.hcModo==='prod'){
-    const o=p.obras*f, ps=p.prodSem, pc=p.prodSem*(1+p.ganhoProd);
-    let s=ps>0?o/ps:0, c=pc>0?o/pc:0;
-    if(p.arred){ s=Math.ceil(s-1e-9); c=Math.ceil(c-1e-9); }
-    return {sem:s,com:c,prodCom:pc};
-  }
-  return {sem:p.hcSem*f,com:p.hcCom*f,prodCom:null};
+  const ratio=(p.obrasSem>0&&p.obrasCom>0)?p.obrasSem/p.obrasCom:1;
+  return {sem:p.hcSem*f,com:p.hcCom*ratio*f,ratio,
+    prodSem:p.hcSem>0?p.obrasSem/p.hcSem:0, prodCom:p.hcCom>0?p.obrasCom/p.hcCom:0};
 }
 function custoOf(p){
-  let parts;
-  if(p.custoModo==='salario'){
-    const base=p.salario*MESES_SAL;
-    parts=[['Salário, 13º e férias',base,'c1'],['Encargos',base*p.encargos,'c2'],['Benefícios',p.beneficios*12,'c3'],['PLR',p.plr*p.salario,'c4']];
-  } else parts=[['Custo mensal com encargos',p.custoMes*p.mesesAno,'c1']];
+  const parts=[['Custo mensal com encargos',p.custoMes*p.mesesAno,'c1']];
   if(p.indiretos>0) parts.push(['Custos indiretos',p.indiretos,'c5']);
   return {parts,total:parts.reduce((a,x)=>a+x[1],0)};
 }
+const horasOf=p=>p.horasDia*p.diasMes*p.mesesTrab*p.produtiv;
+const crescOf=p=>p.cartSentido==='reduz'?-Math.min(1,p.cartPct):p.cartPct;
 function calc(p){
   const hc=hcOf(p,1), lib=Math.max(0,hc.sem-hc.com), C=custoOf(p);
+  const horasFte=horasOf(p), cresc=crescOf(p);
   const soft=lib*C.total*p.captura;
-  const ganho=p.hcModo==='prod'?p.ganhoProd:(hc.com>0?hc.sem/hc.com-1:null);
+  const ganho=(hc.prodSem>0&&hc.prodCom>0)?hc.prodCom/hc.prodSem-1:null;
   const yrs=p.ramp.map((r,i)=>{
-    const f=Math.pow(1+p.cresc,i), h=hcOf(p,f), l=Math.max(0,h.sem-h.com), c=C.total*Math.pow(1+p.reaj,i);
-    return {lib:l*r,soft:l*c*p.captura*r,horas:l*p.horasFte*r,sem:h.sem,com:h.com,custo:c,ramp:r,fd:1/Math.pow(1+p.wacc,i+1)};
+    const f=Math.pow(1+cresc,i), h=hcOf(p,f), l=Math.max(0,h.sem-h.com), c=C.total;
+    return {lib:l*r,soft:l*c*p.captura*r,horas:l*horasFte*r,sem:h.sem,com:h.com,custo:c,ramp:r,obras:p.obrasSem*f,fd:1/Math.pow(1+p.wacc,i+1)};
   });
   const disc=i=>Math.pow(1+p.wacc,i+1);
   const vpl=yrs.reduce((a,y,i)=>a+y.soft/disc(i),0);
@@ -1319,13 +1312,13 @@ function calc(p){
   const roi=custoN>0?sum5/custoN-1:null;
   const payback=(p.capex+p.opex)>0?(soft-p.opex<=0?Infinity:p.capex/((soft-p.opex)/12)):null;
   const sens={
-    hc:C.total*p.captura,
-    custo:p.custoModo==='salario'?lib*1000*(MESES_SAL*(1+p.encargos)+p.plr)*p.captura:lib*1000*p.mesesAno*p.captura,
+    hc:C.total*p.captura*hc.ratio,
+    custo:lib*1000*p.mesesAno*p.captura,
     cap:lib*C.total*.10,
     ind:lib*10000*p.captura
   };
-  return {hc,sem:hc.sem,com:hc.com,lib,C,custoAnual:C.total,custoHora:p.horasFte>0?C.total/p.horasFte:0,soft,ganho,
-    redPct:hc.sem>0?lib/hc.sem:0,horas:lib*p.horasFte,fteConv:lib*p.captura,
+  return {hc,sem:hc.sem,com:hc.com,lib,C,custoAnual:C.total,custoHora:horasFte>0?C.total/horasFte:0,soft,ganho,horasFte,cresc,
+    redPct:hc.sem>0?lib/hc.sem:0,horas:lib*horasFte,fteConv:lib*p.captura,
     yrs,vpl,vplProj,sum5,roi,payback,sens,
     libAnos:yrs.reduce((a,y)=>a+y.lib,0),h5:yrs.reduce((a,y)=>a+y.horas,0)};
 }
@@ -1376,8 +1369,9 @@ if(typeof module!=='undefined') module.exports={calc,DEF};
     });
   });
   document.querySelectorAll('input[data-pb]').forEach(inp=>inp.addEventListener('change',()=>{ P[inp.dataset.pb]=inp.checked?1:0; update(); }));
-  document.querySelectorAll('#hcModo button').forEach(b=>b.onclick=()=>{ P.hcModo=b.dataset.hm; update(); });
-  document.querySelectorAll('#custoModo button').forEach(b=>b.onclick=()=>{ P.custoModo=b.dataset.cm; update(); });
+  let aba='custo';
+  document.querySelectorAll('#pessoaAba button').forEach(b=>b.onclick=()=>{ aba=b.dataset.pa; update(); });
+  document.querySelectorAll('#cartDir button').forEach(b=>b.onclick=()=>{ P.cartSentido=b.dataset.cd; update(); });
   document.getElementById('resetBtn').onclick=()=>{ P=clone(DEF); update(); };
   function syncInputs(skip){
     document.querySelectorAll('input[data-p]').forEach(inp=>{
@@ -1392,27 +1386,26 @@ if(typeof module!=='undefined') module.exports={calc,DEF};
   /* ---------- render ---------- */
   function update(fromInput){
     R=calc(P);
-    const ctx={...R,P,hcSemTxt:hcf(R.sem),hcComTxt:hcf(R.com),libTxt:hcf(R.lib)+(Math.abs(R.lib-1)<1e-9?' gestor':' gestores')};
+    const c5=P.obrasSem*Math.pow(1+R.cresc,4), cv=Math.pow(1+R.cresc,4)-1;
+    const ctx={...R,P:{...P,horasFte:R.horasFte,cresc:R.cresc},hcSemTxt:hcf(R.sem),hcComTxt:hcf(R.com),hcComIn:hcf(P.hcCom),libTxt:hcf(R.lib)+(Math.abs(R.lib-1)<1e-9?' gestor':' gestores'),
+      cart5:nf(P.obrasSem,0)+' → '+nf(c5,0)+' obras',cartVar:Math.abs(cv)<1e-9?'sem variação em 5 anos':(cv>0?'+':'−')+pctAuto(Math.abs(cv))+' do ano 1 ao 5'};
     document.querySelectorAll('[data-v]').forEach(el=>{ const f=F[el.dataset.f]||money; el.textContent=f(get(ctx,el.dataset.v)); });
     syncInputs(fromInput);
     document.querySelectorAll('[data-f="mmcost"],[data-f="roi"],[data-f="pb"]').forEach(e=>e.classList.toggle('na',!(P.capex+P.opex>0)));
-    const prod=P.hcModo==='prod';
-    document.getElementById('paneDireto').hidden=prod; document.getElementById('paneProd').hidden=!prod;
-    document.getElementById('paneTotal').hidden=P.custoModo!=='total'; document.getElementById('paneSal').hidden=P.custoModo!=='salario';
-    document.querySelectorAll('#hcModo button').forEach(b=>{ const on=b.dataset.hm===P.hcModo; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); });
-    document.querySelectorAll('#custoModo button').forEach(b=>{ const on=b.dataset.cm===P.custoModo; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); });
-    const warn=R.com>R.sem;
-    document.getElementById('hcNote').textContent=warn?'Atenção: com o modelo ficou maior que sem o modelo; o ganho é zero.':(prod?'Gestores = obras ÷ obras por gestor.':'Números do calculador de PCP e do backtest.');
-    document.getElementById('hcNote').style.color=warn?'var(--ink-o)':'';
-    document.getElementById('custoNote').textContent=P.custoModo==='salario'?'Salário × 13,33 (13º e 1/3 de férias) + encargos + benefícios + PLR.':'Custo mensal já com encargos, informado pela área.';
-    if(prod){
-      document.getElementById('hProdCom').textContent='com PO: '+nf(R.hc.prodCom,1)+' obras por gestor';
-      const rs=P.prodSem>0?P.obras/P.prodSem:0, rc=R.hc.prodCom>0?P.obras/R.hc.prodCom:0;
-      document.getElementById('hHc').textContent='sem '+nf(rs,1)+' → com '+nf(rc,1)+' gestores (exato)';
-    }
+    document.getElementById('paneCusto').hidden=aba!=='custo'; document.getElementById('paneHoras').hidden=aba!=='horas';
+    document.querySelectorAll('#pessoaAba button').forEach(b=>{ const on=b.dataset.pa===aba; b.classList.toggle('on',on); b.setAttribute('aria-selected',on); });
+    document.querySelectorAll('#cartDir button').forEach(b=>{ const on=b.dataset.cd===P.cartSentido; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); });
+    const red=P.cartSentido==='reduz';
+    document.getElementById('lCart').textContent=red?'Redução (% a.a.)':'Crescimento (% a.a.)';
+    document.getElementById('hCartDir').textContent=red?'ex.: agências encerradas':'novas obras na esteira';
+    document.getElementById('abaNote').textContent=aba==='horas'?'Jornada produtiva de 1 FTE: base das horas liberadas e do custo por hora.':'Custo mensal já com encargos, informado pela área.';
+    const warn=R.com>R.sem, hl=document.getElementById('hLib');
+    hl.textContent=warn?'com PO ficou acima de sem o modelo':(Math.abs(R.hc.ratio-1)<1e-9?'mesma carteira, menos gestores':hcf(R.com)+' com PO para '+nf(P.obrasSem,0)+' obras');
+    hl.classList.toggle('warn',warn);
+    document.getElementById('hProd').textContent=nf(R.hc.prodSem,1)+' → '+nf(R.hc.prodCom,1)+' obras por gestor';
     const full=P.ramp.every(r=>Math.abs(r-1)<1e-9), pl=P.ramp.map(r=>nf(r*100,0)+'%');
     document.getElementById('hRamp').textContent=full?'100% do ano 1 ao 5':pl.join(' • ');
-    const ft='<b>Como calculamos o FTE</b><br>1 FTE = '+nf(P.horasFte,0)+' h produtivas por ano<br>Padrão: 8 h/dia × 20 dias × 12 meses × 85% = 1.632 h<br>Edite em "Horas produtivas por ano" na calculadora';
+    const ft='<b>Como calculamos o FTE</b><br>1 FTE = '+nf(R.horasFte,0)+' h produtivas por ano<br>'+nf(P.horasDia,1)+' h/dia × '+nf(P.diasMes,0)+' dias × '+nf(P.mesesTrab,1)+' meses × '+pctAuto(P.produtiv)+'<br>Edite na aba "Horas trabalhadas" da calculadora';
     document.querySelectorAll('[data-ftetip]').forEach(e=>e.dataset.tip=ft);
     document.body.classList.toggle('custom',differs());
     refreshModal();
@@ -1456,32 +1449,31 @@ if(typeof module!=='undefined') module.exports={calc,DEF};
     }).join('');
   }
   function drawLadder(){
-    const prod=P.hcModo==='prod';
+    const same=Math.abs(R.hc.ratio-1)<1e-9;
     const r=(op,cls,b,s,v,info)=>'<div class="lad-r '+cls+'"><span class="op">'+op+'</span><span class="lb"><b>'+b+(info?'<button type="button" class="info" data-info="'+info+'" aria-label="Origem: '+b+'">i</button>':'')+'</b><span>'+s+'</span></span><span class="v">'+v+'</span></div>';
     document.getElementById('lad').innerHTML=
-      r('','', 'Gestores sem o modelo',prod?nf(P.obras,0)+' obras ÷ '+nf(P.prodSem,1)+' obras por gestor':'2025, pelo calculador de PCP',hcf(R.sem),'hcSem')+
-      r('−','', 'Gestores com pesquisa operacional',prod?nf(P.obras,0)+' obras ÷ '+nf(R.hc.prodCom,1)+' obras por gestor':'backtest sobre a mesma carteira',hcf(R.com),'hcCom')+
+      r('','', 'Gestores sem o modelo',nf(P.obrasSem,0)+' obras executadas • '+nf(R.hc.prodSem,1)+' por gestor',hcf(R.sem),'hcSem')+
+      r('−','', 'Gestores com pesquisa operacional',same?nf(P.obrasCom,0)+' obras executadas • '+nf(R.hc.prodCom,1)+' por gestor':hcf(P.hcCom)+' para '+nf(P.obrasCom,0)+' obras, ajustado a '+nf(P.obrasSem,0)+' obras',hcf(R.com),'hcCom')+
       r('=','eq','Gestores liberados','capacidade que a carteira deixa de exigir',hcf(R.lib))+
-      r('×','', 'Custo anual por gestor',P.custoModo==='salario'?'salário, encargos, benefícios e PLR'+(P.indiretos>0?' + indiretos':''):brl(P.custoMes)+'/mês × '+nf(P.mesesAno,isInt(P.mesesAno)?0:1)+(P.indiretos>0?' + indiretos':''),brl(R.custoAnual),'custo')+
+      r('×','', 'Custo anual por gestor',brl(P.custoMes)+'/mês × '+nf(P.mesesAno,isInt(P.mesesAno)?0:1)+(P.indiretos>0?' + indiretos':''),brl(R.custoAnual),'custo')+
       r('×','', 'Capacidade convertida','parcela que vira realocação ou não reposição',pctAuto(P.captura),'captura')+
       r('=','tot','Soft money por ano','ano 1, em regime',money(R.soft));
     const h=document.getElementById('eqv3h'), b=document.getElementById('eqv3'), s=document.getElementById('eqv3s');
-    if(prod){ h.textContent='Obras a mais'; b.textContent='~'+nf(R.lib*R.hc.prodCom,0); s.textContent='que os liberados acompanhariam'; }
-    else { h.textContent='Redução do quadro'; b.textContent=pctAuto(R.redPct); s.textContent='do necessário sem o modelo'; }
+    h.textContent='Obras por gestor'; b.textContent=nf(R.hc.prodSem,1)+' → '+nf(R.hc.prodCom,1); s.textContent='sem o modelo → com PO';
   }
   function drawWhatIf(){
-    const base=Math.round(R.com), top=Math.ceil(R.sem-1e-9), unit=R.custoAnual*P.captura;
+    const q=R.hc.ratio, cur=P.hcCom, base=Math.round(cur), top=Math.ceil(R.sem/q-1e-9), unit=R.custoAnual*P.captura;
     let ks=[]; for(let k=base-2;k<=base+2;k++) if(k>=0&&k<=Math.max(top,base)) ks.push(k);
-    if(!isInt(R.com)){ ks.push(R.com); ks.sort((a,b)=>a-b); }
-    const val=k=>Math.max(0,R.sem-k)*unit, max=Math.max(1,...ks.map(val));
+    if(!isInt(cur)){ ks.push(cur); ks.sort((a,b)=>a-b); }
+    const libk=k=>Math.max(0,R.sem-k*q), val=k=>libk(k)*unit, max=Math.max(1,...ks.map(val));
     document.getElementById('wif').innerHTML=ks.map(k=>{
-      const on=Math.abs(k-R.com)<1e-9, d=k-R.com, v=val(k);
+      const on=Math.abs(k-cur)<1e-9, d=k-cur, v=val(k);
       const tag=on?'premissa atual':(d>0?'+'+hcf(d)+' no backtest':'−'+hcf(-d)+' no backtest');
-      return '<div class="wf'+(on?' on':'')+(v<=0?' zero':'')+'" data-tip="<b>'+hcf(k)+' gestores com PO</b><br>'+hcf(Math.max(0,R.sem-k))+' liberados × '+brl(R.custoAnual)+' × '+pctAuto(P.captura)+'"><span>'+hcf(k)+' gestores com PO<small>'+tag+'</small></span><div class="tr"><i style="width:'+(v/max*100)+'%"></i></div><b>'+money(v)+'</b></div>';
+      return '<div class="wf'+(on?' on':'')+(v<=0?' zero':'')+'" data-tip="<b>'+hcf(k)+' gestores com PO</b><br>'+hcf(libk(k))+' liberados × '+brl(R.custoAnual)+' × '+pctAuto(P.captura)+'"><span>'+hcf(k)+' gestores com PO<small>'+tag+'</small></span><div class="tr"><i style="width:'+(v/max*100)+'%"></i></div><b>'+money(v)+'</b></div>';
     }).join('');
-    const up=Math.max(0,R.sem-(R.com+1))*unit;
+    const up=val(cur+1);
     document.getElementById('wifNote').innerHTML=R.lib>0
-      ?'Cada pessoa a mais no backtest tira <b>'+money(unit)+'</b> por ano. Se o modelo precisar de <b>'+hcf(R.com+1)+'</b> gestores em vez de '+hcf(R.com)+', o soft money ainda é <b>'+money(up)+'</b> por ano.'
+      ?'Cada pessoa a mais no backtest tira <b>'+money(unit*q)+'</b> por ano. Se o modelo precisar de <b>'+hcf(cur+1)+'</b> gestores em vez de '+hcf(cur)+', o soft money ainda é <b>'+money(up)+'</b> por ano.'
       :'Com as premissas atuais não há gestores liberados. Confira o headcount sem e com o modelo na calculadora.';
   }
 
@@ -1516,7 +1508,7 @@ if(typeof module!=='undefined') module.exports={calc,DEF};
   function drawSens(){
     const S=[
       ['hc','±1 gestor com o modelo (backtest)'],
-      ['custo',P.custoModo==='salario'?'±R$ 1.000 no salário base mensal':'±R$ 1.000 no custo mensal do gestor'],
+      ['custo','±R$ 1.000 no custo mensal do gestor'],
       ['cap','±10 p.p. de capacidade convertida'],
       ['ind','±R$ 10 mil de custo indireto por gestor/ano']
     ].sort((a,b)=>R.sens[b[0]]-R.sens[a[0]]);
@@ -1601,14 +1593,15 @@ if(typeof module!=='undefined') module.exports={calc,DEF};
   const tip=document.getElementById('tip');
   const KIND={ref:'Referência',prx:'Derivada',pre:'Premissa'};
   const SRC={
-    hcSem:[['ref','Gestores sem o modelo • 2025','Calculador de PCP da esteira de obras, que diz quantas pessoas gestoras a carteira exige. Padrão: 8, informado pela área']],
-    hcCom:[['ref','Gestores com PO • backtest','Backtest do modelo de pesquisa operacional sobre a mesma carteira de 2025. Padrão: 5, informado pela área'],['pre','A validar fora da amostra','Repetir na carteira de 2026 e com as restrições reais de região e deslocamento']],
-    ganho:[['prx','Ganho de produtividade','Headcount: gestores sem ÷ com o modelo − 1 (8 ÷ 5 − 1 = +60%). Produtividade: o percentual informado sobre as obras por gestor']],
-    custo:[['ref','R$ 12.000 por mês com encargos','Padrão do analista gestor de obras, o mesmo usado na valoração do Atest.AI. Troque pelo custo do cargo informado por RH ou Controladoria'],['pre','Pelo salário','Salário × 13,33 (12 + 13º + 1/3 de férias) × (1 + encargos) + benefícios × 12 + PLR em salários']],
+    hcSem:[['ref','Gestores sem o modelo','Calculador de PCP da esteira de obras, que diz quantas pessoas gestoras a carteira exige. Padrão: 8, informado pela área']],
+    hcCom:[['ref','Gestores com PO • backtest','Backtest do modelo de pesquisa operacional sobre a carteira de obras. Padrão: 5, informado pela área'],['pre','A validar fora da amostra','Repetir em outra carteira e com as restrições reais de região e deslocamento']],
+    ganho:[['prx','Ganho de produtividade','Obras por gestor com PO ÷ obras por gestor sem o modelo − 1. Padrão: (96 ÷ 5) ÷ (96 ÷ 8) − 1 = +60%']],
+    custo:[['ref','R$ 12.000 por mês com encargos','Padrão do analista gestor de obras, o mesmo usado na valoração do Atest.AI. Troque pelo custo mensal total do cargo informado por RH ou Controladoria']],
     indiretos:[['pre','Custos de acompanhar obra','Deslocamento às obras, veículo, viagens, diárias e equipamentos por pessoa gestora, por ano. Zero no padrão']],
-    encargos:[['pre','36,8% no padrão','INSS patronal 20% + RAT/FAP cerca de 3% + terceiros 5,8% + FGTS 8%, sobre salário, 13º e férias. Confirmar com RH; 13º e férias já estão no 13,33']],
+    horas:[['pre','1.632 h por ano no padrão','8 h por dia × 20 dias úteis × 12 meses × 85% de produtividade. Muda as horas liberadas e o custo por hora, não o R$ do soft money']],
     captura:[['pre','100% no padrão','Parcela da capacidade liberada que a área decide converter: realocação para outra frente, não reposição de saídas ou crescimento sem contratar. Sem decisão, a capacidade existe mas não vira caixa']],
-    obras:[['pre','Mesma unidade do calculador de PCP','Use a unidade do calculador: obras acompanhadas no ano ou obras simultâneas no pico. Os padrões 96 obras e 12 obras por gestor são ilustrativos e reproduzem 8 → 5']]
+    obras:[['ref','Obras executadas sem e com PO','Na mesma unidade do calculador de PCP. Padrão: 96 nas duas, porque o backtest roda sobre a mesma carteira'],['prx','Se forem diferentes','Os gestores com PO são ajustados para a carteira sem o modelo: gestores com PO × obras sem ÷ obras com']],
+    carteira:[['pre','Zero no padrão','Variação anual da carteira de obras, aplicada do ano 2 ao 5. Use Redução quando agências estão sendo encerradas: menos obras pedem menos gestores, e a capacidade liberada encolhe na mesma proporção']]
   };
   let pinned=null;
   function infoHtml(k){ return '<span class="ti-h">De onde vem este número</span>'+(SRC[k]||[]).map(r=>'<div class="ti"><em class="'+r[0]+'">'+KIND[r[0]]+'</em><span><b>'+r[1]+'</b><small>'+r[2]+'</small></span></div>').join('')+'<span class="ti-f">Referência = informado pela área • Derivada = calculada • Premissa = a validar</span>'; }
@@ -1692,7 +1685,7 @@ if(typeof module!=='undefined') module.exports={calc,DEF};
   /* ---------- versões de premissas: salvar e importar ----------
      Compartilhadas no db do artifact (coleção "versoes"); sem db ou sem permissão de escrita, ficam neste navegador. */
   const NUMK=Object.keys(DEF).filter(k=>typeof DEF[k]==='number');
-  const STRK={hcModo:['direto','prod'],custoModo:['total','salario']};
+  const STRK={cartSentido:['cresce','reduz']};
   const LSK='pcpPoVersoes';
   let vdl=null, vdb=null, vuser=null, vMe=null, vOwner=false, vCanWrite=null, vShared=[];
   const lsGet=()=>{ try{ const a=JSON.parse(localStorage.getItem(LSK)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } };
@@ -1703,6 +1696,7 @@ if(typeof module!=='undefined') module.exports={calc,DEF};
     const n=clone(DEF);
     NUMK.forEach(k=>{ if(typeof pr[k]==='number'&&isFinite(pr[k])) n[k]=pr[k]; });
     Object.keys(STRK).forEach(k=>{ if(STRK[k].includes(pr[k])) n[k]=pr[k]; });
+    if(typeof pr.cartPct!=='number'&&typeof pr.cresc==='number'&&isFinite(pr.cresc)){ n.cartSentido=pr.cresc<0?'reduz':'cresce'; n.cartPct=Math.min(1,Math.abs(pr.cresc)); }
     if(Array.isArray(pr.ramp)&&pr.ramp.length===5&&pr.ramp.every(x=>typeof x==='number'&&isFinite(x)&&x>=0&&x<=1)) n.ramp=pr.ramp.slice();
     P=n; update();
   }
@@ -1747,7 +1741,7 @@ if(typeof module!=='undefined') module.exports={calc,DEF};
     const def='Versão de '+new Date().toLocaleDateString('pt-BR');
     const where=sharedWrite()?'Fica disponível para todos que abrem esta calculadora.':'Fica salva só neste navegador.';
     show('<span class="m-kick">Versões de premissas</span><h3 id="mTitle">Salvar versão</h3>'+
-      '<p class="m-lead">Guarda todas as premissas atuais: headcount, produtividade, custo da pessoa gestora, projeção e custo da solução. '+where+'</p>'+
+      '<p class="m-lead">Guarda todas as premissas atuais: gestores e obras, custo e horas da pessoa gestora, carteira e custo da solução. '+where+'</p>'+
       '<div class="vsum"><div><small>Soft money por ano</small><b>'+money(R.soft)+'</b></div><div><small>Gestores liberados</small><b>'+hcf(R.lib)+'</b></div><div><small>Custo anual por gestor</small><b>'+money(R.custoAnual)+'</b></div><div><small>VPL 5 anos</small><b>'+money(R.vpl)+'</b></div></div>'+
       '<form id="vForm" class="vform"><label for="vName">Nome da versão</label><div class="vrow"><input id="vName" maxlength="80" value="'+esc(def)+'" autocomplete="off"><button type="submit" class="gobtn" id="vSave">Salvar versão</button><button type="button" class="ghost big" id="vJson">⬇ Baixar como JSON</button></div><p class="vmsg" id="vMsg" role="status"></p></form>',btn);
     const f=document.getElementById('vForm'), inp=document.getElementById('vName');
