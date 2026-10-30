@@ -534,6 +534,7 @@ body.flow .salgrid,body.flow .salres{grid-template-columns:1fr 1fr}
 .res .wide{grid-column:1/-1;background:linear-gradient(145deg,var(--cta1),var(--cta2));border:0}
 .res .wide small{color:#C9D6F2}.res .wide b{color:#FFB577;font-size:36px}
 .res .wide span{display:block;font-size:12.5px;color:#DCE6FF;margin-top:4px}
+.res span.sm{display:block;font-size:12.5px;color:var(--body);font-weight:700;margin-top:2px}
 .res .h{border-top:4px solid var(--c-hard)}.res .s{border-top:4px solid var(--c-soft)}
 .res .g{background:var(--soft-g);border-color:var(--line-g)}.res .g b{color:var(--ink-g)}
 .fin{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
@@ -990,7 +991,7 @@ body.flow .ex-bar > div{font-size:11px;padding:0 6px}
     <div class="panel grow rise">
       <div class="lv-head"><span></span><span>Alavanca</span><span><i>💬</i>Em palavras simples</span><span><i>ƒx</i>Como calculamos</span><span>R$/ano e peso</span><span>Saving h/ano</span><span></span></div>
       <div id="levers"></div>
-      <div class="lv-tot lv-tot2"><div class="tl"><span>Total SETA + SISR • valores anuais em regime</span><small>Hard + soft: <b data-v="tot.tot" data-f="mm">–</b> por ano</small></div><div class="tb h"><small><i></i>Hard money</small><b data-v="tot.hard" data-f="mm">–</b><em>Sobrepreço evitado (L4)</em></div><div class="tb s"><small><i></i>Soft money</small><b data-v="tot.soft" data-f="mm">–</b><em class="tot-h"><span data-v="tot.horasLib" data-f="h">–</span> liberadas <span data-ftetip data-tip="" style="cursor:help">• <span data-v="tot.fte" data-f="fte">–</span></span></em></div></div>
+      <div class="lv-tot lv-tot2"><div class="tl"><span>Total SETA + SISR • valores anuais em regime</span><small>Hard + soft: <b data-v="tot.tot" data-f="mm">–</b> por ano</small></div><div class="tb h"><small><i></i>Hard money</small><b data-v="tot.hard" data-f="mm">–</b><em>Sobrepreço evitado (L4)</em></div><div class="tb s"><small><i></i>Soft money</small><b data-v="tot.fte" data-f="fte" data-ftetip data-tip="" style="cursor:help">–</b><em class="tot-h"><span data-v="tot.soft" data-f="mm">–</span> por ano • <span data-v="tot.horasLib" data-f="h">–</span> liberadas</em></div></div>
       <div class="lv-read"><i>💡</i><div><b>Leitura:</b> as duas maiores alavancas são <b data-v="top1" data-f="txt">–</b> e <b data-v="top2" data-f="txt">–</b>, que somam <b data-v="topShare" data-f="pct0">–</b> do valor. O dinheiro (L4) é <b data-v="hardShare" data-f="pct0">–</b> e as horas (L1 a L3) são <b data-v="softShare" data-f="pct0">–</b>. Medir essas duas primeiro, com backtest, é o que mais reduz a incerteza do número.</div></div>
     </div>
   </div>
@@ -1026,8 +1027,8 @@ body.flow .ex-bar > div{font-size:11px;padding:0 6px}
       </div>
       <div class="rp soft rise d2">
         <div class="rp-h">
-          <div><span class="tag soft"><i></i>Soft money</span><b class="big" data-v="tot.soft" data-f="mm">–</b><span class="sub">Capacidade liberada • <b data-v="softShare" data-f="pct0">–</b> do total</span></div>
-          <div class="side"><small>Horas liberadas/ano</small><b data-v="tot.horasLib" data-f="h">–</b><span data-ftetip data-tip="" style="cursor:help"><span data-v="tot.fte" data-f="fte">–</span> de analistas ⓘ</span></div>
+          <div><span class="tag soft"><i></i>Soft money</span><b class="big" data-v="tot.fte" data-f="fte">–</b><span class="sub">Capacidade de analistas liberada • <b data-v="tot.soft" data-f="mm">–</b> por ano, <b data-v="softShare" data-f="pct0">–</b> do total</span></div>
+          <div class="side"><small>Horas liberadas/ano</small><b data-v="tot.horasLib" data-f="h">–</b><span data-ftetip data-tip="" style="cursor:help">como calculamos o FTE ⓘ</span></div>
         </div>
         <div class="rp-rows" id="rpSoft"></div>
         <div class="rp-f" id="rpSoftF"></div>
@@ -1111,9 +1112,9 @@ body.flow .ex-bar > div{font-size:11px;padding:0 6px}
         <div class="panel-head">Premissas <div class="sim-act"><div class="scen" data-scen style="box-shadow:none"></div></div></div>
         <div class="panel-body" style="gap:14px">
           <div class="mode-row"><span class="lbl">Aplicar premissas a</span><div class="scen" id="simMode" role="group" aria-label="Aplicar premissas a"><button type="button" data-m="both">SETA + SISR</button><button type="button" data-m="seta">Só SETA</button><button type="button" data-m="sisr">Só SISR</button></div><span class="mode-note" id="modeNote"></span></div>
-          <div class="sub-h">Eficácia do Atest.AI • calibrar no modo sombra</div>
+          <div class="sub-h">Eficácia do Atest.AI • calibrar no backtest</div>
           <div class="sl-grid" id="sliders"></div>
-          <div class="sub-h">Baseline • cronometrar na Fase 0</div>
+          <div class="sub-h">Baseline • medir no backtest</div>
           <div class="in-grid">
             <div class="in"><label for="inHora">Custo da hora (R$)</label><input id="inHora" type="number" min="0" step="1" data-p="custoHora"><button type="button" class="linkbtn" id="salBtn">Calcular pelo salário ↗</button><small class="hint" id="hCost"></small></div>
             <div class="in"><label for="inMin">Min por cotação</label><input id="inMin" type="number" min="0" step="0.1" data-p="minCot"></div>
@@ -1135,14 +1136,13 @@ body.flow .ex-bar > div{font-size:11px;padding:0 6px}
           <div class="res">
             <div class="wide"><small>Benefício total por ano</small><b data-v="tot.tot" data-f="mm">–</b><span>VPL 5 anos dos benefícios: <b style="display:inline;font-size:inherit;color:#FFFFFF" data-v="vplBruto" data-f="mm">–</b></span></div>
             <div class="h"><small>Hard money</small><b data-v="tot.hard" data-f="mm">–</b></div>
-            <div class="s"><small>Soft money</small><b data-v="tot.soft" data-f="mm">–</b></div>
-            <div><small>Horas liberadas/ano</small><b data-v="tot.horasLib" data-f="h">–</b></div>
-            <div><small>Capacidade liberada</small><b data-v="tot.fte" data-f="fte">–</b></div>
+            <div class="s"><small>Soft money</small><b data-v="tot.fte" data-f="fte">–</b><span class="sm"><span data-v="tot.soft" data-f="mm">–</span> por ano</span></div>
+            <div class="s" style="grid-column:1/-1"><small>Horas liberadas/ano</small><b data-v="tot.horasLib" data-f="h">–</b><span class="sm" data-ftetip data-tip="" style="cursor:help">capacidade de analistas ⓘ</span></div>
           </div>
           <div class="sub-h">Por esteira</div>
           <div class="fin est">
-            <div><small>SETA</small><b data-v="seta.tot" data-f="mm">–</b><span>hard <span data-v="seta.hard" data-f="mm">–</span> • soft <span data-v="seta.soft" data-f="mm">–</span></span></div>
-            <div><small>SISR</small><b data-v="sisr.tot" data-f="mm">–</b><span>hard <span data-v="sisr.hard" data-f="mm">–</span> • soft <span data-v="sisr.soft" data-f="mm">–</span></span></div>
+            <div><small>SETA</small><b data-v="seta.tot" data-f="mm">–</b><span>hard <span data-v="seta.hard" data-f="mm">–</span> • soft <span data-v="seta.fte" data-f="fte">–</span></span></div>
+            <div><small>SISR</small><b data-v="sisr.tot" data-f="mm">–</b><span>hard <span data-v="sisr.hard" data-f="mm">–</span> • soft <span data-v="sisr.fte" data-f="fte">–</span></span></div>
           </div>
           <div class="sub-h">Com o custo informado</div>
           <div class="fin">
@@ -1618,16 +1618,17 @@ if(typeof module!=='undefined') module.exports={calc,D,PRESET,BASELINE};
     const T=R.tot, hs=T.hard/T.tot*100;
     document.getElementById('compBar').innerHTML=
       '<div class="h" style="width:'+hs+'%" data-tip="<b>Hard money</b><br>'+money(T.hard)+' • '+nf(hs,0)+'% do total"><small>Hard money</small><b>'+money(T.hard)+' <em>'+nf(hs,0)+'%</em></b></div>'+
-      '<div class="s" style="width:'+(100-hs)+'%" data-tip="<b>Soft money</b><br>'+money(T.soft)+' • '+nf(100-hs,0)+'% do total"><small>Soft money</small><b>'+money(T.soft)+' <em>'+nf(100-hs,0)+'%</em></b></div>';
+      '<div class="s" style="width:'+(100-hs)+'%" data-tip="<b>Soft money</b><br>'+money(T.soft)+' • '+nf(100-hs,0)+'% do total"><small>Soft money</small><b>'+nf(T.fte,1)+' FTE <em>'+money(T.soft)+' • '+nf(100-hs,0)+'%</em></b></div>';
     const max=Math.max(T.L1,T.L2,T.L3,T.L4a,T.L4b);
     const HK={L1:'hLib',L2:'haLib',L3:'hdLib'};
     const row=(k,n,d,code,lev)=>'<button type="button" class="rr" data-lever="'+(lev||k)+'"><span class="c">'+(code||k)+'</span><span class="n"><b>'+n+'</b><span>'+d+'</span></span>'+
       '<span class="tr" data-tip="<b>'+n+'</b><br>'+nf(T[k]/T.tot*100,0)+'% do total<br>SETA '+money(R.seta[k])+' • SISR '+money(R.sisr[k])+'"><i style="width:'+(T[k]/max*100)+'%"></i></span>'+
-      '<span class="v">'+money(T[k])+'</span>'+(HK[k]?'<span class="hh">'+nf(T[HK[k]],0)+' h</span>':'')+'</button>';
+      (HK[k]?'<span class="v">'+nf(T[HK[k]]/P.horasFte,1)+' FTE</span><span class="hh">'+money(T[k])+'</span>':'<span class="v">'+money(T[k])+'</span>')+'</button>';
     document.getElementById('rpHard').innerHTML=row('L4a','Sobrepreço nos aprovados de primeira','item caro ou fora do escopo, sem contestação','L4A','L4')+row('L4b','Sobrepreço que sobra nos contestados','além dos 13,5% já negociados','L4B','L4');
     document.getElementById('rpSoft').innerHTML=row('L1','Análise do orçamento','escopo, orçamento e fotos com parecer pronto')+row('L2','Atestação do serviço','fotos após a execução')+row('L3','Retrabalho com fornecedor','idas e vindas evitadas');
-    const fh=(e)=>'<span class="fh">'+(k==='soft'?nf(R[e].horasLib,0)+' h liberadas • '+nf(R[e].fte,1)+' FTE':'L4A '+money(R[e].L4a)+' • L4B '+money(R[e].L4b))+'</span>';
-    const foot=(k0)=>{k=k0; return '<div><small>SETA</small><b>'+money(R.seta[k])+'<em>'+nf(R.seta[k]/T[k]*100,0)+'%</em></b>'+fh('seta')+'</div><div><small>SISR</small><b>'+money(R.sisr[k])+'<em>'+nf(R.sisr[k]/T[k]*100,0)+'%</em></b>'+fh('sisr')+'</div>';};
+    const fh=(e)=>'<span class="fh">'+(k==='soft'?money(R[e].soft)+' por ano • '+nf(R[e].horasLib,0)+' h liberadas':'L4A '+money(R[e].L4a)+' • L4B '+money(R[e].L4b))+'</span>';
+    const big=(e)=>k==='soft'?nf(R[e].fte,1)+' FTE':money(R[e][k]);
+    const foot=(k0)=>{k=k0; return '<div><small>SETA</small><b>'+big('seta')+'<em>'+nf(R.seta[k]/T[k]*100,0)+'%</em></b>'+fh('seta')+'</div><div><small>SISR</small><b>'+big('sisr')+'<em>'+nf(R.sisr[k]/T[k]*100,0)+'%</em></b>'+fh('sisr')+'</div>';};
     let k;
     document.getElementById('rpHardF').innerHTML=foot('hard');
     document.getElementById('rpSoftF').innerHTML=foot('soft');
