@@ -1,0 +1,1639 @@
+{
+  "format": "archstudio",
+  "version": 1,
+  "name": "Verificador · AS IS",
+  "description": "Arquitetura atual do Verificador Inteligente de Orçamentos: duas entradas (GPCA pelo Autodesk Docs, lida pelo Autodesk Desktop Connector; GOT por extração manual da Salesforce para o SharePoint, lida pela lib Python AWS Cloud Bridge), um mesmo motor no SageMaker às 00:00 com seis validadores (LPU, Composição, Material Banco, NLPU Pricing, Não LPU, Quantitativos), com semantic router e match fuzzy antes do agente Não LPU → LPU, resultado no SharePoint, painel web com Microsoft Lists, réplica numa issue do Autodesk Docs (GPCA) ou na Salesforce (GOT), analítico semanal e atualização dos agentes de match pelo Knowledge Builder.",
+  "settings": {
+    "grid": true,
+    "snap": true,
+    "gridSize": 10,
+    "wheel": "zoom",
+    "minimap": true,
+    "guides": true,
+    "squad": "DataCraft",
+    "wmStyle": "tile",
+    "wmOpacity": 0.08,
+    "legend": true,
+    "legendPos": "right",
+    "badgeShape": "square",
+    "badgeColor": "#147EBA"
+  },
+  "savedAt": "2026-11-05T11:40:22.096Z",
+  "pageTitle": "Página 1",
+  "legend": {
+    "order": [
+      "x:s1",
+      "b:1",
+      "b:2",
+      "b:3",
+      "b:4",
+      "b:5",
+      "b:6",
+      "b:7",
+      "b:8",
+      "b:9",
+      "b:10",
+      "b:11",
+      "b:12",
+      "b:13",
+      "b:14",
+      "b:15",
+      "b:16",
+      "b:17",
+      "b:18",
+      "b:19",
+      "b:20",
+      "x:s3",
+      "b:K1",
+      "b:K2",
+      "b:K3",
+      "x:s2",
+      "b:A",
+      "b:B",
+      "b:C",
+      "b:D",
+      "b:E",
+      "b:F",
+      "b:G"
+    ],
+    "extras": [
+      {
+        "id": "s1",
+        "kind": "section",
+        "title": "Fluxo atual"
+      },
+      {
+        "id": "s2",
+        "kind": "section",
+        "title": "Pontos de atenção"
+      },
+      {
+        "id": "s3",
+        "kind": "section",
+        "title": "Atualização dos agentes de match"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "corp",
+      "type": "g-dc",
+      "x": -1638,
+      "y": -169,
+      "w": 1885,
+      "h": 1573,
+      "label": "Ambiente corporativo",
+      "sub": "Salesforce · Autodesk Docs · Microsoft 365",
+      "kind": "group",
+      "meta": [],
+      "style": {}
+    },
+    {
+      "id": "g_in",
+      "type": "g-generic",
+      "x": -429,
+      "y": -46,
+      "w": 663,
+      "h": 377,
+      "label": "① Fontes de dados",
+      "sub": "sistemas de origem · lidos às 00:00",
+      "kind": "group",
+      "meta": [],
+      "style": {
+        "stroke": "#16a34a",
+        "fill": "#16a34a",
+        "fo": 0.03,
+        "dashed": false,
+        "glyph": "ingest"
+      },
+      "parent": "corp"
+    },
+    {
+      "id": "g_in_gpca",
+      "type": "g-generic",
+      "x": -410,
+      "y": 156,
+      "w": 624,
+      "h": 156,
+      "label": "GPCA · orçamento executivo",
+      "sub": "",
+      "kind": "group",
+      "meta": [],
+      "style": {
+        "stroke": "#16a34a",
+        "fill": "#16a34a",
+        "fo": 0.02,
+        "dashed": true,
+        "glyph": ""
+      },
+      "parent": "g_in"
+    },
+    {
+      "id": "gpca_in",
+      "type": "extapi",
+      "x": -410,
+      "y": 196,
+      "w": 190,
+      "h": 62,
+      "label": "Autodesk Docs",
+      "sub": "orçamento executivo do projetista",
+      "kind": "card",
+      "style": {
+        "badge": "1"
+      },
+      "meta": [],
+      "notes": "Mecanismo da varredura e local da planilha de cadastro (agência/UPE e perfil): a confirmar.",
+      "stepDesc": "**GPCA**: o projetista sobe o orçamento executivo no **Autodesk Docs**. Sob demanda, a agência/UPE e o perfil são cadastrados numa planilha; orçamentos de **concorrência** ficam de fora.",
+      "parent": "g_in_gpca"
+    },
+    {
+      "id": "g_in_got",
+      "type": "g-generic",
+      "x": -410,
+      "y": -6,
+      "w": 624,
+      "h": 136,
+      "label": "GOT · orçamento da construtora",
+      "sub": "",
+      "kind": "group",
+      "meta": [],
+      "style": {
+        "stroke": "#16a34a",
+        "fill": "#16a34a",
+        "fo": 0.02,
+        "dashed": true,
+        "glyph": ""
+      },
+      "parent": "g_in"
+    },
+    {
+      "id": "sf_in",
+      "type": "extapi",
+      "x": -410,
+      "y": 38,
+      "w": 190,
+      "h": 62,
+      "label": "Salesforce",
+      "sub": "orçamento da construtora",
+      "kind": "card",
+      "style": {},
+      "meta": [],
+      "parent": "g_in_got"
+    },
+    {
+      "id": "sp_in",
+      "type": "data-file",
+      "x": -46,
+      "y": 38,
+      "w": 190,
+      "h": 62,
+      "label": "SharePoint",
+      "sub": "pasta de entrada (GOT)",
+      "kind": "card",
+      "style": {
+        "badge": "2"
+      },
+      "meta": [],
+      "stepDesc": "**GOT**: o **analista** extrai da **Salesforce** o orçamento preenchido pela construtora (Inspector) e salva na **pasta do SharePoint**, que é a entrada da execução da noite.",
+      "parent": "g_in_got"
+    },
+    {
+      "id": "vault",
+      "type": "secrets",
+      "x": -46,
+      "y": -130,
+      "w": 220,
+      "h": 62,
+      "label": "Vault",
+      "sub": "credenciais corporativas",
+      "kind": "card",
+      "style": {
+        "glyph": "key"
+      },
+      "meta": [],
+      "parent": "corp"
+    },
+    {
+      "id": "g_use",
+      "type": "g-generic",
+      "x": -1612,
+      "y": 1001,
+      "w": 1846,
+      "h": 377,
+      "label": "④ Camada de consumo",
+      "sub": "resultado, análise e feedback",
+      "kind": "group",
+      "meta": [],
+      "style": {
+        "stroke": "#147EBA",
+        "fill": "#147EBA",
+        "fo": 0.03,
+        "dashed": false,
+        "glyph": "browser"
+      },
+      "parent": "corp"
+    },
+    {
+      "id": "sp_out",
+      "type": "data-file",
+      "x": -46,
+      "y": 1061,
+      "w": 220,
+      "h": 70,
+      "label": "SharePoint",
+      "sub": "resultados por agência/UPE + consolidado da data",
+      "kind": "card",
+      "style": {},
+      "meta": [],
+      "parent": "g_use"
+    },
+    {
+      "id": "negocio",
+      "type": "users",
+      "x": -429,
+      "y": 1066,
+      "w": 220,
+      "h": 62,
+      "label": "Analista de negócio",
+      "sub": "GOT · GPCA",
+      "kind": "card",
+      "style": {
+        "badge": "15"
+      },
+      "meta": [],
+      "stepDesc": "O **analista** (GPCA ou GOT) baixa o resultado do **SharePoint** e o **importa no painel web**, sua principal forma de navegar pelas divergências.",
+      "parent": "g_use"
+    },
+    {
+      "id": "painel",
+      "type": "browser",
+      "x": -806,
+      "y": 1061,
+      "w": 220,
+      "h": 70,
+      "label": "Painel web",
+      "sub": "URL personalizada no SharePoint",
+      "kind": "card",
+      "style": {},
+      "meta": [],
+      "parent": "g_use"
+    },
+    {
+      "id": "lists",
+      "type": "dynamodb",
+      "x": -806,
+      "y": 1248,
+      "w": 220,
+      "h": 62,
+      "label": "Microsoft Lists",
+      "sub": "parecer: acertou · errou · faltou indicar",
+      "kind": "card",
+      "style": {
+        "badge": "16",
+        "glyph": "table",
+        "accent": "#0078D4"
+      },
+      "meta": [],
+      "stepDesc": "O painel grava no **Microsoft Lists** o parecer de cada item: **Acertou** (vai para a réplica), **Errou** ou **Faltou indicar** (ficam fora da réplica e calibram o modelo), com comentários livres.",
+      "parent": "g_use"
+    },
+    {
+      "id": "tele",
+      "type": "dynamodb",
+      "x": -1183,
+      "y": 1248,
+      "w": 220,
+      "h": 62,
+      "label": "Telemetria",
+      "sub": "Microsoft Lists · uso e tempo por UPE",
+      "kind": "card",
+      "style": {
+        "badge": "17",
+        "glyph": "table",
+        "accent": "#0078D4"
+      },
+      "meta": [],
+      "stepDesc": "A partir do **Microsoft Lists** a equipe capta **telemetria**: quem usa, quanto tempo permanece no painel, quanto tempo leva para analisar cada **UPE**.",
+      "parent": "g_use"
+    },
+    {
+      "id": "analitico",
+      "type": "quicksight",
+      "x": -1560,
+      "y": 1248,
+      "w": 220,
+      "h": 62,
+      "label": "Analítico semanal",
+      "sub": "produto por agente · benefício (valor recuperado)",
+      "kind": "card",
+      "style": {
+        "badge": "18"
+      },
+      "meta": [],
+      "stepDesc": "**Analítico semanal** (em fechamento): visão de **produto** (como cada agente vai) e de **benefício** (valor recuperado), por validador e construtora. O que o analista marca como Errou ou Faltou indicar volta como insumo para calibrar validadores e agentes.",
+      "notes": "Atualização semanal em fechamento.",
+      "parent": "g_use"
+    },
+    {
+      "id": "g_out",
+      "type": "g-generic",
+      "x": -1612,
+      "y": 559,
+      "w": 1144,
+      "h": 390,
+      "label": "⑤ Integração de saída",
+      "sub": "feita manualmente pelo analista",
+      "kind": "group",
+      "meta": [],
+      "style": {
+        "stroke": "#ED7100",
+        "fill": "#ED7100",
+        "fo": 0.03,
+        "dashed": false,
+        "glyph": "external"
+      },
+      "parent": "corp"
+    },
+    {
+      "id": "g_out_gpca",
+      "type": "g-generic",
+      "x": -1592,
+      "y": 604,
+      "w": 722,
+      "h": 325,
+      "label": "Réplica GPCA",
+      "sub": "ao projetista",
+      "kind": "group",
+      "meta": [],
+      "style": {
+        "stroke": "#ED7100",
+        "fill": "#ED7100",
+        "fo": 0.02,
+        "dashed": true,
+        "glyph": ""
+      },
+      "parent": "g_out"
+    },
+    {
+      "id": "xls",
+      "type": "data-file",
+      "x": -1196,
+      "y": 806,
+      "w": 220,
+      "h": 62,
+      "label": "Excel de réplica",
+      "sub": "exportado do painel · só itens com Verificador Acertou (com divergência)",
+      "kind": "card",
+      "style": {
+        "badge": "19"
+      },
+      "meta": [],
+      "stepDesc": "**Réplica GPCA**: o painel exporta um Excel **só com os itens marcados como Acertou**; o **analista sobe esse arquivo manualmente** numa **issue do Autodesk Docs**, e o projetista recebe **só o que não procede** no orçamento.",
+      "parent": "g_out_gpca"
+    },
+    {
+      "id": "adr",
+      "type": "extapi",
+      "x": -1196,
+      "y": 650,
+      "w": 220,
+      "h": 62,
+      "label": "Autodesk Docs",
+      "sub": "issue de réplica · upload manual do analista",
+      "kind": "card",
+      "style": {},
+      "meta": [],
+      "parent": "g_out_gpca"
+    },
+    {
+      "id": "proj",
+      "type": "user",
+      "x": -1566,
+      "y": 650,
+      "w": 200,
+      "h": 62,
+      "label": "Projetista",
+      "sub": "recebe só o que não procede",
+      "kind": "card",
+      "style": {},
+      "meta": [],
+      "parent": "g_out_gpca"
+    },
+    {
+      "id": "g_out_got",
+      "type": "g-generic",
+      "x": -852,
+      "y": 604,
+      "w": 364,
+      "h": 325,
+      "label": "Réplica GOT",
+      "sub": "à construtora",
+      "kind": "group",
+      "meta": [],
+      "style": {
+        "stroke": "#ED7100",
+        "fill": "#ED7100",
+        "fo": 0.02,
+        "dashed": true,
+        "glyph": ""
+      },
+      "parent": "g_out"
+    },
+    {
+      "id": "sf_rep",
+      "type": "extapi",
+      "x": -832,
+      "y": 806,
+      "w": 250,
+      "h": 62,
+      "label": "Salesforce",
+      "sub": "réplica feita manualmente pelo analista",
+      "kind": "card",
+      "style": {
+        "badge": "20"
+      },
+      "meta": [],
+      "stepDesc": "**Réplica GOT**: a partir do que validou no painel, o **analista registra a réplica manualmente na Salesforce**, e a construtora recebe o retorno do orçamento.",
+      "parent": "g_out_got"
+    },
+    {
+      "id": "constr",
+      "type": "users",
+      "x": -832,
+      "y": 650,
+      "w": 250,
+      "h": 62,
+      "label": "Construtora",
+      "sub": "recebe o retorno do orçamento",
+      "kind": "card",
+      "style": {},
+      "meta": [],
+      "parent": "g_out_got"
+    },
+    {
+      "id": "autodesk",
+      "type": "extapi",
+      "x": 2002,
+      "y": 898,
+      "label": "Autodesk Docs",
+      "sub": "layouts DWG / Revit",
+      "kind": "card",
+      "w": 220,
+      "h": 62,
+      "style": {},
+      "meta": []
+    },
+    {
+      "id": "cloud",
+      "type": "g-cloud",
+      "x": 299,
+      "y": -222,
+      "label": "AWS Cloud",
+      "sub": "",
+      "w": 1638,
+      "h": 1581,
+      "style": {},
+      "kind": "group",
+      "meta": []
+    },
+    {
+      "id": "g_ing",
+      "type": "g-mlenv",
+      "x": 325,
+      "y": -46,
+      "w": 575,
+      "h": 377,
+      "label": "② Ingestão",
+      "sub": "",
+      "kind": "group",
+      "meta": [],
+      "style": {},
+      "parent": "cloud"
+    },
+    {
+      "id": "cb",
+      "type": "py-lib",
+      "x": 403,
+      "y": 20,
+      "label": "AWS Cloud Bridge",
+      "sub": "lib Python · conector SharePoint",
+      "kind": "card",
+      "w": 200,
+      "h": 90,
+      "style": {
+        "glyph": "swap",
+        "badge": "5"
+      },
+      "stepDesc": "**GOT**: dentro do notebook, a lib Python **AWS Cloud Bridge** (credenciais no **Vault**) lê a pasta de entrada do **SharePoint** e traz os arquivos para o **S3 RAW**.",
+      "meta": [
+        {
+          "k": "Tipo",
+          "v": "biblioteca Python"
+        },
+        {
+          "k": "Credenciais",
+          "v": "Vault"
+        }
+      ],
+      "parent": "g_ing"
+    },
+    {
+      "id": "sched",
+      "type": "data-schedule",
+      "x": 575,
+      "y": -175,
+      "label": "SageMaker Notebook Jobs",
+      "sub": "agendamento diário · 00:00",
+      "kind": "card",
+      "w": 270,
+      "h": 52,
+      "style": {
+        "badge": "3"
+      },
+      "stepDesc": "**Todos os dias às 00:00** um único **Notebook Job do SageMaker** faz a ingestão das duas portas (Autodesk Docs na GPCA, SharePoint via Cloud Bridge na GOT) e roda os validadores, com o **mesmo motor** para GPCA e GOT.",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "raw",
+      "type": "s3",
+      "x": 744,
+      "y": 42,
+      "label": "S3 · raw",
+      "sub": "orçamentos recebidos",
+      "style": {},
+      "kind": "icon",
+      "w": 56,
+      "h": 56,
+      "meta": [],
+      "parent": "g_ing"
+    },
+    {
+      "id": "leitura",
+      "type": "data-ingest",
+      "x": 650,
+      "y": 182,
+      "w": 225,
+      "h": 84,
+      "label": "Autodesk Desktop Connector",
+      "sub": "só arquivos modificados",
+      "kind": "card",
+      "style": {
+        "badge": "4"
+      },
+      "meta": [
+        {
+          "k": "Tipo",
+          "v": "componente Autodesk"
+        }
+      ],
+      "stepDesc": "**GPCA**: dentro do notebook, o componente **Autodesk Desktop Connector** busca no Autodesk Docs só os orçamentos executivos **modificados** e os traz para o **S3 RAW**.",
+      "parent": "g_ing"
+    },
+    {
+      "id": "bases",
+      "type": "g-generic",
+      "x": 338,
+      "y": 377,
+      "label": "S3 · dados de referência",
+      "sub": "",
+      "w": 507,
+      "h": 351,
+      "style": {
+        "stroke": "#7AA116",
+        "fill": "#7AA116",
+        "fo": 0.05,
+        "dashed": false,
+        "glyph": "bucket"
+      },
+      "kind": "group",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "b_ag",
+      "type": "s3",
+      "x": 358,
+      "y": 436,
+      "label": "Agências",
+      "sub": "dados das agências",
+      "kind": "card",
+      "w": 170,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "bases"
+    },
+    {
+      "id": "b_co",
+      "type": "s3",
+      "x": 604,
+      "y": 436,
+      "label": "Construtoras",
+      "sub": "regiões · grupo de preço",
+      "kind": "card",
+      "w": 170,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "bases"
+    },
+    {
+      "id": "b_lpu",
+      "type": "s3",
+      "x": 358,
+      "y": 533,
+      "label": "LPU",
+      "sub": "itens e preços por região",
+      "kind": "card",
+      "w": 170,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "bases"
+    },
+    {
+      "id": "b_ar",
+      "type": "s3",
+      "x": 604,
+      "y": 533,
+      "label": "LPU ar-cond.",
+      "sub": "itens e preços por região",
+      "kind": "card",
+      "w": 170,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "bases"
+    },
+    {
+      "id": "b_comp",
+      "type": "s3",
+      "x": 358,
+      "y": 630,
+      "label": "Composição",
+      "sub": "composições × insumos",
+      "kind": "card",
+      "w": 170,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "bases"
+    },
+    {
+      "id": "sm",
+      "type": "g-mlenv",
+      "x": 988,
+      "y": 65,
+      "label": "③ Processamento",
+      "sub": "Amazon SageMaker · motor de validação (GPCA e GOT)",
+      "w": 910,
+      "h": 1268,
+      "style": {},
+      "kind": "group",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "v1",
+      "type": "ml-gate",
+      "x": 1027,
+      "y": 130,
+      "label": "Validador LPU",
+      "sub": "determinístico · GPCA e GOT",
+      "kind": "card",
+      "w": 270,
+      "h": 62,
+      "style": {
+        "badge": "6"
+      },
+      "stepDesc": "**Validador LPU** (determinístico, GPCA e GOT): cruza o orçamento com **agências**, **construtoras** (região e grupo de preço), **LPU** e **LPU ar-condicionado** e aponta preço unitário, unidade e item LPU lançado como não LPU.",
+      "meta": [
+        {
+          "k": "Esteiras",
+          "v": "GPCA · GOT"
+        }
+      ],
+      "parent": "sm"
+    },
+    {
+      "id": "g_pre",
+      "type": "g-generic",
+      "x": 1365,
+      "y": 585,
+      "w": 520,
+      "h": 135,
+      "label": "Pré-filtro do Não LPU → LPU",
+      "sub": "reduz itens enviados ao agente",
+      "kind": "group",
+      "meta": [],
+      "style": {
+        "stroke": "#0891b2",
+        "fill": "#0891b2",
+        "fo": 0.04,
+        "dashed": true,
+        "glyph": "funnel"
+      },
+      "parent": "sm"
+    },
+    {
+      "id": "router",
+      "type": "gen-gateway",
+      "x": 1385,
+      "y": 630,
+      "w": 230,
+      "h": 62,
+      "label": "Semantic router",
+      "sub": "descarta itens sem substituto na LPU",
+      "kind": "card",
+      "style": {
+        "badge": "10",
+        "glyph": "signpost"
+      },
+      "meta": [
+        {
+          "k": "Exemplo",
+          "v": "deslocamento"
+        }
+      ],
+      "parent": "g_pre",
+      "stepDesc": "**Semantic router**: antes do agente **Não LPU → LPU**, descarta os itens que não têm substituto real na LPU (ex.: **deslocamento**), reduzindo a quantidade de itens enviados ao agente de IA."
+    },
+    {
+      "id": "fuzzy",
+      "type": "data-join",
+      "x": 1640,
+      "y": 630,
+      "w": 230,
+      "h": 62,
+      "label": "Match fuzzy",
+      "sub": "execuções paralelas · equivalente na LPU",
+      "kind": "card",
+      "style": {
+        "badge": "11"
+      },
+      "meta": [
+        {
+          "k": "Execução",
+          "v": "paralela, para otimizar o tempo de processamento"
+        }
+      ],
+      "parent": "g_pre",
+      "stepDesc": "**Match fuzzy**: busca o equivalente na **LPU** por similaridade, em **execuções paralelas** para otimizar o tempo de processamento. Os itens restantes seguem para o agente de match contextual **Não LPU → LPU**."
+    },
+    {
+      "id": "v2",
+      "type": "gen-agent",
+      "x": 1027,
+      "y": 377,
+      "label": "Validador Material Banco",
+      "sub": "match contextual · só GPCA",
+      "kind": "card",
+      "w": 270,
+      "h": 62,
+      "style": {
+        "badge": "8"
+      },
+      "stepDesc": "**Material Banco** (só GPCA): itens não LPU vão ao agente de match contextual com nome e unidade; vale o **top 1 acima do limiar**. Sem candidato acima do limiar, o item segue para o próximo agente.",
+      "meta": [
+        {
+          "k": "Esteiras",
+          "v": "GPCA"
+        }
+      ],
+      "parent": "sm"
+    },
+    {
+      "id": "v3",
+      "type": "gen-agent",
+      "x": 1027,
+      "y": 500,
+      "label": "Validador NLPU Pricing",
+      "sub": "match contextual · só GPCA",
+      "kind": "card",
+      "w": 270,
+      "h": 62,
+      "style": {
+        "badge": "9"
+      },
+      "stepDesc": "**NLPU Pricing** (só GPCA): mesmo modelo de chamada, top 1 acima do limiar; aponta preço acima da tabela.",
+      "meta": [
+        {
+          "k": "Esteiras",
+          "v": "GPCA"
+        }
+      ],
+      "parent": "sm"
+    },
+    {
+      "id": "v4",
+      "type": "gen-agent",
+      "x": 1027,
+      "y": 774,
+      "label": "Validador Não LPU → LPU",
+      "sub": "match contextual · GPCA e GOT",
+      "kind": "card",
+      "w": 270,
+      "h": 62,
+      "style": {
+        "badge": "12"
+      },
+      "stepDesc": "**Não LPU → LPU** (GPCA e GOT): converte em LPU o item escrito de outra forma; sem candidato acima do limiar, o item **continua Não LPU**.",
+      "meta": [
+        {
+          "k": "Esteiras",
+          "v": "GPCA · GOT"
+        }
+      ],
+      "parent": "sm"
+    },
+    {
+      "id": "v5",
+      "type": "ml-gate",
+      "x": 1027,
+      "y": 250,
+      "label": "Validador Composição",
+      "sub": "determinístico · GPCA e GOT",
+      "kind": "card",
+      "w": 270,
+      "h": 62,
+      "style": {
+        "badge": "7"
+      },
+      "stepDesc": "**Validador de Composição** (determinístico, GPCA e GOT), logo após o LPU: aponta duplicidade, insumo incoerente e item sem vínculo com o serviço.",
+      "meta": [
+        {
+          "k": "Esteiras",
+          "v": "GPCA · GOT"
+        }
+      ],
+      "parent": "sm"
+    },
+    {
+      "id": "v6",
+      "type": "gen-agent",
+      "x": 1027,
+      "y": 898,
+      "label": "Validador Quantitativos",
+      "sub": "layout + KB + orçamento → LLM · GOT",
+      "kind": "card",
+      "w": 270,
+      "h": 62,
+      "style": {},
+      "meta": [
+        {
+          "k": "Esteiras",
+          "v": "GOT (40%) · GPCA/GOA 0%"
+        }
+      ],
+      "parent": "sm"
+    },
+    {
+      "id": "pub",
+      "type": "py-lib",
+      "x": 344,
+      "y": 1066,
+      "w": 220,
+      "h": 62,
+      "label": "Publicação",
+      "sub": "AWS Cloud Bridge → SharePoint",
+      "kind": "card",
+      "style": {
+        "glyph": "swap"
+      },
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "res",
+      "type": "data-agg",
+      "x": 1027,
+      "y": 1066,
+      "label": "Resultado consolidado",
+      "sub": "item a item: validador e variação",
+      "kind": "card",
+      "w": 270,
+      "h": 62,
+      "style": {
+        "glyph": "checklist",
+        "badge": "14"
+      },
+      "meta": [],
+      "parent": "sm",
+      "stepDesc": "O **resultado item a item** (validador e variação) é publicado no **SharePoint** pela mesma lib **AWS Cloud Bridge**: um **arquivo por agência/UPE** e um **consolidado da data**, renovados a cada execução."
+    },
+    {
+      "id": "quant",
+      "type": "g-stage",
+      "x": 1417,
+      "y": 839,
+      "label": "Quantitativos",
+      "sub": "leitura de layout · hoje só GOT",
+      "w": 455,
+      "h": 468,
+      "style": {},
+      "kind": "group",
+      "meta": [],
+      "parent": "sm"
+    },
+    {
+      "id": "q1",
+      "type": "gen-retriever",
+      "x": 1443,
+      "y": 898,
+      "label": "Busca layouts atualizados",
+      "sub": "Autodesk Desktop Connector · agências do orçamento",
+      "kind": "card",
+      "w": 310,
+      "h": 70,
+      "style": {
+        "badge": "13"
+      },
+      "stepDesc": "**Quantitativos** (hoje só GOT): o componente **Autodesk Desktop Connector** busca no **Autodesk Docs** os layouts atualizados das agências orçadas; os dados do **DWG ou Revit** são extraídos em JSON e enviados ao **GPT-5.5** com o orçamento e a **Knowledge Base** do programa dono. O agente devolve os itens com quantitativo a mais ou a menos.",
+      "meta": [
+        {
+          "k": "Programas lidos",
+          "v": "Ampliação Wi-Fi · Commbox · Câmera Dori · Expansão CFTV · Portaria PF · Desmobilização de telefone laranja · Luminárias"
+        },
+        {
+          "k": "Cobertura",
+          "v": "GOT 40% · GPCA/GOA 0%"
+        }
+      ],
+      "parent": "quant"
+    },
+    {
+      "id": "q2",
+      "type": "gen-parse",
+      "x": 1443,
+      "y": 1002,
+      "label": "Extração DWG / Revit",
+      "sub": "dados da agência → JSON",
+      "kind": "card",
+      "w": 310,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "quant"
+    },
+    {
+      "id": "q3",
+      "type": "gen-agent",
+      "x": 1443,
+      "y": 1106,
+      "label": "Agente de quantitativos",
+      "sub": "itens com quantitativo a mais / a menos",
+      "kind": "card",
+      "w": 310,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "quant"
+    },
+    {
+      "id": "b_kb",
+      "type": "gen-docs",
+      "x": 1443,
+      "y": 1210,
+      "label": "Knowledge Bases",
+      "sub": "regras e premissas por programa dono",
+      "kind": "card",
+      "w": 310,
+      "h": 56,
+      "style": {},
+      "meta": [],
+      "parent": "quant"
+    },
+    {
+      "id": "stack",
+      "type": "g-generic",
+      "x": 1976,
+      "y": 318,
+      "label": "StackSpot AI",
+      "sub": "serviço externo · agentes de match + Knowledge Bases",
+      "w": 767,
+      "h": 540,
+      "style": {
+        "stroke": "#475569",
+        "fill": "#475569",
+        "fo": 0.04,
+        "dashed": true,
+        "glyph": "external"
+      },
+      "kind": "group",
+      "meta": []
+    },
+    {
+      "id": "a_mb",
+      "type": "gen-rerank",
+      "x": 2002,
+      "y": 377,
+      "label": "Match contextual · Material Banco",
+      "sub": "nome + unidade → candidatos",
+      "kind": "card",
+      "w": 250,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "stack"
+    },
+    {
+      "id": "a_np",
+      "type": "gen-rerank",
+      "x": 2002,
+      "y": 500,
+      "label": "Match contextual · NLPU Pricing",
+      "sub": "nome + unidade → candidatos",
+      "kind": "card",
+      "w": 250,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "stack"
+    },
+    {
+      "id": "a_nl",
+      "type": "gen-rerank",
+      "x": 2002,
+      "y": 774,
+      "label": "Match contextual · Não LPU",
+      "sub": "equivalente na LPU",
+      "kind": "card",
+      "w": 250,
+      "h": 62,
+      "style": {},
+      "notes": "Hospedagem no StackSpot a confirmar.",
+      "meta": [],
+      "parent": "stack"
+    },
+    {
+      "id": "gpt",
+      "type": "gen-llm",
+      "x": 2002,
+      "y": 1106,
+      "label": "GPT-5.5",
+      "sub": "LLM externo · orçamento + KB + JSON",
+      "kind": "card",
+      "w": 250,
+      "h": 62,
+      "style": {},
+      "meta": []
+    },
+    {
+      "id": "g_kp",
+      "type": "g-offline",
+      "x": 1950,
+      "y": -6,
+      "w": 793,
+      "h": 182,
+      "label": "Pipeline de conhecimento",
+      "sub": "offline · a cada mudança nas bases",
+      "kind": "group",
+      "meta": [],
+      "style": {}
+    },
+    {
+      "id": "upd",
+      "type": "data-source",
+      "x": 1976,
+      "y": 52,
+      "label": "Mudança nas bases",
+      "sub": "LPU · Material Banco · NLPU Pricing",
+      "kind": "card",
+      "w": 220,
+      "h": 70,
+      "style": {
+        "badge": "K1"
+      },
+      "meta": [],
+      "stepColor": "#7c3aed",
+      "stepDesc": "Qualquer mudança nas bases de **LPU**, **Material Banco** ou **NLPU Pricing** dispara a atualização dos agentes de match contextual.",
+      "parent": "g_kp"
+    },
+    {
+      "id": "kbb",
+      "type": "gen-agent",
+      "x": 2392,
+      "y": 52,
+      "label": "Knowledge Builder",
+      "sub": "agente de enriquecimento dos itens",
+      "kind": "card",
+      "w": 250,
+      "h": 70,
+      "style": {
+        "badge": "K2"
+      },
+      "meta": [
+        {
+          "k": "Entrada",
+          "v": "itens alterados · nome + unidade"
+        },
+        {
+          "k": "Saída",
+          "v": "itens enriquecidos"
+        }
+      ],
+      "stepColor": "#7c3aed",
+      "notes": "Onde o Knowledge Builder roda e como a mudança nas bases é detectada: a confirmar.",
+      "stepDesc": "O **Knowledge Builder** enriquece cada item, que chega só com **nome e unidade**, com: intenção técnica, tipo do item, sinônimos, palavras-chave, aplicações típicas, \"não confundir com\", unidades compatíveis, query contextual, sensibilidade à dimensão, substituição por outras dimensões e as dimensões extraídas.",
+      "parent": "g_kp"
+    },
+    {
+      "id": "kb_mb",
+      "type": "gen-docs",
+      "x": 2392,
+      "y": 377,
+      "label": "KB · Material Banco",
+      "sub": "itens enriquecidos",
+      "kind": "card",
+      "w": 250,
+      "h": 62,
+      "style": {
+        "badge": "K3"
+      },
+      "meta": [],
+      "parent": "stack",
+      "stepColor": "#7c3aed",
+      "stepDesc": "Os itens enriquecidos sobem como **KB no StackSpot AI**, uma para cada agente de match contextual: **Material Banco**, **NLPU Pricing** e **LPU** (usada pelo agente Não LPU → LPU)."
+    },
+    {
+      "id": "kb_np",
+      "type": "gen-docs",
+      "x": 2392,
+      "y": 500,
+      "label": "KB · NLPU Pricing",
+      "sub": "itens enriquecidos",
+      "kind": "card",
+      "w": 250,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "stack"
+    },
+    {
+      "id": "kb_lpu",
+      "type": "gen-docs",
+      "x": 2392,
+      "y": 774,
+      "label": "KB · LPU",
+      "sub": "itens enriquecidos · usada pelo Não LPU",
+      "kind": "card",
+      "w": 250,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "stack"
+    },
+    {
+      "id": "n_kb",
+      "type": "shape-note",
+      "x": 2858,
+      "y": 318,
+      "label": "O que o Knowledge Builder adiciona a cada item",
+      "sub": "Intenção técnica\nTipo do item\nSinônimos\nPalavras-chave\nAplicações típicas\nNão confundir com\nUnidades compatíveis\nQuery contextual\nSensível à dimensão?\nPode ser substituído por outras dimensões?\nDimensões extraídas",
+      "w": 260,
+      "h": 300,
+      "kind": "note",
+      "style": {},
+      "meta": []
+    },
+    {
+      "id": "start",
+      "type": "shape-text",
+      "x": -429,
+      "y": -127,
+      "w": 250,
+      "h": 44,
+      "label": "▶ Início do fluxo",
+      "sub": "",
+      "kind": "text",
+      "style": {
+        "fill": "#16a34a",
+        "text": "#ffffff",
+        "fontSize": 17
+      },
+      "meta": [],
+      "parent": "corp"
+    },
+    {
+      "id": "n1",
+      "type": "shape-note",
+      "x": -1612,
+      "y": -130,
+      "w": 840,
+      "h": 230,
+      "label": "Como ler esta arquitetura",
+      "sub": "① Fontes de dados: GPCA no Autodesk Docs; GOT na Salesforce, extraído para o SharePoint.\n② Ingestão: SageMaker Notebook Jobs às 00:00 lê o Autodesk Docs (Desktop Connector) e o SharePoint (AWS Cloud Bridge) e grava no S3 raw.\n③ Processamento: 6 validadores em sequência no mesmo motor; agentes de match (StackSpot AI), com semantic router e match fuzzy antes do Não LPU → LPU; leitura de layout nos quantitativos.\n④ Camada de consumo: resultado publicado no SharePoint, importado no painel web, com pareceres e telemetria no Microsoft Lists.\n⑤ Integração de saída: o analista faz a réplica manualmente, subindo o Excel numa issue do Autodesk Docs (GPCA) ou registrando na Salesforce (GOT).\n\nSelos azuis 1–20 seguem essa ordem · K1–K3 (roxo): pipeline de conhecimento · A–G (vermelho): pontos de atenção.",
+      "kind": "note",
+      "style": {
+        "fontSize": 13
+      },
+      "meta": [],
+      "parent": "corp"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e5",
+      "from": "cb",
+      "to": "raw",
+      "label": "grava",
+      "style": {}
+    },
+    {
+      "id": "e7",
+      "from": "raw",
+      "to": "v1",
+      "label": "orçamentos",
+      "style": {},
+      "fromSide": "right",
+      "toSide": "left",
+      "mid": 922
+    },
+    {
+      "id": "e8",
+      "from": "bases",
+      "to": "v1",
+      "label": "consulta",
+      "style": {},
+      "fromSide": "right",
+      "toSide": "left",
+      "mid": 946
+    },
+    {
+      "id": "e33",
+      "from": "v1",
+      "to": "v5",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e10",
+      "from": "v2",
+      "to": "v3",
+      "label": "restantes",
+      "style": {}
+    },
+    {
+      "id": "e14",
+      "from": "b_comp",
+      "to": "v5",
+      "label": "consulta",
+      "style": {},
+      "fromSide": "right",
+      "toSide": "left",
+      "mid": 968
+    },
+    {
+      "id": "e15",
+      "from": "v2",
+      "to": "a_mb",
+      "label": "API",
+      "style": {
+        "arrow": "both",
+        "badge": "D"
+      },
+      "stepDesc": "**Cascata de agentes externos**: chamadas item a item via API, em série (Material Banco → NLPU Pricing → Não LPU). Cada agente devolve candidatos com score e vale o **top 1 acima do limiar**; equivalências já resolvidas não são reaproveitadas entre execuções.",
+      "stepColor": "#DD344C"
+    },
+    {
+      "id": "e16",
+      "from": "v3",
+      "to": "a_np",
+      "label": "API",
+      "style": {
+        "arrow": "both"
+      }
+    },
+    {
+      "id": "e17",
+      "from": "v4",
+      "to": "a_nl",
+      "label": "API",
+      "style": {
+        "arrow": "both"
+      }
+    },
+    {
+      "id": "e18",
+      "from": "v6",
+      "to": "q1",
+      "label": "layout",
+      "style": {}
+    },
+    {
+      "id": "e19",
+      "from": "q1",
+      "to": "autodesk",
+      "label": "Desktop Connector",
+      "style": {
+        "arrow": "both"
+      }
+    },
+    {
+      "id": "e20",
+      "from": "q1",
+      "to": "q2",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e21",
+      "from": "q2",
+      "to": "q3",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e22",
+      "from": "b_kb",
+      "to": "q3",
+      "label": "KB do programa dono",
+      "style": {}
+    },
+    {
+      "id": "e23",
+      "from": "q3",
+      "to": "gpt",
+      "label": "prompt",
+      "style": {
+        "arrow": "both",
+        "badge": "E"
+      },
+      "stepDesc": "**LLM externo**: orçamento, KB e JSON da agência vão ao GPT-5.5; confirmar governança dos dados. O layout é extraído de novo a cada rodada, mesmo sem mudança.",
+      "stepColor": "#DD344C"
+    },
+    {
+      "id": "e35",
+      "from": "v4",
+      "to": "v6",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e36",
+      "from": "upd",
+      "to": "kbb",
+      "label": "itens alterados",
+      "style": {}
+    },
+    {
+      "id": "e37",
+      "from": "kbb",
+      "to": "kb_mb",
+      "label": "publica",
+      "style": {},
+      "fromSide": "right",
+      "toSide": "right",
+      "mid": 2769
+    },
+    {
+      "id": "e38",
+      "from": "kbb",
+      "to": "kb_np",
+      "label": "",
+      "style": {},
+      "fromSide": "right",
+      "toSide": "right",
+      "mid": 2769
+    },
+    {
+      "id": "e39",
+      "from": "kbb",
+      "to": "kb_lpu",
+      "label": "",
+      "style": {},
+      "fromSide": "right",
+      "toSide": "right",
+      "mid": 2769
+    },
+    {
+      "id": "e40",
+      "from": "kb_mb",
+      "to": "a_mb",
+      "label": "consulta",
+      "style": {}
+    },
+    {
+      "id": "e41",
+      "from": "kb_np",
+      "to": "a_np",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e42",
+      "from": "kb_lpu",
+      "to": "a_nl",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e45",
+      "from": "sf_in",
+      "to": "sp_in",
+      "label": "manual",
+      "style": {
+        "badge": "A"
+      },
+      "stepDesc": "**Extração manual (GOT)**: depende de uma pessoa todos os dias, sem trilha de auditoria; atraso ou esquecimento param a análise da GOT. Na GPCA a entrada já é automática.",
+      "stepColor": "#DD344C"
+    },
+    {
+      "id": "e46",
+      "from": "sp_in",
+      "to": "cb",
+      "label": "leitura",
+      "style": {
+        "badge": "B"
+      },
+      "stepDesc": "**Arquivo como integração**: entrada e saída trafegam como planilha no SharePoint, sem contrato de dados, versionamento ou validação de schema.",
+      "stepColor": "#DD344C"
+    },
+    {
+      "id": "e49",
+      "from": "sp_out",
+      "to": "negocio",
+      "label": "download",
+      "style": {}
+    },
+    {
+      "id": "e50",
+      "from": "negocio",
+      "to": "painel",
+      "label": "upload",
+      "style": {
+        "badge": "F"
+      },
+      "stepDesc": "**Passos manuais no consumo**: baixar o resultado do SharePoint, importar no painel e fazer a réplica à mão, numa issue do Autodesk Docs (GPCA) ou na Salesforce (GOT).",
+      "stepColor": "#DD344C"
+    },
+    {
+      "id": "e51",
+      "from": "painel",
+      "to": "lists",
+      "label": "grava parecer",
+      "style": {
+        "arrow": "both",
+        "badge": "G"
+      },
+      "stepDesc": "**Microsoft Lists como base de dados**: limites de volume e de consulta (5.000 itens por visualização), e o feedback do analista chega de forma estruturada ao Verificador para evoluir os agentes.",
+      "stepColor": "#DD344C",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "e52",
+      "from": "lists",
+      "to": "tele",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e53",
+      "from": "tele",
+      "to": "analitico",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e54",
+      "from": "painel",
+      "to": "xls",
+      "label": "exporta",
+      "style": {},
+      "fromSide": "left",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e55",
+      "from": "xls",
+      "to": "adr",
+      "label": "upload manual (analista)",
+      "style": {},
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e56",
+      "from": "adr",
+      "to": "proj",
+      "label": "réplica",
+      "style": {}
+    },
+    {
+      "id": "e57",
+      "from": "painel",
+      "to": "sf_rep",
+      "label": "réplica manual (analista)",
+      "style": {},
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e58",
+      "from": "sf_rep",
+      "to": "constr",
+      "label": "retorno",
+      "style": {},
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e59",
+      "from": "sched",
+      "to": "g_ing",
+      "label": "00:00",
+      "style": {
+        "badge": "C"
+      },
+      "stepDesc": "**Uma rodada por dia**: o orçamento que entra de manhã só é verificado à meia-noite; uma falha na rodada adia tudo em mais um dia.",
+      "stepColor": "#DD344C"
+    },
+    {
+      "id": "e60",
+      "from": "gpca_in",
+      "to": "leitura",
+      "label": "leitura",
+      "style": {}
+    },
+    {
+      "id": "e61",
+      "from": "leitura",
+      "to": "raw",
+      "label": "grava",
+      "style": {},
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e62",
+      "from": "cb",
+      "to": "vault",
+      "label": "credenciais",
+      "style": {
+        "dash": "dashed"
+      },
+      "fromSide": "top",
+      "toSide": "right"
+    },
+    {
+      "id": "e63",
+      "from": "res",
+      "to": "pub",
+      "label": "",
+      "style": {
+        "animated": true
+      }
+    },
+    {
+      "id": "e64",
+      "from": "pub",
+      "to": "sp_out",
+      "label": "publica",
+      "style": {}
+    },
+    {
+      "id": "e65",
+      "from": "v6",
+      "to": "res",
+      "label": "resultado",
+      "style": {},
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "e66",
+      "from": "v5",
+      "to": "v2",
+      "label": "não LPU",
+      "style": {}
+    },
+    {
+      "id": "e67",
+      "from": "v3",
+      "to": "router",
+      "label": "restantes",
+      "style": {},
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "e68",
+      "from": "router",
+      "to": "fuzzy",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e69",
+      "from": "fuzzy",
+      "to": "v4",
+      "label": "restantes",
+      "style": {},
+      "fromSide": "bottom",
+      "toSide": "top",
+      "mid": 740
+    }
+  ]
+}
