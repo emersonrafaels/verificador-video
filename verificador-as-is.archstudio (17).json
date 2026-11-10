@@ -2,7 +2,7 @@
   "format": "archstudio",
   "version": 1,
   "name": "Verificador · AS IS",
-  "description": "Arquitetura atual do Verificador Inteligente de Orçamentos: duas entradas (GPCA pelo Autodesk Docs, lida pelo Autodesk Desktop Connector; GOT por extração manual da Salesforce para o SharePoint, lida pela lib Python AWS Cloud Bridge), um mesmo motor no SageMaker às 00:00 com seis validadores (LPU, Composição, Material Banco, NLPU Pricing, Não LPU, Quantitativos), com semantic router e match fuzzy antes do agente Não LPU → LPU, resultado no SharePoint, painel web com Microsoft Lists, réplica numa issue do Autodesk Docs (GPCA) ou na Salesforce (GOT), analítico semanal e atualização dos agentes de match pelo Knowledge Builder.",
+  "description": "Arquitetura atual do Verificador Inteligente de Orçamentos: duas entradas (GPCA pelo Autodesk Docs, lida pelo Autodesk Desktop Connector; GOT por extração manual da Salesforce para o SharePoint, lida pela lib Python AWS Cloud Bridge), um mesmo motor no SageMaker às 00:00 com seis validadores (LPU, Composição, Material Banco, NLPU Pricing, Não LPU, Quantitativos), com semantic router e match fuzzy antes do agente Não LPU → LPU, resultado no SharePoint, painel web com Microsoft Lists, réplica numa issue do Autodesk Docs (GPCA) ou na Salesforce (GOT), analítico semanal e atualização dos agentes de match pelo Knowledge Builder. Planejado: avaliação semanal da consistência dos pareceres humanos (kappa de Fleiss, 11 avaliadores), gerando um dataset de acertos e erros que sobe ao StackSpot AI como KB dos três agentes de match contextual.",
   "settings": {
     "grid": true,
     "snap": true,
@@ -47,6 +47,10 @@
       "b:K1",
       "b:K2",
       "b:K3",
+      "x:s4",
+      "b:H1",
+      "b:H2",
+      "b:H3",
       "x:s2",
       "b:A",
       "b:B",
@@ -71,6 +75,11 @@
         "id": "s3",
         "kind": "section",
         "title": "Atualização dos agentes de match"
+      },
+      {
+        "id": "s4",
+        "kind": "section",
+        "title": "Feedback humano (planejado)"
       }
     ]
   },
@@ -1008,11 +1017,11 @@
       "id": "stack",
       "type": "g-generic",
       "x": 1976,
-      "y": 318,
+      "y": 210,
       "label": "StackSpot AI",
       "sub": "serviço externo · agentes de match + Knowledge Bases",
       "w": 767,
-      "h": 540,
+      "h": 648,
       "style": {
         "stroke": "#475569",
         "fill": "#475569",
@@ -1022,6 +1031,34 @@
       },
       "kind": "group",
       "meta": []
+    },
+    {
+      "id": "kb_fb",
+      "type": "gen-docs",
+      "x": 2002,
+      "y": 250,
+      "w": 640,
+      "h": 62,
+      "label": "KB · feedback humano",
+      "sub": "exemplos consistentes de acerto e erro · usada pelos 3 agentes de match",
+      "kind": "card",
+      "parent": "stack",
+      "style": {
+        "badge": "H3",
+        "dashed": true
+      },
+      "stepColor": "#0d9488",
+      "meta": [
+        {
+          "k": "Status",
+          "v": "planejado"
+        },
+        {
+          "k": "Atualização",
+          "v": "semanal"
+        }
+      ],
+      "stepDesc": "O dataset é enviado ao **StackSpot AI** como uma **KB de exemplos de acerto e erro**, consultada pelos **três agentes de match contextual** (Material Banco, NLPU Pricing e Não LPU → LPU)."
     },
     {
       "id": "a_mb",
@@ -1223,13 +1260,92 @@
       "w": 840,
       "h": 230,
       "label": "Como ler esta arquitetura",
-      "sub": "① Fontes de dados: GPCA no Autodesk Docs; GOT na Salesforce, extraído para o SharePoint.\n② Ingestão: SageMaker Notebook Jobs às 00:00 lê o Autodesk Docs (Desktop Connector) e o SharePoint (AWS Cloud Bridge) e grava no S3 raw.\n③ Processamento: 6 validadores em sequência no mesmo motor; agentes de match (StackSpot AI), com semantic router e match fuzzy antes do Não LPU → LPU; leitura de layout nos quantitativos.\n④ Camada de consumo: resultado publicado no SharePoint, importado no painel web, com pareceres e telemetria no Microsoft Lists.\n⑤ Integração de saída: o analista faz a réplica manualmente, subindo o Excel numa issue do Autodesk Docs (GPCA) ou registrando na Salesforce (GOT).\n\nSelos azuis 1–20 seguem essa ordem · K1–K3 (roxo): pipeline de conhecimento · A–G (vermelho): pontos de atenção.",
+      "sub": "① Fontes de dados: GPCA no Autodesk Docs; GOT na Salesforce, extraído para o SharePoint.\n② Ingestão: SageMaker Notebook Jobs às 00:00 lê o Autodesk Docs (Desktop Connector) e o SharePoint (AWS Cloud Bridge) e grava no S3 raw.\n③ Processamento: 6 validadores em sequência no mesmo motor; agentes de match (StackSpot AI), com semantic router e match fuzzy antes do Não LPU → LPU; leitura de layout nos quantitativos.\n④ Camada de consumo: resultado publicado no SharePoint, importado no painel web, com pareceres e telemetria no Microsoft Lists.\n⑤ Integração de saída: o analista faz a réplica manualmente, subindo o Excel numa issue do Autodesk Docs (GPCA) ou registrando na Salesforce (GOT).\n\nSelos azuis 1–20 seguem essa ordem · K1–K3 (roxo): pipeline de conhecimento · H1–H3 (verde-azulado, tracejado): feedback humano planejado · A–G (vermelho): pontos de atenção.",
       "kind": "note",
       "style": {
         "fontSize": 13
       },
       "meta": [],
       "parent": "corp"
+    },
+    {
+      "id": "g_hitl",
+      "type": "g-generic",
+      "x": 1950,
+      "y": 1460,
+      "w": 793,
+      "h": 190,
+      "label": "Pipeline de feedback humano (HITL)",
+      "sub": "planejado · semanal",
+      "kind": "group",
+      "meta": [],
+      "style": {
+        "stroke": "#0d9488",
+        "fill": "#0d9488",
+        "fo": 0.04,
+        "dashed": true,
+        "glyph": "users"
+      }
+    },
+    {
+      "id": "kappa",
+      "type": "ml-eval",
+      "x": 1976,
+      "y": 1525,
+      "w": 260,
+      "h": 70,
+      "label": "Avaliação de consistência",
+      "sub": "kappa de Fleiss · 11 avaliadores",
+      "kind": "card",
+      "parent": "g_hitl",
+      "style": {
+        "badge": "H1",
+        "dashed": true
+      },
+      "stepColor": "#0d9488",
+      "meta": [
+        {
+          "k": "Frequência",
+          "v": "semanal"
+        },
+        {
+          "k": "Métrica",
+          "v": "kappa de Fleiss"
+        },
+        {
+          "k": "Avaliadores",
+          "v": "11 analistas"
+        },
+        {
+          "k": "Entrada",
+          "v": "pareceres do Microsoft Lists"
+        }
+      ],
+      "stepDesc": "Toda semana, os pareceres dos **11 analistas** no **Microsoft Lists** (acertou, errou, faltou indicar) passam por uma **avaliação de consistência com o kappa de Fleiss**, que mede a concordância entre vários avaliadores."
+    },
+    {
+      "id": "fb_ds",
+      "type": "data-label",
+      "x": 2392,
+      "y": 1525,
+      "w": 300,
+      "h": 70,
+      "label": "Dataset de feedback consistente",
+      "sub": "item analisado · candidato · agente · acertou/errou",
+      "kind": "card",
+      "parent": "g_hitl",
+      "style": {
+        "badge": "H2",
+        "dashed": true
+      },
+      "stepColor": "#0d9488",
+      "meta": [
+        {
+          "k": "Colunas",
+          "v": "item analisado · item candidato pelo agente · agente · acertou ou errou (feedback humano)"
+        }
+      ],
+      "stepDesc": "Só os exemplos **consistentes** entram no dataset, com **item analisado**, **item candidato pelo agente**, **qual agente** e se **acertou ou errou** segundo o feedback humano."
     }
   ],
   "edges": [
@@ -1411,7 +1527,7 @@
       "id": "e40",
       "from": "kb_mb",
       "to": "a_mb",
-      "label": "consulta",
+      "label": "",
       "style": {}
     },
     {
@@ -1634,6 +1750,77 @@
       "fromSide": "bottom",
       "toSide": "top",
       "mid": 740
+    },
+    {
+      "id": "e70",
+      "from": "lists",
+      "to": "kappa",
+      "label": "pareceres da semana",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      },
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "e71",
+      "from": "kappa",
+      "to": "fb_ds",
+      "label": "exemplos consistentes",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      }
+    },
+    {
+      "id": "e72",
+      "from": "fb_ds",
+      "to": "kb_fb",
+      "label": "upload semanal",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      },
+      "fromSide": "right",
+      "toSide": "right",
+      "mid": 2805
+    },
+    {
+      "id": "e73",
+      "from": "kb_fb",
+      "to": "a_mb",
+      "label": "",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      },
+      "fromSide": "bottom",
+      "toSide": "right"
+    },
+    {
+      "id": "e74",
+      "from": "kb_fb",
+      "to": "a_np",
+      "label": "",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      },
+      "fromSide": "bottom",
+      "toSide": "right"
+    },
+    {
+      "id": "e75",
+      "from": "kb_fb",
+      "to": "a_nl",
+      "label": "",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      },
+      "fromSide": "bottom",
+      "toSide": "right"
     }
   ]
 }
