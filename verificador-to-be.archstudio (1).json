@@ -1,2133 +1,2366 @@
 {
- "format": "archstudio",
- "version": 1,
- "name": "Verificador · TO BE (AWS)",
- "description": "Proposta de arquitetura alvo do Verificador Inteligente de Orçamentos em serviços AWS: ingestão por evento (Salesforce Event Relay e webhooks do APS), contrato de dados, Step Functions com 1 execução por orçamento e 3 ramos em paralelo, serviço único de match com cache (DynamoDB) invocando agentes, Bases de Conhecimento e embeddings da IARA GenAI, quantitativos com cache de layout e LLM pela IARA GenAI, parecer no Aurora, painel com SSO, réplicas automáticas, feedback curado com drift e validação de mudanças em CI/CD com 3 Golden Datasets.",
- "settings": {
-  "legend": true,
-  "legendPos": "right",
-  "squad": "DataCraft",
-  "badgeColor": "#147EBA"
- },
- "legend": {
-  "order": [
-   "x:s1",
-   "b:1",
-   "b:2",
-   "b:3",
-   "b:4",
-   "b:5",
-   "b:6",
-   "b:7",
-   "b:8",
-   "b:9",
-   "b:10",
-   "b:11",
-   "b:12",
-   "b:13",
-   "b:14",
-   "b:15",
-   "b:16",
-   "x:s3",
-   "b:K1",
-   "b:K2",
-   "b:K3",
-   "x:s4",
-   "b:H1",
-   "b:H2",
-   "b:H3",
-   "b:H4",
-   "x:s5",
-   "b:V1",
-   "b:V2",
-   "b:V3",
-   "b:V4",
-   "b:V5",
-   "x:s2",
-   "b:A",
-   "b:B",
-   "b:C",
-   "b:D",
-   "b:E",
-   "b:F",
-   "b:G"
+  "format": "archstudio",
+  "version": 1,
+  "name": "Verificador · TO BE (AWS)",
+  "description": "Proposta de arquitetura alvo do Verificador Inteligente de Orçamentos em serviços AWS: ingestão por evento (Salesforce Event Relay e webhooks do APS), contrato de dados, Step Functions com 1 execução por orçamento e 3 ramos em paralelo, serviço único de match com cache (DynamoDB) invocando agentes, Bases de Conhecimento e embeddings da IARA GenAI, quantitativos com cache de layout e LLM pela IARA GenAI, parecer no Aurora, painel com SSO, réplicas automáticas, feedback curado com drift e validação de mudanças em CI/CD com 3 Golden Datasets.",
+  "settings": {
+    "grid": true,
+    "snap": true,
+    "gridSize": 10,
+    "wheel": "zoom",
+    "minimap": true,
+    "guides": true,
+    "squad": "DataCraft",
+    "wmStyle": "tile",
+    "wmOpacity": 0.08,
+    "legend": true,
+    "legendPos": "right",
+    "badgeShape": "square",
+    "badgeColor": "#147EBA"
+  },
+  "view": {
+    "k": 1.0034741900887028,
+    "x": -1071.0444786872692,
+    "y": -1621.1906293130098
+  },
+  "savedAt": "2026-11-17T11:23:24.187Z",
+  "pageTitle": "Página 1",
+  "legend": {
+    "order": [
+      "x:s1",
+      "b:1",
+      "b:2",
+      "b:3",
+      "b:4",
+      "b:5",
+      "b:6",
+      "b:7",
+      "b:8",
+      "b:9",
+      "b:10",
+      "b:11",
+      "b:12",
+      "b:13",
+      "b:14",
+      "b:15",
+      "b:16",
+      "x:s3",
+      "b:K1",
+      "b:K2",
+      "b:K3",
+      "x:s4",
+      "b:H1",
+      "b:H2",
+      "b:H3",
+      "b:H4",
+      "x:s5",
+      "b:V1",
+      "b:V2",
+      "b:V3",
+      "b:V4",
+      "b:V5",
+      "x:s2",
+      "b:A",
+      "b:B",
+      "b:C",
+      "b:D",
+      "b:E",
+      "b:F",
+      "b:G"
+    ],
+    "extras": [
+      {
+        "id": "s1",
+        "kind": "section",
+        "title": "Fluxo do orçamento"
+      },
+      {
+        "id": "s3",
+        "kind": "section",
+        "title": "Pipeline de conhecimento"
+      },
+      {
+        "id": "s4",
+        "kind": "section",
+        "title": "Feedback humano curado e drift"
+      },
+      {
+        "id": "s5",
+        "kind": "section",
+        "title": "Validação de mudanças"
+      },
+      {
+        "id": "s2",
+        "kind": "section",
+        "title": "Como resolve os pontos do AS IS"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "title",
+      "type": "shape-text",
+      "x": 0,
+      "y": -330,
+      "label": "Verificador Inteligente de Orçamentos · TO BE (proposta em serviços AWS)",
+      "sub": "Arquitetura ideal · orientada a eventos · 1 execução por orçamento · ramos em paralelo · parecer em banco · réplicas automáticas · validação por Golden Datasets",
+      "w": 3000,
+      "h": 64,
+      "kind": "text",
+      "style": {
+        "fontSize": 26,
+        "align": "start"
+      },
+      "meta": []
+    },
+    {
+      "id": "start",
+      "type": "shape-text",
+      "x": 0,
+      "y": -40,
+      "label": "▶ Início do fluxo",
+      "sub": "",
+      "w": 250,
+      "h": 44,
+      "kind": "text",
+      "style": {
+        "fill": "#16a34a",
+        "text": "#ffffff",
+        "fontSize": 17
+      },
+      "meta": []
+    },
+    {
+      "id": "n_ler",
+      "type": "shape-note",
+      "x": 0,
+      "y": -250,
+      "label": "Como ler esta arquitetura",
+      "sub": "① Fontes de dados: Salesforce (GOT) e Autodesk Docs (GPCA) avisam por evento quando um orçamento é submetido ou modificado.\n② Ingestão: EventBridge aciona os coletores, que leem pela API, validam o contrato de dados e gravam no S3.\n③ Processamento: Step Functions abre 1 execução por orçamento, com 3 ramos em paralelo; os agentes usam serviços de IA compartilhados e a IARA GenAI.\n④ Camada de consumo: parecer no Aurora, painel web com SSO lendo da API, telemetria e analítico. ⑤ Integração de saída: réplicas automáticas após aprovação do analista.\n⑥ Feedback humano curado e monitoramento de drift. ⑦ Validação de mudanças em CI/CD com 3 Golden Datasets.",
+      "w": 1300,
+      "h": 190,
+      "kind": "note",
+      "style": {},
+      "meta": []
+    },
+    {
+      "id": "n_cor",
+      "type": "shape-note",
+      "x": 1340,
+      "y": -250,
+      "label": "Selos e cores",
+      "sub": "Selos azuis 1–16: fluxo do orçamento\nSelos verdes A–G: como o TO BE resolve cada ponto de atenção do AS IS\nK1–K3 (roxo): pipeline de conhecimento\nH1–H4 (verde-azulado): feedback humano curado e drift\nV1–V5 (índigo): validação de mudanças com Golden Datasets",
+      "w": 820,
+      "h": 190,
+      "kind": "note",
+      "style": {},
+      "meta": []
+    },
+    {
+      "id": "n_prem",
+      "type": "shape-note",
+      "x": 2200,
+      "y": -250,
+      "label": "Premissas e decisões a validar",
+      "sub": "Proposta para discussão com Arquitetura Corporativa e Segurança; serviços podem trocar por equivalentes já homologados.\nA IARA GenAI é a plataforma única de LLM, agentes, Bases de Conhecimento e embeddings (governança do Itaú).\nOs agentes de match saem do StackSpot e passam para a IARA GenAI (Agentes, Bases de Conhecimento e embeddings), orquestrados por um serviço na AWS com lote, cache e limiar. Alternativa: manter o StackSpot.\nSalesforce Event Relay e webhooks do Autodesk Platform Services (APS) dependem de configuração nas duas plataformas.",
+      "w": 1300,
+      "h": 190,
+      "kind": "note",
+      "style": {},
+      "meta": []
+    },
+    {
+      "id": "g_src",
+      "type": "g-generic",
+      "x": 0,
+      "y": 30,
+      "label": "① Fontes de dados",
+      "sub": "sistemas de origem",
+      "w": 300,
+      "h": 330,
+      "style": {
+        "stroke": "#16a34a",
+        "fill": "#16a34a",
+        "fo": 0.04,
+        "dashed": false,
+        "glyph": "ingest"
+      },
+      "kind": "group",
+      "meta": []
+    },
+    {
+      "id": "sf",
+      "type": "extapi",
+      "x": 30,
+      "y": 90,
+      "label": "Salesforce",
+      "sub": "orçamento da construtora (GOT) · Event Relay",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "1"
+      },
+      "stepDesc": "**GOT**: quando a construtora submete o orçamento, a **Salesforce** publica um evento (**Event Relay → EventBridge**). Acaba a extração manual.",
+      "meta": [],
+      "parent": "g_src"
+    },
+    {
+      "id": "adk",
+      "type": "extapi",
+      "x": 30,
+      "y": 230,
+      "label": "Autodesk Docs",
+      "sub": "orçamento executivo (GPCA) · webhook APS",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "2"
+      },
+      "stepDesc": "**GPCA**: o **Autodesk Platform Services (APS)** avisa por **webhook** quando um orçamento executivo é criado ou modificado.",
+      "meta": [],
+      "parent": "g_src"
+    },
+    {
+      "id": "g_id",
+      "type": "g-generic",
+      "x": 0,
+      "y": 400,
+      "label": "Identidade e segredos",
+      "sub": "corporativo",
+      "w": 300,
+      "h": 210,
+      "style": {
+        "stroke": "#475569",
+        "fill": "#475569",
+        "fo": 0.04,
+        "dashed": false,
+        "glyph": "key"
+      },
+      "kind": "group",
+      "meta": []
+    },
+    {
+      "id": "vault",
+      "type": "secrets",
+      "x": 30,
+      "y": 450,
+      "label": "Vault",
+      "sub": "credenciais corporativas",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "glyph": "key"
+      },
+      "meta": [],
+      "parent": "g_id"
+    },
+    {
+      "id": "idp",
+      "type": "users",
+      "x": 30,
+      "y": 535,
+      "label": "IdP corporativo",
+      "sub": "SSO dos analistas (federação)",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_id"
+    },
+    {
+      "id": "cloud",
+      "type": "g-cloud",
+      "x": 340,
+      "y": 0,
+      "label": "AWS Cloud",
+      "sub": "conta do Verificador · proposta",
+      "w": 3170,
+      "h": 2330,
+      "style": {},
+      "kind": "group",
+      "meta": []
+    },
+    {
+      "id": "g_ing",
+      "type": "g-online",
+      "x": 370,
+      "y": 30,
+      "label": "② Ingestão por evento",
+      "sub": "sem arquivo e sem agendamento fixo",
+      "w": 930,
+      "h": 450,
+      "style": {},
+      "kind": "group",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "apiwh",
+      "type": "apigw",
+      "x": 390,
+      "y": 230,
+      "label": "API Gateway",
+      "sub": "recebe o webhook do APS",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_ing"
+    },
+    {
+      "id": "eb",
+      "type": "eventbridge",
+      "x": 390,
+      "y": 90,
+      "label": "EventBridge",
+      "sub": "orçamento submetido / modificado",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "3"
+      },
+      "stepDesc": "O **EventBridge** recebe os eventos das duas fontes e aciona o coletor certo. O **EventBridge Scheduler** faz uma varredura de segurança para eventos perdidos.",
+      "meta": [],
+      "parent": "g_ing"
+    },
+    {
+      "id": "sch",
+      "type": "eventbridge",
+      "x": 390,
+      "y": 370,
+      "label": "EventBridge Scheduler",
+      "sub": "varredura de segurança",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_ing"
+    },
+    {
+      "id": "colsf",
+      "type": "lambda",
+      "x": 690,
+      "y": 90,
+      "label": "Coletor Salesforce",
+      "sub": "Lambda · API REST",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "4"
+      },
+      "stepDesc": "Os **coletores** (Lambda) leem o orçamento pela API de cada fonte, com credenciais do **Secrets Manager**, e gravam o original no **S3 raw**.",
+      "meta": [],
+      "parent": "g_ing"
+    },
+    {
+      "id": "colapx",
+      "type": "lambda",
+      "x": 690,
+      "y": 230,
+      "label": "Coletor Autodesk",
+      "sub": "Lambda · APS Data Management",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_ing"
+    },
+    {
+      "id": "sm_sec",
+      "type": "secrets",
+      "x": 690,
+      "y": 370,
+      "label": "Secrets Manager",
+      "sub": "credenciais sincronizadas do Vault",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "glyph": "key"
+      },
+      "meta": [],
+      "parent": "g_ing"
+    },
+    {
+      "id": "raw",
+      "type": "s3",
+      "x": 1000,
+      "y": 90,
+      "label": "S3 · raw",
+      "sub": "orçamento original por evento",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_ing"
+    },
+    {
+      "id": "dq",
+      "type": "glue",
+      "x": 1000,
+      "y": 230,
+      "label": "Contrato de dados",
+      "sub": "Glue Data Quality · schema",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "5"
+      },
+      "stepDesc": "Um **contrato de dados** (Glue Data Quality) valida schema e qualidade antes de qualquer validador; o orçamento normalizado vai ao **S3 curated**.",
+      "meta": [],
+      "parent": "g_ing"
+    },
+    {
+      "id": "cur",
+      "type": "s3",
+      "x": 1000,
+      "y": 370,
+      "label": "S3 · curated",
+      "sub": "itens normalizados por orçamento",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_ing"
+    },
+    {
+      "id": "g_ref",
+      "type": "g-generic",
+      "x": 370,
+      "y": 520,
+      "label": "Dados de referência versionados",
+      "sub": "S3 + Glue Data Catalog · versão fixada por execução",
+      "w": 930,
+      "h": 260,
+      "style": {
+        "stroke": "#7AA116",
+        "fill": "#7AA116",
+        "fo": 0.05,
+        "dashed": false,
+        "glyph": "bucket"
+      },
+      "kind": "group",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "ref_cad",
+      "type": "s3",
+      "x": 390,
+      "y": 580,
+      "label": "Bases cadastrais",
+      "sub": "agências · construtoras (região, grupo de preço)",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_ref"
+    },
+    {
+      "id": "ref_cat",
+      "type": "s3",
+      "x": 690,
+      "y": 580,
+      "label": "Catálogos",
+      "sub": "LPU · LPU ar · Material Banco · NLPU Pricing",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_ref"
+    },
+    {
+      "id": "ref_reg",
+      "type": "s3",
+      "x": 990,
+      "y": 580,
+      "label": "Regras",
+      "sub": "composição × insumos · KB por programa dono",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_ref"
+    },
+    {
+      "id": "gcat",
+      "type": "gluecatalog",
+      "x": 690,
+      "y": 690,
+      "label": "Glue Data Catalog",
+      "sub": "versões e linhagem",
+      "kind": "card",
+      "w": 240,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "g_ref"
+    },
+    {
+      "id": "g_proc",
+      "type": "g-generic",
+      "x": 1340,
+      "y": 30,
+      "label": "③ Processamento",
+      "sub": "Step Functions · 1 execução por orçamento · retentativa por etapa",
+      "w": 1220,
+      "h": 1070,
+      "style": {
+        "stroke": "#E7157B",
+        "fill": "#E7157B",
+        "fo": 0.04,
+        "dashed": false,
+        "glyph": "flow"
+      },
+      "kind": "group",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "sfn",
+      "type": "stepfunctions",
+      "x": 1360,
+      "y": 85,
+      "label": "Orquestrador",
+      "sub": "Step Functions · ramos em paralelo",
+      "kind": "card",
+      "w": 300,
+      "h": 70,
+      "style": {
+        "badge": "6"
+      },
+      "stepDesc": "O **Step Functions** abre **uma execução por orçamento**, com três ramos em paralelo e retentativa por etapa: uma falha não derruba a rodada inteira.",
+      "meta": [],
+      "parent": "g_proc"
+    },
+    {
+      "id": "r1",
+      "type": "g-stage",
+      "x": 1360,
+      "y": 190,
+      "label": "Ramo 1 · preço e classificação",
+      "sub": "Lambda + Distributed Map",
+      "w": 1180,
+      "h": 380,
+      "style": {},
+      "kind": "group",
+      "meta": [],
+      "parent": "g_proc"
+    },
+    {
+      "id": "lpu",
+      "type": "lambda",
+      "x": 1380,
+      "y": 240,
+      "label": "Validador LPU",
+      "sub": "determinístico · preço · unidade",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "7"
+      },
+      "stepDesc": "**Validador LPU** (Lambda, determinístico), com as bases de referência da versão fixada na execução.",
+      "meta": [],
+      "parent": "r1"
+    },
+    {
+      "id": "mb",
+      "type": "gen-agent",
+      "x": 1680,
+      "y": 240,
+      "label": "Validador Material Banco",
+      "sub": "match contextual · só GPCA",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "8"
+      },
+      "stepDesc": "**Material Banco** e **NLPU Pricing** chamam o **serviço de match**, que trabalha em lote, consulta o cache e invoca os **agentes de match da IARA GenAI**, cada um com sua **Base de Conhecimento** e a Validated Match Memory.",
+      "meta": [],
+      "parent": "r1"
+    },
+    {
+      "id": "np",
+      "type": "gen-agent",
+      "x": 1980,
+      "y": 240,
+      "label": "Validador NLPU Pricing",
+      "sub": "match contextual · só GPCA",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "r1"
+    },
+    {
+      "id": "pre",
+      "type": "g-generic",
+      "x": 1660,
+      "y": 360,
+      "label": "Pré-filtro do Não LPU → LPU",
+      "sub": "Distributed Map · execuções paralelas",
+      "w": 860,
+      "h": 190,
+      "style": {
+        "stroke": "#0891b2",
+        "fill": "#0891b2",
+        "fo": 0.04,
+        "dashed": true,
+        "glyph": "funnel"
+      },
+      "kind": "group",
+      "meta": [],
+      "parent": "r1"
+    },
+    {
+      "id": "router",
+      "type": "gen-gateway",
+      "x": 1980,
+      "y": 410,
+      "label": "Semantic router",
+      "sub": "descarta itens sem substituto na LPU",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "9"
+      },
+      "stepDesc": "**Semantic router** e **match fuzzy** rodam em paralelo no **Distributed Map** do Step Functions, antes do agente **Não LPU → LPU**.",
+      "meta": [],
+      "parent": "pre"
+    },
+    {
+      "id": "fuzzy",
+      "type": "lambda",
+      "x": 1680,
+      "y": 410,
+      "label": "Match fuzzy",
+      "sub": "Lambda · paralelo por lote",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "pre"
+    },
+    {
+      "id": "nl",
+      "type": "gen-agent",
+      "x": 1380,
+      "y": 410,
+      "label": "Validador Não LPU → LPU",
+      "sub": "match contextual · GPCA e GOT",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "10"
+      },
+      "stepDesc": "**Não LPU → LPU** usa o mesmo serviço de match contextual, com a KB da LPU enriquecida.",
+      "meta": [],
+      "parent": "r1"
+    },
+    {
+      "id": "r2",
+      "type": "g-stage",
+      "x": 1360,
+      "y": 600,
+      "label": "Ramo 2 · composição",
+      "sub": "",
+      "w": 300,
+      "h": 130,
+      "style": {},
+      "kind": "group",
+      "meta": [],
+      "parent": "g_proc"
+    },
+    {
+      "id": "comp",
+      "type": "lambda",
+      "x": 1380,
+      "y": 645,
+      "label": "Validador Composição",
+      "sub": "determinístico",
+      "kind": "card",
+      "w": 260,
+      "h": 62,
+      "style": {
+        "badge": "11"
+      },
+      "stepDesc": "**Composição** (Lambda, determinístico) roda em paralelo, sem depender da cascata de preço.",
+      "meta": [],
+      "parent": "r2"
+    },
+    {
+      "id": "r3",
+      "type": "g-stage",
+      "x": 1700,
+      "y": 600,
+      "label": "Ramo 3 · quantitativos",
+      "sub": "por agência orçada",
+      "w": 840,
+      "h": 300,
+      "style": {},
+      "kind": "group",
+      "meta": [],
+      "parent": "g_proc"
+    },
+    {
+      "id": "lay",
+      "type": "lambda",
+      "x": 1720,
+      "y": 650,
+      "label": "Layout por versão",
+      "sub": "APS · só busca layout novo",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "12"
+      },
+      "stepDesc": "**Quantitativos**: busca no APS só layouts com **versão nova**; a extração DWG/Revit roda em **ECS Fargate** com **cache por versão no S3**; o agente usa a KB versionada e chama o **GPT-5.5 pela IARA GenAI**.",
+      "meta": [],
+      "parent": "r3"
+    },
+    {
+      "id": "ext",
+      "type": "fargate",
+      "x": 2000,
+      "y": 650,
+      "label": "Extração DWG / Revit",
+      "sub": "ECS Fargate · APS Model Derivative",
+      "kind": "card",
+      "w": 260,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "r3"
+    },
+    {
+      "id": "lcache",
+      "type": "s3",
+      "x": 2000,
+      "y": 790,
+      "label": "S3 · cache de layout",
+      "sub": "JSON por agência e versão",
+      "kind": "card",
+      "w": 260,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "r3"
+    },
+    {
+      "id": "qag",
+      "type": "ecs",
+      "x": 1720,
+      "y": 790,
+      "label": "Agente de quantitativos",
+      "sub": "ECS · SDK IARA · saída estruturada",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "r3"
+    },
+    {
+      "id": "consol",
+      "type": "data-agg",
+      "x": 1360,
+      "y": 960,
+      "label": "Consolidação do parecer",
+      "sub": "status · R$ divergente · evidência · versão",
+      "kind": "card",
+      "w": 300,
+      "h": 70,
+      "style": {
+        "glyph": "checklist",
+        "badge": "13"
+      },
+      "stepDesc": "A **consolidação** junta os três ramos e grava o parecer por item no **Aurora**, com evidência, confiança e a versão de regras, catálogos e agentes usada.",
+      "meta": [],
+      "parent": "g_proc"
+    },
+    {
+      "id": "g_ai",
+      "type": "g-generic",
+      "x": 2600,
+      "y": 30,
+      "label": "Serviços de IA compartilhados",
+      "sub": "orquestração do match e conhecimento",
+      "w": 620,
+      "h": 1070,
+      "style": {
+        "stroke": "#a21caf",
+        "fill": "#a21caf",
+        "fo": 0.04,
+        "dashed": false,
+        "glyph": "sparkle"
+      },
+      "kind": "group",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "msvc",
+      "type": "ecs",
+      "x": 2620,
+      "y": 240,
+      "label": "Serviço de match",
+      "sub": "ECS · lote · top-k + limiar",
+      "kind": "card",
+      "w": 260,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_ai"
+    },
+    {
+      "id": "mcache",
+      "type": "dynamodb",
+      "x": 2940,
+      "y": 240,
+      "label": "Cache de equivalências",
+      "sub": "DynamoDB · matches confirmados",
+      "kind": "card",
+      "w": 260,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_ai"
+    },
+    {
+      "id": "g_kp",
+      "type": "g-offline",
+      "x": 2620,
+      "y": 380,
+      "label": "Pipeline de conhecimento",
+      "sub": "a cada mudança de catálogo",
+      "w": 580,
+      "h": 320,
+      "style": {},
+      "kind": "group",
+      "meta": [],
+      "parent": "g_ai"
+    },
+    {
+      "id": "kchg",
+      "type": "s3",
+      "x": 2640,
+      "y": 440,
+      "label": "Mudança de catálogo",
+      "sub": "nova versão no S3 → EventBridge",
+      "kind": "card",
+      "w": 250,
+      "h": 70,
+      "style": {
+        "badge": "K1"
+      },
+      "stepDesc": "Uma nova versão de **LPU, Material Banco ou NLPU Pricing** no S3 gera um evento que dispara o pipeline de conhecimento.",
+      "stepColor": "#7c3aed",
+      "meta": [],
+      "parent": "g_kp"
+    },
+    {
+      "id": "kbb",
+      "type": "stepfunctions",
+      "x": 2930,
+      "y": 440,
+      "label": "Knowledge Builder",
+      "sub": "Step Functions + Lambda · IARA",
+      "kind": "card",
+      "w": 250,
+      "h": 70,
+      "style": {
+        "badge": "K2"
+      },
+      "stepDesc": "O **Knowledge Builder** enriquece cada item (intenção técnica, sinônimos, unidades compatíveis, dimensões etc.) com a IARA, em lote.",
+      "stepColor": "#7c3aed",
+      "meta": [],
+      "parent": "g_kp"
+    },
+    {
+      "id": "emb",
+      "type": "lambda",
+      "x": 2640,
+      "y": 630,
+      "label": "Publicação das KBs",
+      "sub": "Lambda · SDK IARA → Bases de Conhecimento",
+      "kind": "card",
+      "w": 540,
+      "h": 62,
+      "style": {
+        "badge": "K3"
+      },
+      "stepDesc": "Os itens enriquecidos são publicados como **Bases de Conhecimento da IARA** (uma por agente), vetorizadas pelos **embeddings da IARA**. A nova versão do catálogo também dispara a **revisão dos casos afetados** nos Golden Datasets.",
+      "stepColor": "#7c3aed",
+      "meta": [],
+      "parent": "g_kp"
+    },
+    {
+      "id": "g_obs",
+      "type": "g-generic",
+      "x": 3250,
+      "y": 30,
+      "label": "Observabilidade e segurança",
+      "sub": "",
+      "w": 240,
+      "h": 1070,
+      "style": {
+        "stroke": "#64748b",
+        "fill": "#64748b",
+        "fo": 0.04,
+        "dashed": false,
+        "glyph": "shield"
+      },
+      "kind": "group",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "cw",
+      "type": "cloudwatch",
+      "x": 3260,
+      "y": 90,
+      "label": "CloudWatch",
+      "sub": "alarmes por etapa · custo por orçamento",
+      "kind": "card",
+      "w": 220,
+      "h": 80,
+      "style": {},
+      "meta": [],
+      "parent": "g_obs"
+    },
+    {
+      "id": "xr",
+      "type": "xray",
+      "x": 3260,
+      "y": 220,
+      "label": "X-Ray",
+      "sub": "rastreio por execução",
+      "kind": "card",
+      "w": 220,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_obs"
+    },
+    {
+      "id": "kms",
+      "type": "kms",
+      "x": 3260,
+      "y": 330,
+      "label": "KMS",
+      "sub": "dados cifrados",
+      "kind": "card",
+      "w": 220,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_obs"
+    },
+    {
+      "id": "iam",
+      "type": "iam",
+      "x": 3260,
+      "y": 440,
+      "label": "IAM",
+      "sub": "menor privilégio por serviço",
+      "kind": "card",
+      "w": 220,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_obs"
+    },
+    {
+      "id": "waf",
+      "type": "waf",
+      "x": 3260,
+      "y": 550,
+      "label": "WAF",
+      "sub": "proteção do painel e da API",
+      "kind": "card",
+      "w": 220,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_obs"
+    },
+    {
+      "id": "g_iara",
+      "type": "g-generic",
+      "x": 3560,
+      "y": 0,
+      "label": "IARA GenAI",
+      "sub": "plataforma de IA do Itaú",
+      "w": 340,
+      "h": 700,
+      "style": {
+        "stroke": "#EC7000",
+        "fill": "#EC7000",
+        "fo": 0.05,
+        "dashed": false,
+        "glyph": "sparkle"
+      },
+      "kind": "group",
+      "meta": []
+    },
+    {
+      "id": "iara",
+      "type": "gen-gateway",
+      "x": 3590,
+      "y": 50,
+      "label": "API IARA GenAI",
+      "sub": "SDK iara_genai_sdk · OAuth",
+      "kind": "card",
+      "w": 280,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_iara"
+    },
+    {
+      "id": "ag",
+      "type": "gen-agent",
+      "x": 3590,
+      "y": 160,
+      "label": "Agentes de match",
+      "sub": "Material Banco · NLPU Pricing · Não LPU → LPU",
+      "kind": "card",
+      "w": 280,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_iara"
+    },
+    {
+      "id": "kbs",
+      "type": "gen-docs",
+      "x": 3590,
+      "y": 270,
+      "label": "Bases de Conhecimento",
+      "sub": "catálogos enriquecidos · uma por agente",
+      "kind": "card",
+      "w": 280,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_iara"
+    },
+    {
+      "id": "embs",
+      "type": "gen-embed",
+      "x": 3590,
+      "y": 380,
+      "label": "Embeddings",
+      "sub": "vetorização das Bases de Conhecimento",
+      "kind": "card",
+      "w": 280,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_iara"
+    },
+    {
+      "id": "gpt",
+      "type": "gen-llm",
+      "x": 3590,
+      "y": 490,
+      "label": "Modelos",
+      "sub": "GPT-5.5 e outros · usados pelos agentes e pela API",
+      "kind": "card",
+      "w": 280,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_iara"
+    },
+    {
+      "id": "vmm",
+      "type": "gen-docs",
+      "x": 3590,
+      "y": 600,
+      "label": "KB · Validated Match Memory",
+      "sub": "casos curados · RA-ICL",
+      "kind": "card",
+      "w": 280,
+      "h": 70,
+      "style": {
+        "badge": "H3"
+      },
+      "stepDesc": "O **Consensus Dataset** é publicado toda semana como uma **Base de Conhecimento da IARA**, a **Validated Match Memory**, consultada pelos agentes de match (RA-ICL).",
+      "stepColor": "#0d9488",
+      "meta": [],
+      "parent": "g_iara"
+    },
+    {
+      "id": "g_dst",
+      "type": "g-generic",
+      "x": 3560,
+      "y": 1150,
+      "label": "Destinos das réplicas",
+      "sub": "externos",
+      "w": 300,
+      "h": 330,
+      "style": {
+        "stroke": "#ED7100",
+        "fill": "#ED7100",
+        "fo": 0.04,
+        "dashed": false,
+        "glyph": "external"
+      },
+      "kind": "group",
+      "meta": []
+    },
+    {
+      "id": "adk_rep",
+      "type": "extapi",
+      "x": 3590,
+      "y": 1220,
+      "label": "Autodesk Docs",
+      "sub": "issue de réplica ao projetista",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_dst"
+    },
+    {
+      "id": "sf_rep",
+      "type": "extapi",
+      "x": 3590,
+      "y": 1370,
+      "label": "Salesforce",
+      "sub": "réplica à construtora",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_dst"
+    },
+    {
+      "id": "aps",
+      "type": "extapi",
+      "x": 3940,
+      "y": 965,
+      "label": "Autodesk APS",
+      "sub": "layouts DWG / Revit",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": []
+    },
+    {
+      "id": "g_use",
+      "type": "g-generic",
+      "x": 370,
+      "y": 1150,
+      "label": "④ Camada de consumo",
+      "sub": "parecer, análise e feedback",
+      "w": 1290,
+      "h": 330,
+      "style": {
+        "stroke": "#147EBA",
+        "fill": "#147EBA",
+        "fo": 0.04,
+        "dashed": false,
+        "glyph": "browser"
+      },
+      "kind": "group",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "cf",
+      "type": "cloudfront",
+      "x": 390,
+      "y": 1210,
+      "label": "Painel web",
+      "sub": "CloudFront + S3 · lê direto da API",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "14"
+      },
+      "stepDesc": "O analista abre o **painel web** com SSO e o parecer já está lá, sem baixar nem subir arquivo. Parecer, feedback e comentários vão para o **Aurora**.",
+      "meta": [],
+      "parent": "g_use"
+    },
+    {
+      "id": "apigw",
+      "type": "apigw",
+      "x": 690,
+      "y": 1210,
+      "label": "API Gateway",
+      "sub": "autorizador Cognito",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_use"
+    },
+    {
+      "id": "api",
+      "type": "lambda",
+      "x": 990,
+      "y": 1210,
+      "label": "API do painel",
+      "sub": "Lambda · FastAPI",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_use"
+    },
+    {
+      "id": "aur",
+      "type": "aurora",
+      "x": 1340,
+      "y": 1210,
+      "label": "Aurora PostgreSQL",
+      "sub": "parecer · feedback · histórico · versões",
+      "kind": "card",
+      "w": 300,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_use"
+    },
+    {
+      "id": "cog",
+      "type": "cognito",
+      "x": 390,
+      "y": 1360,
+      "label": "Cognito",
+      "sub": "federação com o IdP corporativo",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_use"
+    },
+    {
+      "id": "fh",
+      "type": "firehose",
+      "x": 690,
+      "y": 1360,
+      "label": "Data Firehose",
+      "sub": "telemetria: uso e tempo por UPE",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "16"
+      },
+      "stepDesc": "**Telemetria** (Firehose → S3) e pareceres (Aurora, via Athena) alimentam o **analítico semanal** no QuickSight: produto por agente e benefício em R$.",
+      "meta": [],
+      "parent": "g_use"
+    },
+    {
+      "id": "ath",
+      "type": "athena",
+      "x": 990,
+      "y": 1360,
+      "label": "Athena",
+      "sub": "consulta federada no Aurora + telemetria",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_use"
+    },
+    {
+      "id": "qs",
+      "type": "quicksight",
+      "x": 1340,
+      "y": 1360,
+      "label": "QuickSight",
+      "sub": "analítico semanal · produto + benefício",
+      "kind": "card",
+      "w": 300,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_use"
+    },
+    {
+      "id": "g_out",
+      "type": "g-generic",
+      "x": 1700,
+      "y": 1150,
+      "label": "⑤ Integração de saída",
+      "sub": "automática após aprovação do analista",
+      "w": 860,
+      "h": 330,
+      "style": {
+        "stroke": "#ED7100",
+        "fill": "#ED7100",
+        "fo": 0.04,
+        "dashed": false,
+        "glyph": "external"
+      },
+      "kind": "group",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "evap",
+      "type": "eventbridge",
+      "x": 1720,
+      "y": 1210,
+      "label": "Parecer aprovado",
+      "sub": "evento no EventBridge",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "15"
+      },
+      "stepDesc": "Quando o analista **aprova** o parecer no painel, um evento aciona as **réplicas automáticas**: issue no Autodesk Docs (GPCA) e registro na Salesforce (GOT).",
+      "meta": [],
+      "parent": "g_out"
+    },
+    {
+      "id": "rep_g",
+      "type": "lambda",
+      "x": 2020,
+      "y": 1210,
+      "label": "Réplica GPCA",
+      "sub": "Lambda · APS Issues API",
+      "kind": "card",
+      "w": 260,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_out"
+    },
+    {
+      "id": "rep_o",
+      "type": "lambda",
+      "x": 2020,
+      "y": 1360,
+      "label": "Réplica GOT",
+      "sub": "Lambda · API Salesforce",
+      "kind": "card",
+      "w": 260,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_out"
+    },
+    {
+      "id": "sqsdlq",
+      "type": "sqs",
+      "x": 1810,
+      "y": 1370,
+      "label": "SQS · DLQ",
+      "sub": "falhas de réplica",
+      "style": {},
+      "kind": "icon",
+      "w": 56,
+      "h": 56,
+      "meta": [],
+      "parent": "g_out"
+    },
+    {
+      "id": "g_fb",
+      "type": "g-generic",
+      "x": 370,
+      "y": 1540,
+      "label": "⑥ Feedback humano curado e drift",
+      "sub": "Step Functions semanal",
+      "w": 3110,
+      "h": 300,
+      "style": {
+        "stroke": "#0d9488",
+        "fill": "#0d9488",
+        "fo": 0.04,
+        "dashed": false,
+        "glyph": "users"
+      },
+      "kind": "group",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "alpha",
+      "type": "glue",
+      "x": 390,
+      "y": 1610,
+      "label": "Concordância entre avaliadores",
+      "sub": "Glue job · Krippendorff's Alpha",
+      "kind": "card",
+      "w": 280,
+      "h": 70,
+      "style": {
+        "badge": "H1"
+      },
+      "stepDesc": "Toda semana, um **Glue job** lê os pareceres do **Aurora** e calcula a concordância entre os 11 analistas com o **Krippendorff's Alpha**.",
+      "stepColor": "#0d9488",
+      "meta": [],
+      "parent": "g_fb"
+    },
+    {
+      "id": "cons",
+      "type": "s3",
+      "x": 720,
+      "y": 1610,
+      "label": "Consensus Dataset",
+      "sub": "S3 · só itens com concordância",
+      "kind": "card",
+      "w": 260,
+      "h": 70,
+      "style": {
+        "badge": "H2"
+      },
+      "stepDesc": "Só os itens com concordância suficiente entram no **Consensus Dataset** (S3): item, candidato, agente e se acertou ou errou.",
+      "stepColor": "#0d9488",
+      "meta": [],
+      "parent": "g_fb"
+    },
+    {
+      "id": "togold",
+      "type": "data-sample",
+      "x": 1040,
+      "y": 1610,
+      "label": "Consensus → Golden",
+      "sub": "amostra estratificada · adjudicação · quarentena",
+      "kind": "card",
+      "w": 300,
+      "h": 70,
+      "style": {
+        "badge": "H4"
+      },
+      "stepDesc": "**Consensus → Golden**: parte do consenso é separada, adjudicada por especialista e mantida em **quarentena** (nunca vai à memória), renovando os Golden Datasets. Um **monitor de drift** compara os orçamentos recentes com o Golden e alerta quando surgem itens, programas ou unidades não cobertos.",
+      "stepColor": "#0d9488",
+      "meta": [],
+      "parent": "g_fb"
+    },
+    {
+      "id": "drift",
+      "type": "cloudwatch",
+      "x": 1400,
+      "y": 1610,
+      "label": "Monitor de data drift",
+      "sub": "S3 curated × Golden · alarme CloudWatch",
+      "kind": "card",
+      "w": 300,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_fb"
+    },
+    {
+      "id": "quar",
+      "type": "dynamodb",
+      "x": 1040,
+      "y": 1740,
+      "label": "Registro de quarentena",
+      "sub": "itens do Golden · filtro da memória",
+      "kind": "card",
+      "w": 300,
+      "h": 62,
+      "style": {},
+      "meta": [],
+      "parent": "g_fb"
+    },
+    {
+      "id": "g_val",
+      "type": "g-generic",
+      "x": 370,
+      "y": 1880,
+      "label": "⑦ Validação de mudanças",
+      "sub": "CI/CD · prompt, KB, regra ou modelo só sobem depois do portão",
+      "w": 3110,
+      "h": 420,
+      "style": {
+        "stroke": "#4338ca",
+        "fill": "#4338ca",
+        "fo": 0.04,
+        "dashed": false,
+        "glyph": "target"
+      },
+      "kind": "group",
+      "meta": [],
+      "parent": "cloud"
+    },
+    {
+      "id": "pr",
+      "type": "codecommit",
+      "x": 390,
+      "y": 1950,
+      "label": "Proposta de mudança",
+      "sub": "pull request · config versionada",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "V1"
+      },
+      "stepDesc": "Toda mudança (prompt, limiar, KB, regra, router, fuzzy, modelo) entra por **pull request**, com a configuração versionada.",
+      "stepColor": "#4338ca",
+      "meta": [],
+      "parent": "g_val"
+    },
+    {
+      "id": "cp",
+      "type": "codepipeline",
+      "x": 690,
+      "y": 1950,
+      "label": "CodePipeline",
+      "sub": "dispara a avaliação",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_val"
+    },
+    {
+      "id": "cb",
+      "type": "codebuild",
+      "x": 990,
+      "y": 1950,
+      "label": "Avaliação offline",
+      "sub": "CodeBuild · candidata × 3 Golden",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "V2"
+      },
+      "stepDesc": "O **CodeBuild** roda a versão candidata e a de produção contra o **Golden Dataset do que mudou**: match (F1), router (F0,5) ou quantitativos (F1).",
+      "stepColor": "#4338ca",
+      "meta": [],
+      "parent": "g_val"
+    },
+    {
+      "id": "gate",
+      "type": "ml-gate",
+      "x": 1290,
+      "y": 1950,
+      "label": "Gate de qualidade do modelo",
+      "sub": "métrica da nova versão > métrica da versão anterior",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "V3"
+      },
+      "stepDesc": "O **portão de qualidade** aprova só se a candidata melhorar mais que **1 ponto** em relação à produção; **reprovada** volta para ajuste.",
+      "stepColor": "#4338ca",
+      "meta": [],
+      "parent": "g_val"
+    },
+    {
+      "id": "dep",
+      "type": "codedeploy",
+      "x": 1590,
+      "y": 1950,
+      "label": "Publicação",
+      "sub": "CodeDeploy · Lambda, ECS e configs",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {
+        "badge": "V4"
+      },
+      "stepDesc": "Só a versão aprovada é publicada: Lambdas, serviços no ECS, máquinas do Step Functions e agentes e Bases de Conhecimento na IARA.",
+      "stepColor": "#4338ca",
+      "meta": [],
+      "parent": "g_val"
+    },
+    {
+      "id": "g_gold",
+      "type": "g-generic",
+      "x": 990,
+      "y": 2080,
+      "label": "Golden Datasets",
+      "sub": "S3 versionado com Object Lock · congelados",
+      "w": 860,
+      "h": 190,
+      "style": {
+        "stroke": "#4338ca",
+        "fill": "#4338ca",
+        "fo": 0.05,
+        "dashed": true,
+        "glyph": "target"
+      },
+      "kind": "group",
+      "meta": [],
+      "parent": "g_val"
+    },
+    {
+      "id": "gm",
+      "type": "s3",
+      "x": 1010,
+      "y": 2140,
+      "label": "Golden · Match",
+      "sub": "item × candidato · F1",
+      "kind": "card",
+      "w": 260,
+      "h": 70,
+      "style": {
+        "badge": "V5"
+      },
+      "stepDesc": "Três **Golden Datasets** no S3 versionado com **Object Lock** (imutáveis): match contextual, semantic router e quantitativos. Cada caso guarda a versão do catálogo.",
+      "stepColor": "#4338ca",
+      "meta": [],
+      "parent": "g_gold"
+    },
+    {
+      "id": "gr",
+      "type": "s3",
+      "x": 1290,
+      "y": 2140,
+      "label": "Golden · Router",
+      "sub": "descartar ou manter · F0,5",
+      "kind": "card",
+      "w": 260,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_gold"
+    },
+    {
+      "id": "gq",
+      "type": "s3",
+      "x": 1570,
+      "y": 2140,
+      "label": "Golden · Quantitativos",
+      "sub": "item + direção · F1",
+      "kind": "card",
+      "w": 260,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_gold"
+    },
+    {
+      "id": "ecr",
+      "type": "ecr",
+      "x": 1900,
+      "y": 1950,
+      "label": "ECR",
+      "sub": "imagens versionadas dos serviços",
+      "kind": "card",
+      "w": 240,
+      "h": 70,
+      "style": {},
+      "meta": [],
+      "parent": "g_val"
+    },
+    {
+      "id": "analista",
+      "type": "users",
+      "x": 60,
+      "y": 1230,
+      "label": "Analista de negócio",
+      "sub": "GOT · GPCA",
+      "kind": "icon",
+      "w": 56,
+      "h": 56,
+      "style": {},
+      "meta": []
+    },
+    {
+      "id": "gestao",
+      "type": "users",
+      "x": 60,
+      "y": 1380,
+      "label": "Gestão e board",
+      "sub": "analítico semanal",
+      "kind": "icon",
+      "w": 56,
+      "h": 56,
+      "style": {},
+      "meta": []
+    }
   ],
-  "extras": [
-   {
-    "id": "s1",
-    "kind": "section",
-    "title": "Fluxo do orçamento"
-   },
-   {
-    "id": "s3",
-    "kind": "section",
-    "title": "Pipeline de conhecimento"
-   },
-   {
-    "id": "s4",
-    "kind": "section",
-    "title": "Feedback humano curado e drift"
-   },
-   {
-    "id": "s5",
-    "kind": "section",
-    "title": "Validação de mudanças"
-   },
-   {
-    "id": "s2",
-    "kind": "section",
-    "title": "Como resolve os pontos do AS IS"
-   }
+  "edges": [
+    {
+      "id": "e1",
+      "from": "sf",
+      "to": "eb",
+      "label": "evento",
+      "style": {
+        "badge": "A"
+      },
+      "stepDesc": "**Resolve A (extração manual)**: o orçamento da GOT entra por evento da Salesforce e é lido pela API; ninguém precisa extrair relatório.",
+      "stepColor": "#16a34a"
+    },
+    {
+      "id": "e2",
+      "from": "adk",
+      "to": "apiwh",
+      "label": "webhook",
+      "style": {}
+    },
+    {
+      "id": "e3",
+      "from": "apiwh",
+      "to": "eb",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e4",
+      "from": "eb",
+      "to": "colsf",
+      "label": "a cada orçamento",
+      "style": {
+        "badge": "C"
+      },
+      "stepDesc": "**Resolve C (uma rodada por dia)**: cada orçamento é verificado quando chega; a varredura agendada cobre eventos perdidos.",
+      "stepColor": "#16a34a"
+    },
+    {
+      "id": "e5",
+      "from": "eb",
+      "to": "colapx",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e6",
+      "from": "sch",
+      "to": "eb",
+      "label": "varredura",
+      "style": {
+        "dash": "dashed"
+      }
+    },
+    {
+      "id": "e7",
+      "from": "colsf",
+      "to": "sm_sec",
+      "label": "",
+      "style": {
+        "dash": "dotted"
+      }
+    },
+    {
+      "id": "e8",
+      "from": "sm_sec",
+      "to": "vault",
+      "label": "sincroniza",
+      "style": {
+        "dash": "dashed"
+      },
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "e9",
+      "from": "colsf",
+      "to": "raw",
+      "label": "grava",
+      "style": {}
+    },
+    {
+      "id": "e10",
+      "from": "colapx",
+      "to": "raw",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e11",
+      "from": "raw",
+      "to": "dq",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e12",
+      "from": "dq",
+      "to": "cur",
+      "label": "",
+      "style": {
+        "badge": "B"
+      },
+      "stepDesc": "**Resolve B (arquivo como integração)**: contrato de dados na entrada e banco com API na saída, no lugar das planilhas no SharePoint.",
+      "stepColor": "#16a34a"
+    },
+    {
+      "id": "e13",
+      "from": "cur",
+      "to": "sfn",
+      "label": "evento: orçamento pronto",
+      "style": {},
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "e14",
+      "from": "g_ref",
+      "to": "r1",
+      "label": "versão fixada",
+      "style": {
+        "dash": "dashed"
+      },
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "e15",
+      "from": "sfn",
+      "to": "r1",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e16",
+      "from": "lpu",
+      "to": "mb",
+      "label": "não LPU",
+      "style": {}
+    },
+    {
+      "id": "e17",
+      "from": "mb",
+      "to": "np",
+      "label": "restantes",
+      "style": {}
+    },
+    {
+      "id": "e18",
+      "from": "np",
+      "to": "router",
+      "label": "restantes",
+      "style": {}
+    },
+    {
+      "id": "e19",
+      "from": "router",
+      "to": "fuzzy",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e20",
+      "from": "fuzzy",
+      "to": "nl",
+      "label": "restantes",
+      "style": {}
+    },
+    {
+      "id": "e21",
+      "from": "r1",
+      "to": "msvc",
+      "label": "match em lote",
+      "style": {},
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "e22",
+      "from": "msvc",
+      "to": "mcache",
+      "label": "consulta primeiro",
+      "style": {
+        "arrow": "both",
+        "badge": "D"
+      },
+      "stepDesc": "**Resolve D (cascata item a item, top 1)**: um serviço único de match, em lote, que consulta primeiro o cache de equivalências e usa top-k com limiar; só o que não está no cache vai ao LLM.",
+      "stepColor": "#16a34a"
+    },
+    {
+      "id": "e23",
+      "from": "msvc",
+      "to": "ag",
+      "label": "invoca em lote",
+      "style": {
+        "color": "#EC7000"
+      },
+      "fromSide": "top",
+      "toSide": "left",
+      "mid": 195
+    },
+    {
+      "id": "e24",
+      "from": "ag",
+      "to": "kbs",
+      "label": "consulta",
+      "style": {
+        "color": "#EC7000"
+      }
+    },
+    {
+      "id": "e25",
+      "from": "kbs",
+      "to": "embs",
+      "label": "",
+      "style": {
+        "color": "#EC7000"
+      }
+    },
+    {
+      "id": "e26",
+      "from": "ag",
+      "to": "vmm",
+      "label": "casos validados",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      },
+      "fromSide": "right",
+      "toSide": "right",
+      "mid": 3925
+    },
+    {
+      "id": "e27",
+      "from": "r3",
+      "to": "aps",
+      "label": "layouts · só versões novas",
+      "style": {},
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "e28",
+      "from": "lay",
+      "to": "ext",
+      "label": "",
+      "style": {
+        "badge": "E"
+      },
+      "stepDesc": "**Resolve E (reextração do layout)**: o layout só é extraído quando muda de versão; o JSON fica em cache no S3 e é reaproveitado.",
+      "stepColor": "#16a34a"
+    },
+    {
+      "id": "e29",
+      "from": "ext",
+      "to": "lcache",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e30",
+      "from": "lcache",
+      "to": "qag",
+      "label": "JSON",
+      "style": {}
+    },
+    {
+      "id": "e31",
+      "from": "qag",
+      "to": "iara",
+      "label": "SDK IARA",
+      "style": {
+        "color": "#EC7000"
+      },
+      "fromSide": "bottom",
+      "toSide": "left",
+      "mid": 930
+    },
+    {
+      "id": "e32",
+      "from": "r1",
+      "to": "consol",
+      "label": "resultado",
+      "style": {},
+      "fromSide": "left",
+      "toSide": "left",
+      "mid": 1350
+    },
+    {
+      "id": "e33",
+      "from": "r2",
+      "to": "consol",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e34",
+      "from": "r3",
+      "to": "consol",
+      "label": "",
+      "style": {},
+      "fromSide": "bottom",
+      "toSide": "right"
+    },
+    {
+      "id": "e35",
+      "from": "consol",
+      "to": "aur",
+      "label": "parecer por item",
+      "style": {
+        "animated": true
+      },
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "e36",
+      "from": "analista",
+      "to": "cf",
+      "label": "analisa e aprova",
+      "style": {
+        "badge": "F"
+      },
+      "stepDesc": "**Resolve F (passos manuais no consumo)**: o painel lê o parecer da API, e as réplicas saem automaticamente para o Autodesk Docs (GPCA) e a Salesforce (GOT).",
+      "stepColor": "#16a34a"
+    },
+    {
+      "id": "e37",
+      "from": "cf",
+      "to": "apigw",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e38",
+      "from": "apigw",
+      "to": "api",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e39",
+      "from": "api",
+      "to": "aur",
+      "label": "parecer · feedback",
+      "style": {
+        "badge": "G"
+      },
+      "stepDesc": "**Resolve G (Microsoft Lists como base)**: parecer, feedback e telemetria ficam no **Aurora** e no S3, sem limite de visualização e ligados a cada item e versão.",
+      "stepColor": "#16a34a"
+    },
+    {
+      "id": "e40",
+      "from": "cf",
+      "to": "cog",
+      "label": "SSO",
+      "style": {
+        "dash": "dashed"
+      }
+    },
+    {
+      "id": "e41",
+      "from": "cog",
+      "to": "idp",
+      "label": "federação",
+      "style": {
+        "dash": "dashed"
+      },
+      "fromSide": "left",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e42",
+      "from": "api",
+      "to": "fh",
+      "label": "eventos de uso",
+      "style": {
+        "dash": "dashed"
+      },
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "e43",
+      "from": "fh",
+      "to": "ath",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e44",
+      "from": "ath",
+      "to": "qs",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e45",
+      "from": "gestao",
+      "to": "qs",
+      "label": "semanal",
+      "style": {},
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "mid": 1500
+    },
+    {
+      "id": "e46",
+      "from": "api",
+      "to": "evap",
+      "label": "aprovação",
+      "style": {},
+      "fromSide": "top",
+      "toSide": "top",
+      "mid": 1180
+    },
+    {
+      "id": "e47",
+      "from": "evap",
+      "to": "rep_g",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e48",
+      "from": "evap",
+      "to": "rep_o",
+      "label": "",
+      "style": {},
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "e49",
+      "from": "rep_g",
+      "to": "adk_rep",
+      "label": "issue",
+      "style": {}
+    },
+    {
+      "id": "e50",
+      "from": "rep_o",
+      "to": "sf_rep",
+      "label": "API",
+      "style": {}
+    },
+    {
+      "id": "e51",
+      "from": "rep_o",
+      "to": "sqsdlq",
+      "label": "falha",
+      "style": {
+        "dash": "dashed"
+      }
+    },
+    {
+      "id": "e52",
+      "from": "kchg",
+      "to": "kbb",
+      "label": "",
+      "style": {}
+    },
+    {
+      "id": "e53",
+      "from": "kbb",
+      "to": "emb",
+      "label": "",
+      "style": {},
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "e54",
+      "from": "emb",
+      "to": "kbs",
+      "label": "publica KB",
+      "style": {
+        "color": "#EC7000"
+      },
+      "fromSide": "right",
+      "toSide": "left",
+      "mid": 3530
+    },
+    {
+      "id": "e55",
+      "from": "aur",
+      "to": "alpha",
+      "label": "pareceres da semana",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      },
+      "fromSide": "right",
+      "toSide": "top",
+      "mid": 1680
+    },
+    {
+      "id": "e56",
+      "from": "alpha",
+      "to": "cons",
+      "label": "consenso",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      }
+    },
+    {
+      "id": "e57",
+      "from": "cons",
+      "to": "vmm",
+      "label": "publica semanal",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      },
+      "fromSide": "right",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e58",
+      "from": "cons",
+      "to": "togold",
+      "label": "amostra",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      }
+    },
+    {
+      "id": "e59",
+      "from": "togold",
+      "to": "quar",
+      "label": "",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      }
+    },
+    {
+      "id": "e60",
+      "from": "quar",
+      "to": "cons",
+      "label": "filtra a memória",
+      "style": {
+        "dash": "dotted",
+        "color": "#0d9488"
+      },
+      "fromSide": "left",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e61",
+      "from": "drift",
+      "to": "g_gold",
+      "label": "compara cobertura",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      },
+      "fromSide": "bottom",
+      "toSide": "right",
+      "mid": 1950
+    },
+    {
+      "id": "e62",
+      "from": "togold",
+      "to": "g_gold",
+      "label": "renova",
+      "style": {
+        "dash": "dashed",
+        "color": "#0d9488"
+      },
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "e63",
+      "from": "pr",
+      "to": "cp",
+      "label": "",
+      "style": {
+        "color": "#4338ca"
+      }
+    },
+    {
+      "id": "e64",
+      "from": "cp",
+      "to": "cb",
+      "label": "",
+      "style": {
+        "color": "#4338ca"
+      }
+    },
+    {
+      "id": "e65",
+      "from": "g_gold",
+      "to": "cb",
+      "label": "casos",
+      "style": {
+        "color": "#4338ca"
+      },
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e66",
+      "from": "cb",
+      "to": "gate",
+      "label": "",
+      "style": {
+        "color": "#4338ca"
+      }
+    },
+    {
+      "id": "e67",
+      "from": "gate",
+      "to": "dep",
+      "label": "aprovada",
+      "style": {
+        "width": 2,
+        "color": "#16a34a"
+      }
+    },
+    {
+      "id": "e68",
+      "from": "gate",
+      "to": "pr",
+      "label": "reprovada",
+      "style": {
+        "dash": "dashed",
+        "color": "#DD344C"
+      },
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "mid": 2050
+    },
+    {
+      "id": "e69",
+      "from": "dep",
+      "to": "ecr",
+      "label": "",
+      "style": {
+        "color": "#4338ca"
+      }
+    },
+    {
+      "id": "e70",
+      "from": "dep",
+      "to": "g_proc",
+      "label": "publica",
+      "style": {
+        "dash": "dashed",
+        "color": "#4338ca"
+      },
+      "fromSide": "right",
+      "toSide": "bottom",
+      "mid": 2580
+    }
   ]
- },
- "nodes": [
-  {
-   "id": "title",
-   "type": "shape-text",
-   "x": 0,
-   "y": -330,
-   "label": "Verificador Inteligente de Orçamentos · TO BE (proposta em serviços AWS)",
-   "sub": "Arquitetura ideal · orientada a eventos · 1 execução por orçamento · ramos em paralelo · parecer em banco · réplicas automáticas · validação por Golden Datasets",
-   "w": 3000,
-   "h": 64,
-   "kind": "text",
-   "style": {
-    "fontSize": 26,
-    "align": "start"
-   }
-  },
-  {
-   "id": "start",
-   "type": "shape-text",
-   "x": 0,
-   "y": -40,
-   "label": "▶ Início do fluxo",
-   "sub": "",
-   "w": 250,
-   "h": 44,
-   "kind": "text",
-   "style": {
-    "fill": "#16a34a",
-    "text": "#ffffff",
-    "fontSize": 17
-   }
-  },
-  {
-   "id": "n_ler",
-   "type": "shape-note",
-   "x": 0,
-   "y": -250,
-   "label": "Como ler esta arquitetura",
-   "sub": "① Fontes de dados: Salesforce (GOT) e Autodesk Docs (GPCA) avisam por evento quando um orçamento é submetido ou modificado.\n② Ingestão: EventBridge aciona os coletores, que leem pela API, validam o contrato de dados e gravam no S3.\n③ Processamento: Step Functions abre 1 execução por orçamento, com 3 ramos em paralelo; os agentes usam serviços de IA compartilhados e a IARA GenAI.\n④ Camada de consumo: parecer no Aurora, painel web com SSO lendo da API, telemetria e analítico. ⑤ Integração de saída: réplicas automáticas após aprovação do analista.\n⑥ Feedback humano curado e monitoramento de drift. ⑦ Validação de mudanças em CI/CD com 3 Golden Datasets.",
-   "w": 1300,
-   "h": 190
-  },
-  {
-   "id": "n_cor",
-   "type": "shape-note",
-   "x": 1340,
-   "y": -250,
-   "label": "Selos e cores",
-   "sub": "Selos azuis 1–16: fluxo do orçamento\nSelos verdes A–G: como o TO BE resolve cada ponto de atenção do AS IS\nK1–K3 (roxo): pipeline de conhecimento\nH1–H4 (verde-azulado): feedback humano curado e drift\nV1–V5 (índigo): validação de mudanças com Golden Datasets",
-   "w": 820,
-   "h": 190
-  },
-  {
-   "id": "n_prem",
-   "type": "shape-note",
-   "x": 2200,
-   "y": -250,
-   "label": "Premissas e decisões a validar",
-   "sub": "Proposta para discussão com Arquitetura Corporativa e Segurança; serviços podem trocar por equivalentes já homologados.\nA IARA GenAI é a plataforma única de LLM, agentes, Bases de Conhecimento e embeddings (governança do Itaú).\nOs agentes de match saem do StackSpot e passam para a IARA GenAI (Agentes, Bases de Conhecimento e embeddings), orquestrados por um serviço na AWS com lote, cache e limiar. Alternativa: manter o StackSpot.\nSalesforce Event Relay e webhooks do Autodesk Platform Services (APS) dependem de configuração nas duas plataformas.",
-   "w": 1300,
-   "h": 190
-  },
-  {
-   "id": "g_src",
-   "type": "g-generic",
-   "x": 0,
-   "y": 30,
-   "label": "① Fontes de dados",
-   "sub": "sistemas de origem",
-   "w": 300,
-   "h": 330,
-   "style": {
-    "stroke": "#16a34a",
-    "fill": "#16a34a",
-    "fo": 0.04,
-    "dashed": false,
-    "glyph": "ingest"
-   }
-  },
-  {
-   "id": "sf",
-   "type": "extapi",
-   "x": 30,
-   "y": 90,
-   "label": "Salesforce",
-   "sub": "orçamento da construtora (GOT) · Event Relay",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "1"
-   },
-   "stepDesc": "**GOT**: quando a construtora submete o orçamento, a **Salesforce** publica um evento (**Event Relay → EventBridge**). Acaba a extração manual."
-  },
-  {
-   "id": "adk",
-   "type": "extapi",
-   "x": 30,
-   "y": 230,
-   "label": "Autodesk Docs",
-   "sub": "orçamento executivo (GPCA) · webhook APS",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "2"
-   },
-   "stepDesc": "**GPCA**: o **Autodesk Platform Services (APS)** avisa por **webhook** quando um orçamento executivo é criado ou modificado."
-  },
-  {
-   "id": "g_id",
-   "type": "g-generic",
-   "x": 0,
-   "y": 400,
-   "label": "Identidade e segredos",
-   "sub": "corporativo",
-   "w": 300,
-   "h": 210,
-   "style": {
-    "stroke": "#475569",
-    "fill": "#475569",
-    "fo": 0.04,
-    "dashed": false,
-    "glyph": "key"
-   }
-  },
-  {
-   "id": "vault",
-   "type": "secrets",
-   "x": 30,
-   "y": 450,
-   "label": "Vault",
-   "sub": "credenciais corporativas",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "glyph": "key"
-   }
-  },
-  {
-   "id": "idp",
-   "type": "users",
-   "x": 30,
-   "y": 535,
-   "label": "IdP corporativo",
-   "sub": "SSO dos analistas (federação)",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "cloud",
-   "type": "g-cloud",
-   "x": 340,
-   "y": 0,
-   "label": "AWS Cloud",
-   "sub": "conta do Verificador · proposta",
-   "w": 3170,
-   "h": 2330,
-   "style": {}
-  },
-  {
-   "id": "g_ing",
-   "type": "g-online",
-   "x": 370,
-   "y": 30,
-   "label": "② Ingestão por evento",
-   "sub": "sem arquivo e sem agendamento fixo",
-   "w": 930,
-   "h": 450,
-   "style": {}
-  },
-  {
-   "id": "apiwh",
-   "type": "apigw",
-   "x": 390,
-   "y": 230,
-   "label": "API Gateway",
-   "sub": "recebe o webhook do APS",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "eb",
-   "type": "eventbridge",
-   "x": 390,
-   "y": 90,
-   "label": "EventBridge",
-   "sub": "orçamento submetido / modificado",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "3"
-   },
-   "stepDesc": "O **EventBridge** recebe os eventos das duas fontes e aciona o coletor certo. O **EventBridge Scheduler** faz uma varredura de segurança para eventos perdidos."
-  },
-  {
-   "id": "sch",
-   "type": "eventbridge",
-   "x": 390,
-   "y": 370,
-   "label": "EventBridge Scheduler",
-   "sub": "varredura de segurança",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "colsf",
-   "type": "lambda",
-   "x": 690,
-   "y": 90,
-   "label": "Coletor Salesforce",
-   "sub": "Lambda · API REST",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "4"
-   },
-   "stepDesc": "Os **coletores** (Lambda) leem o orçamento pela API de cada fonte, com credenciais do **Secrets Manager**, e gravam o original no **S3 raw**."
-  },
-  {
-   "id": "colapx",
-   "type": "lambda",
-   "x": 690,
-   "y": 230,
-   "label": "Coletor Autodesk",
-   "sub": "Lambda · APS Data Management",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "sm_sec",
-   "type": "secrets",
-   "x": 690,
-   "y": 370,
-   "label": "Secrets Manager",
-   "sub": "credenciais sincronizadas do Vault",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "glyph": "key"
-   }
-  },
-  {
-   "id": "raw",
-   "type": "s3",
-   "x": 1000,
-   "y": 90,
-   "label": "S3 · raw",
-   "sub": "orçamento original por evento",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "dq",
-   "type": "glue",
-   "x": 1000,
-   "y": 230,
-   "label": "Contrato de dados",
-   "sub": "Glue Data Quality · schema",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "5"
-   },
-   "stepDesc": "Um **contrato de dados** (Glue Data Quality) valida schema e qualidade antes de qualquer validador; o orçamento normalizado vai ao **S3 curated**."
-  },
-  {
-   "id": "cur",
-   "type": "s3",
-   "x": 1000,
-   "y": 370,
-   "label": "S3 · curated",
-   "sub": "itens normalizados por orçamento",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "g_ref",
-   "type": "g-generic",
-   "x": 370,
-   "y": 520,
-   "label": "Dados de referência versionados",
-   "sub": "S3 + Glue Data Catalog · versão fixada por execução",
-   "w": 930,
-   "h": 260,
-   "style": {
-    "stroke": "#7AA116",
-    "fill": "#7AA116",
-    "fo": 0.05,
-    "dashed": false,
-    "glyph": "bucket"
-   }
-  },
-  {
-   "id": "ref_cad",
-   "type": "s3",
-   "x": 390,
-   "y": 580,
-   "label": "Bases cadastrais",
-   "sub": "agências · construtoras (região, grupo de preço)",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "ref_cat",
-   "type": "s3",
-   "x": 690,
-   "y": 580,
-   "label": "Catálogos",
-   "sub": "LPU · LPU ar · Material Banco · NLPU Pricing",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "ref_reg",
-   "type": "s3",
-   "x": 990,
-   "y": 580,
-   "label": "Regras",
-   "sub": "composição × insumos · KB por programa dono",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "gcat",
-   "type": "gluecatalog",
-   "x": 690,
-   "y": 690,
-   "label": "Glue Data Catalog",
-   "sub": "versões e linhagem",
-   "kind": "card",
-   "w": 240,
-   "h": 62,
-   "style": {}
-  },
-  {
-   "id": "g_proc",
-   "type": "g-generic",
-   "x": 1340,
-   "y": 30,
-   "label": "③ Processamento",
-   "sub": "Step Functions · 1 execução por orçamento · retentativa por etapa",
-   "w": 1220,
-   "h": 1070,
-   "style": {
-    "stroke": "#E7157B",
-    "fill": "#E7157B",
-    "fo": 0.04,
-    "dashed": false,
-    "glyph": "flow"
-   }
-  },
-  {
-   "id": "sfn",
-   "type": "stepfunctions",
-   "x": 1360,
-   "y": 85,
-   "label": "Orquestrador",
-   "sub": "Step Functions · ramos em paralelo",
-   "kind": "card",
-   "w": 300,
-   "h": 70,
-   "style": {
-    "badge": "6"
-   },
-   "stepDesc": "O **Step Functions** abre **uma execução por orçamento**, com três ramos em paralelo e retentativa por etapa: uma falha não derruba a rodada inteira."
-  },
-  {
-   "id": "r1",
-   "type": "g-stage",
-   "x": 1360,
-   "y": 190,
-   "label": "Ramo 1 · preço e classificação",
-   "sub": "Lambda + Distributed Map",
-   "w": 1180,
-   "h": 380,
-   "style": {}
-  },
-  {
-   "id": "lpu",
-   "type": "lambda",
-   "x": 1380,
-   "y": 240,
-   "label": "Validador LPU",
-   "sub": "determinístico · preço · unidade",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "7"
-   },
-   "stepDesc": "**Validador LPU** (Lambda, determinístico), com as bases de referência da versão fixada na execução."
-  },
-  {
-   "id": "mb",
-   "type": "gen-agent",
-   "x": 1680,
-   "y": 240,
-   "label": "Validador Material Banco",
-   "sub": "match contextual · só GPCA",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "8"
-   },
-   "stepDesc": "**Material Banco** e **NLPU Pricing** chamam o **serviço de match**, que trabalha em lote, consulta o cache e invoca os **agentes de match da IARA GenAI**, cada um com sua **Base de Conhecimento** e a Validated Match Memory."
-  },
-  {
-   "id": "np",
-   "type": "gen-agent",
-   "x": 1980,
-   "y": 240,
-   "label": "Validador NLPU Pricing",
-   "sub": "match contextual · só GPCA",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "pre",
-   "type": "g-generic",
-   "x": 1660,
-   "y": 360,
-   "label": "Pré-filtro do Não LPU → LPU",
-   "sub": "Distributed Map · execuções paralelas",
-   "w": 860,
-   "h": 190,
-   "style": {
-    "stroke": "#0891b2",
-    "fill": "#0891b2",
-    "fo": 0.04,
-    "dashed": true,
-    "glyph": "funnel"
-   }
-  },
-  {
-   "id": "router",
-   "type": "gen-gateway",
-   "x": 1980,
-   "y": 410,
-   "label": "Semantic router",
-   "sub": "descarta itens sem substituto na LPU",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "9"
-   },
-   "stepDesc": "**Semantic router** e **match fuzzy** rodam em paralelo no **Distributed Map** do Step Functions, antes do agente **Não LPU → LPU**."
-  },
-  {
-   "id": "fuzzy",
-   "type": "lambda",
-   "x": 1680,
-   "y": 410,
-   "label": "Match fuzzy",
-   "sub": "Lambda · paralelo por lote",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "nl",
-   "type": "gen-agent",
-   "x": 1380,
-   "y": 410,
-   "label": "Validador Não LPU → LPU",
-   "sub": "match contextual · GPCA e GOT",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "10"
-   },
-   "stepDesc": "**Não LPU → LPU** usa o mesmo serviço de match contextual, com a KB da LPU enriquecida."
-  },
-  {
-   "id": "r2",
-   "type": "g-stage",
-   "x": 1360,
-   "y": 600,
-   "label": "Ramo 2 · composição",
-   "sub": "",
-   "w": 300,
-   "h": 130,
-   "style": {}
-  },
-  {
-   "id": "comp",
-   "type": "lambda",
-   "x": 1380,
-   "y": 645,
-   "label": "Validador Composição",
-   "sub": "determinístico",
-   "kind": "card",
-   "w": 260,
-   "h": 62,
-   "style": {
-    "badge": "11"
-   },
-   "stepDesc": "**Composição** (Lambda, determinístico) roda em paralelo, sem depender da cascata de preço."
-  },
-  {
-   "id": "r3",
-   "type": "g-stage",
-   "x": 1700,
-   "y": 600,
-   "label": "Ramo 3 · quantitativos",
-   "sub": "por agência orçada",
-   "w": 840,
-   "h": 300,
-   "style": {}
-  },
-  {
-   "id": "lay",
-   "type": "lambda",
-   "x": 1720,
-   "y": 650,
-   "label": "Layout por versão",
-   "sub": "APS · só busca layout novo",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "12"
-   },
-   "stepDesc": "**Quantitativos**: busca no APS só layouts com **versão nova**; a extração DWG/Revit roda em **ECS Fargate** com **cache por versão no S3**; o agente usa a KB versionada e chama o **GPT-5.5 pela IARA GenAI**."
-  },
-  {
-   "id": "ext",
-   "type": "fargate",
-   "x": 2000,
-   "y": 650,
-   "label": "Extração DWG / Revit",
-   "sub": "ECS Fargate · APS Model Derivative",
-   "kind": "card",
-   "w": 260,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "lcache",
-   "type": "s3",
-   "x": 2000,
-   "y": 790,
-   "label": "S3 · cache de layout",
-   "sub": "JSON por agência e versão",
-   "kind": "card",
-   "w": 260,
-   "h": 62,
-   "style": {}
-  },
-  {
-   "id": "qag",
-   "type": "ecs",
-   "x": 1720,
-   "y": 790,
-   "label": "Agente de quantitativos",
-   "sub": "ECS · SDK IARA · saída estruturada",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "consol",
-   "type": "data-agg",
-   "x": 1360,
-   "y": 960,
-   "label": "Consolidação do parecer",
-   "sub": "status · R$ divergente · evidência · versão",
-   "kind": "card",
-   "w": 300,
-   "h": 70,
-   "style": {
-    "glyph": "checklist",
-    "badge": "13"
-   },
-   "stepDesc": "A **consolidação** junta os três ramos e grava o parecer por item no **Aurora**, com evidência, confiança e a versão de regras, catálogos e agentes usada."
-  },
-  {
-   "id": "g_ai",
-   "type": "g-generic",
-   "x": 2600,
-   "y": 30,
-   "label": "Serviços de IA compartilhados",
-   "sub": "orquestração do match e conhecimento",
-   "w": 620,
-   "h": 1070,
-   "style": {
-    "stroke": "#a21caf",
-    "fill": "#a21caf",
-    "fo": 0.04,
-    "dashed": false,
-    "glyph": "sparkle"
-   }
-  },
-  {
-   "id": "msvc",
-   "type": "ecs",
-   "x": 2620,
-   "y": 240,
-   "label": "Serviço de match",
-   "sub": "ECS · lote · top-k + limiar",
-   "kind": "card",
-   "w": 260,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "mcache",
-   "type": "dynamodb",
-   "x": 2940,
-   "y": 240,
-   "label": "Cache de equivalências",
-   "sub": "DynamoDB · matches confirmados",
-   "kind": "card",
-   "w": 260,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "g_kp",
-   "type": "g-offline",
-   "x": 2620,
-   "y": 380,
-   "label": "Pipeline de conhecimento",
-   "sub": "a cada mudança de catálogo",
-   "w": 580,
-   "h": 320,
-   "style": {}
-  },
-  {
-   "id": "kchg",
-   "type": "s3",
-   "x": 2640,
-   "y": 440,
-   "label": "Mudança de catálogo",
-   "sub": "nova versão no S3 → EventBridge",
-   "kind": "card",
-   "w": 250,
-   "h": 70,
-   "style": {
-    "badge": "K1"
-   },
-   "stepDesc": "Uma nova versão de **LPU, Material Banco ou NLPU Pricing** no S3 gera um evento que dispara o pipeline de conhecimento.",
-   "stepColor": "#7c3aed"
-  },
-  {
-   "id": "kbb",
-   "type": "stepfunctions",
-   "x": 2930,
-   "y": 440,
-   "label": "Knowledge Builder",
-   "sub": "Step Functions + Lambda · IARA",
-   "kind": "card",
-   "w": 250,
-   "h": 70,
-   "style": {
-    "badge": "K2"
-   },
-   "stepDesc": "O **Knowledge Builder** enriquece cada item (intenção técnica, sinônimos, unidades compatíveis, dimensões etc.) com a IARA, em lote.",
-   "stepColor": "#7c3aed"
-  },
-  {
-   "id": "emb",
-   "type": "lambda",
-   "x": 2640,
-   "y": 630,
-   "label": "Publicação das KBs",
-   "sub": "Lambda · SDK IARA → Bases de Conhecimento",
-   "kind": "card",
-   "w": 540,
-   "h": 62,
-   "style": {
-    "badge": "K3"
-   },
-   "stepDesc": "Os itens enriquecidos são publicados como **Bases de Conhecimento da IARA** (uma por agente), vetorizadas pelos **embeddings da IARA**. A nova versão do catálogo também dispara a **revisão dos casos afetados** nos Golden Datasets.",
-   "stepColor": "#7c3aed"
-  },
-  {
-   "id": "g_obs",
-   "type": "g-generic",
-   "x": 3250,
-   "y": 30,
-   "label": "Observabilidade e segurança",
-   "sub": "",
-   "w": 240,
-   "h": 1070,
-   "style": {
-    "stroke": "#64748b",
-    "fill": "#64748b",
-    "fo": 0.04,
-    "dashed": false,
-    "glyph": "shield"
-   }
-  },
-  {
-   "id": "cw",
-   "type": "cloudwatch",
-   "x": 3260,
-   "y": 90,
-   "label": "CloudWatch",
-   "sub": "alarmes por etapa · custo por orçamento",
-   "kind": "card",
-   "w": 220,
-   "h": 80,
-   "style": {}
-  },
-  {
-   "id": "xr",
-   "type": "xray",
-   "x": 3260,
-   "y": 220,
-   "label": "X-Ray",
-   "sub": "rastreio por execução",
-   "kind": "card",
-   "w": 220,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "kms",
-   "type": "kms",
-   "x": 3260,
-   "y": 330,
-   "label": "KMS",
-   "sub": "dados cifrados",
-   "kind": "card",
-   "w": 220,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "iam",
-   "type": "iam",
-   "x": 3260,
-   "y": 440,
-   "label": "IAM",
-   "sub": "menor privilégio por serviço",
-   "kind": "card",
-   "w": 220,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "waf",
-   "type": "waf",
-   "x": 3260,
-   "y": 550,
-   "label": "WAF",
-   "sub": "proteção do painel e da API",
-   "kind": "card",
-   "w": 220,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "g_iara",
-   "type": "g-generic",
-   "x": 3560,
-   "y": 0,
-   "label": "IARA GenAI",
-   "sub": "plataforma de IA do Itaú",
-   "w": 340,
-   "h": 700,
-   "style": {
-    "stroke": "#EC7000",
-    "fill": "#EC7000",
-    "fo": 0.05,
-    "dashed": false,
-    "glyph": "sparkle"
-   }
-  },
-  {
-   "id": "iara",
-   "type": "gen-gateway",
-   "x": 3590,
-   "y": 50,
-   "label": "API IARA GenAI",
-   "sub": "SDK iara_genai_sdk · OAuth",
-   "kind": "card",
-   "w": 280,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "ag",
-   "type": "gen-agent",
-   "x": 3590,
-   "y": 160,
-   "label": "Agentes de match",
-   "sub": "Material Banco · NLPU Pricing · Não LPU → LPU",
-   "kind": "card",
-   "w": 280,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "kbs",
-   "type": "gen-docs",
-   "x": 3590,
-   "y": 270,
-   "label": "Bases de Conhecimento",
-   "sub": "catálogos enriquecidos · uma por agente",
-   "kind": "card",
-   "w": 280,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "embs",
-   "type": "gen-embed",
-   "x": 3590,
-   "y": 380,
-   "label": "Embeddings",
-   "sub": "vetorização das Bases de Conhecimento",
-   "kind": "card",
-   "w": 280,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "gpt",
-   "type": "gen-llm",
-   "x": 3590,
-   "y": 490,
-   "label": "Modelos",
-   "sub": "GPT-5.5 e outros · usados pelos agentes e pela API",
-   "kind": "card",
-   "w": 280,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "vmm",
-   "type": "gen-docs",
-   "x": 3590,
-   "y": 600,
-   "label": "KB · Validated Match Memory",
-   "sub": "casos curados · RA-ICL",
-   "kind": "card",
-   "w": 280,
-   "h": 70,
-   "style": {
-    "badge": "H3"
-   },
-   "stepDesc": "O **Consensus Dataset** é publicado toda semana como uma **Base de Conhecimento da IARA**, a **Validated Match Memory**, consultada pelos agentes de match (RA-ICL).",
-   "stepColor": "#0d9488"
-  },
-  {
-   "id": "g_dst",
-   "type": "g-generic",
-   "x": 3560,
-   "y": 1150,
-   "label": "Destinos das réplicas",
-   "sub": "externos",
-   "w": 300,
-   "h": 330,
-   "style": {
-    "stroke": "#ED7100",
-    "fill": "#ED7100",
-    "fo": 0.04,
-    "dashed": false,
-    "glyph": "external"
-   }
-  },
-  {
-   "id": "adk_rep",
-   "type": "extapi",
-   "x": 3590,
-   "y": 1220,
-   "label": "Autodesk Docs",
-   "sub": "issue de réplica ao projetista",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "sf_rep",
-   "type": "extapi",
-   "x": 3590,
-   "y": 1370,
-   "label": "Salesforce",
-   "sub": "réplica à construtora",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "aps",
-   "type": "extapi",
-   "x": 3940,
-   "y": 965,
-   "label": "Autodesk APS",
-   "sub": "layouts DWG / Revit",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "g_use",
-   "type": "g-generic",
-   "x": 370,
-   "y": 1150,
-   "label": "④ Camada de consumo",
-   "sub": "parecer, análise e feedback",
-   "w": 1290,
-   "h": 330,
-   "style": {
-    "stroke": "#147EBA",
-    "fill": "#147EBA",
-    "fo": 0.04,
-    "dashed": false,
-    "glyph": "browser"
-   }
-  },
-  {
-   "id": "cf",
-   "type": "cloudfront",
-   "x": 390,
-   "y": 1210,
-   "label": "Painel web",
-   "sub": "CloudFront + S3 · lê direto da API",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "14"
-   },
-   "stepDesc": "O analista abre o **painel web** com SSO e o parecer já está lá, sem baixar nem subir arquivo. Parecer, feedback e comentários vão para o **Aurora**."
-  },
-  {
-   "id": "apigw",
-   "type": "apigw",
-   "x": 690,
-   "y": 1210,
-   "label": "API Gateway",
-   "sub": "autorizador Cognito",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "api",
-   "type": "lambda",
-   "x": 990,
-   "y": 1210,
-   "label": "API do painel",
-   "sub": "Lambda · FastAPI",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "aur",
-   "type": "aurora",
-   "x": 1340,
-   "y": 1210,
-   "label": "Aurora PostgreSQL",
-   "sub": "parecer · feedback · histórico · versões",
-   "kind": "card",
-   "w": 300,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "cog",
-   "type": "cognito",
-   "x": 390,
-   "y": 1360,
-   "label": "Cognito",
-   "sub": "federação com o IdP corporativo",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "fh",
-   "type": "firehose",
-   "x": 690,
-   "y": 1360,
-   "label": "Data Firehose",
-   "sub": "telemetria: uso e tempo por UPE",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "16"
-   },
-   "stepDesc": "**Telemetria** (Firehose → S3) e pareceres (Aurora, via Athena) alimentam o **analítico semanal** no QuickSight: produto por agente e benefício em R$."
-  },
-  {
-   "id": "ath",
-   "type": "athena",
-   "x": 990,
-   "y": 1360,
-   "label": "Athena",
-   "sub": "consulta federada no Aurora + telemetria",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "qs",
-   "type": "quicksight",
-   "x": 1340,
-   "y": 1360,
-   "label": "QuickSight",
-   "sub": "analítico semanal · produto + benefício",
-   "kind": "card",
-   "w": 300,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "g_out",
-   "type": "g-generic",
-   "x": 1700,
-   "y": 1150,
-   "label": "⑤ Integração de saída",
-   "sub": "automática após aprovação do analista",
-   "w": 860,
-   "h": 330,
-   "style": {
-    "stroke": "#ED7100",
-    "fill": "#ED7100",
-    "fo": 0.04,
-    "dashed": false,
-    "glyph": "external"
-   }
-  },
-  {
-   "id": "evap",
-   "type": "eventbridge",
-   "x": 1720,
-   "y": 1210,
-   "label": "Parecer aprovado",
-   "sub": "evento no EventBridge",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "15"
-   },
-   "stepDesc": "Quando o analista **aprova** o parecer no painel, um evento aciona as **réplicas automáticas**: issue no Autodesk Docs (GPCA) e registro na Salesforce (GOT)."
-  },
-  {
-   "id": "rep_g",
-   "type": "lambda",
-   "x": 2020,
-   "y": 1210,
-   "label": "Réplica GPCA",
-   "sub": "Lambda · APS Issues API",
-   "kind": "card",
-   "w": 260,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "rep_o",
-   "type": "lambda",
-   "x": 2020,
-   "y": 1360,
-   "label": "Réplica GOT",
-   "sub": "Lambda · API Salesforce",
-   "kind": "card",
-   "w": 260,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "sqsdlq",
-   "type": "sqs",
-   "x": 1810,
-   "y": 1370,
-   "label": "SQS · DLQ",
-   "sub": "falhas de réplica",
-   "style": {},
-   "kind": "icon",
-   "w": 56,
-   "h": 56
-  },
-  {
-   "id": "g_fb",
-   "type": "g-generic",
-   "x": 370,
-   "y": 1540,
-   "label": "⑥ Feedback humano curado e drift",
-   "sub": "Step Functions semanal",
-   "w": 3110,
-   "h": 300,
-   "style": {
-    "stroke": "#0d9488",
-    "fill": "#0d9488",
-    "fo": 0.04,
-    "dashed": false,
-    "glyph": "users"
-   }
-  },
-  {
-   "id": "alpha",
-   "type": "glue",
-   "x": 390,
-   "y": 1610,
-   "label": "Concordância entre avaliadores",
-   "sub": "Glue job · Krippendorff's Alpha",
-   "kind": "card",
-   "w": 280,
-   "h": 70,
-   "style": {
-    "badge": "H1"
-   },
-   "stepDesc": "Toda semana, um **Glue job** lê os pareceres do **Aurora** e calcula a concordância entre os 11 analistas com o **Krippendorff's Alpha**.",
-   "stepColor": "#0d9488"
-  },
-  {
-   "id": "cons",
-   "type": "s3",
-   "x": 720,
-   "y": 1610,
-   "label": "Consensus Dataset",
-   "sub": "S3 · só itens com concordância",
-   "kind": "card",
-   "w": 260,
-   "h": 70,
-   "style": {
-    "badge": "H2"
-   },
-   "stepDesc": "Só os itens com concordância suficiente entram no **Consensus Dataset** (S3): item, candidato, agente e se acertou ou errou.",
-   "stepColor": "#0d9488"
-  },
-  {
-   "id": "togold",
-   "type": "data-sample",
-   "x": 1040,
-   "y": 1610,
-   "label": "Consensus → Golden",
-   "sub": "amostra estratificada · adjudicação · quarentena",
-   "kind": "card",
-   "w": 300,
-   "h": 70,
-   "style": {
-    "badge": "H4"
-   },
-   "stepDesc": "**Consensus → Golden**: parte do consenso é separada, adjudicada por especialista e mantida em **quarentena** (nunca vai à memória), renovando os Golden Datasets. Um **monitor de drift** compara os orçamentos recentes com o Golden e alerta quando surgem itens, programas ou unidades não cobertos.",
-   "stepColor": "#0d9488"
-  },
-  {
-   "id": "drift",
-   "type": "cloudwatch",
-   "x": 1400,
-   "y": 1610,
-   "label": "Monitor de data drift",
-   "sub": "S3 curated × Golden · alarme CloudWatch",
-   "kind": "card",
-   "w": 300,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "quar",
-   "type": "dynamodb",
-   "x": 1040,
-   "y": 1740,
-   "label": "Registro de quarentena",
-   "sub": "itens do Golden · filtro da memória",
-   "kind": "card",
-   "w": 300,
-   "h": 62,
-   "style": {}
-  },
-  {
-   "id": "g_val",
-   "type": "g-generic",
-   "x": 370,
-   "y": 1880,
-   "label": "⑦ Validação de mudanças",
-   "sub": "CI/CD · prompt, KB, regra ou modelo só sobem depois do portão",
-   "w": 3110,
-   "h": 420,
-   "style": {
-    "stroke": "#4338ca",
-    "fill": "#4338ca",
-    "fo": 0.04,
-    "dashed": false,
-    "glyph": "target"
-   }
-  },
-  {
-   "id": "pr",
-   "type": "codecommit",
-   "x": 390,
-   "y": 1950,
-   "label": "Proposta de mudança",
-   "sub": "pull request · config versionada",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "V1"
-   },
-   "stepDesc": "Toda mudança (prompt, limiar, KB, regra, router, fuzzy, modelo) entra por **pull request**, com a configuração versionada.",
-   "stepColor": "#4338ca"
-  },
-  {
-   "id": "cp",
-   "type": "codepipeline",
-   "x": 690,
-   "y": 1950,
-   "label": "CodePipeline",
-   "sub": "dispara a avaliação",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "cb",
-   "type": "codebuild",
-   "x": 990,
-   "y": 1950,
-   "label": "Avaliação offline",
-   "sub": "CodeBuild · candidata × 3 Golden",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "V2"
-   },
-   "stepDesc": "O **CodeBuild** roda a versão candidata e a de produção contra o **Golden Dataset do que mudou**: match (F1), router (F0,5) ou quantitativos (F1).",
-   "stepColor": "#4338ca"
-  },
-  {
-   "id": "gate",
-   "type": "ml-gate",
-   "x": 1290,
-   "y": 1950,
-   "label": "Portão de qualidade",
-   "sub": "não piorar > 1 ponto + piso por Golden",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "V3"
-   },
-   "stepDesc": "O **portão de qualidade** aprova só se nenhuma métrica piorar mais que 1 ponto em relação à produção e se o piso de cada Golden for respeitado.",
-   "stepColor": "#4338ca"
-  },
-  {
-   "id": "dep",
-   "type": "codedeploy",
-   "x": 1590,
-   "y": 1950,
-   "label": "Publicação",
-   "sub": "CodeDeploy · Lambda, ECS e configs",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {
-    "badge": "V4"
-   },
-   "stepDesc": "Só a versão aprovada é publicada: Lambdas, serviços no ECS, máquinas do Step Functions e agentes e Bases de Conhecimento na IARA.",
-   "stepColor": "#4338ca"
-  },
-  {
-   "id": "g_gold",
-   "type": "g-generic",
-   "x": 990,
-   "y": 2080,
-   "label": "Golden Datasets",
-   "sub": "S3 versionado com Object Lock · congelados",
-   "w": 860,
-   "h": 190,
-   "style": {
-    "stroke": "#4338ca",
-    "fill": "#4338ca",
-    "fo": 0.05,
-    "dashed": true,
-    "glyph": "target"
-   }
-  },
-  {
-   "id": "gm",
-   "type": "s3",
-   "x": 1010,
-   "y": 2140,
-   "label": "Golden · Match",
-   "sub": "item × candidato · F1",
-   "kind": "card",
-   "w": 260,
-   "h": 70,
-   "style": {
-    "badge": "V5"
-   },
-   "stepDesc": "Três **Golden Datasets** no S3 versionado com **Object Lock** (imutáveis): match contextual, semantic router e quantitativos. Cada caso guarda a versão do catálogo.",
-   "stepColor": "#4338ca"
-  },
-  {
-   "id": "gr",
-   "type": "s3",
-   "x": 1290,
-   "y": 2140,
-   "label": "Golden · Router",
-   "sub": "descartar ou manter · F0,5",
-   "kind": "card",
-   "w": 260,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "gq",
-   "type": "s3",
-   "x": 1570,
-   "y": 2140,
-   "label": "Golden · Quantitativos",
-   "sub": "item + direção · F1",
-   "kind": "card",
-   "w": 260,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "ecr",
-   "type": "ecr",
-   "x": 1900,
-   "y": 1950,
-   "label": "ECR",
-   "sub": "imagens versionadas dos serviços",
-   "kind": "card",
-   "w": 240,
-   "h": 70,
-   "style": {}
-  },
-  {
-   "id": "analista",
-   "type": "users",
-   "x": 60,
-   "y": 1230,
-   "label": "Analista de negócio",
-   "sub": "GOT · GPCA",
-   "kind": "icon",
-   "w": 56,
-   "h": 56,
-   "style": {}
-  },
-  {
-   "id": "gestao",
-   "type": "users",
-   "x": 60,
-   "y": 1380,
-   "label": "Gestão e board",
-   "sub": "analítico semanal",
-   "kind": "icon",
-   "w": 56,
-   "h": 56,
-   "style": {}
-  }
- ],
- "edges": [
-  {
-   "id": "e1",
-   "from": "sf",
-   "to": "eb",
-   "label": "evento",
-   "style": {
-    "badge": "A"
-   },
-   "stepDesc": "**Resolve A (extração manual)**: o orçamento da GOT entra por evento da Salesforce e é lido pela API; ninguém precisa extrair relatório.",
-   "stepColor": "#16a34a"
-  },
-  {
-   "id": "e2",
-   "from": "adk",
-   "to": "apiwh",
-   "label": "webhook",
-   "style": {}
-  },
-  {
-   "id": "e3",
-   "from": "apiwh",
-   "to": "eb",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e4",
-   "from": "eb",
-   "to": "colsf",
-   "label": "a cada orçamento",
-   "style": {
-    "badge": "C"
-   },
-   "stepDesc": "**Resolve C (uma rodada por dia)**: cada orçamento é verificado quando chega; a varredura agendada cobre eventos perdidos.",
-   "stepColor": "#16a34a"
-  },
-  {
-   "id": "e5",
-   "from": "eb",
-   "to": "colapx",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e6",
-   "from": "sch",
-   "to": "eb",
-   "label": "varredura",
-   "style": {
-    "dash": "dashed"
-   }
-  },
-  {
-   "id": "e7",
-   "from": "colsf",
-   "to": "sm_sec",
-   "label": "",
-   "style": {
-    "dash": "dotted"
-   }
-  },
-  {
-   "id": "e8",
-   "from": "sm_sec",
-   "to": "vault",
-   "label": "sincroniza",
-   "style": {
-    "dash": "dashed"
-   },
-   "fromSide": "left",
-   "toSide": "right"
-  },
-  {
-   "id": "e9",
-   "from": "colsf",
-   "to": "raw",
-   "label": "grava",
-   "style": {}
-  },
-  {
-   "id": "e10",
-   "from": "colapx",
-   "to": "raw",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e11",
-   "from": "raw",
-   "to": "dq",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e12",
-   "from": "dq",
-   "to": "cur",
-   "label": "",
-   "style": {
-    "badge": "B"
-   },
-   "stepDesc": "**Resolve B (arquivo como integração)**: contrato de dados na entrada e banco com API na saída, no lugar das planilhas no SharePoint.",
-   "stepColor": "#16a34a"
-  },
-  {
-   "id": "e13",
-   "from": "cur",
-   "to": "sfn",
-   "label": "evento: orçamento pronto",
-   "style": {},
-   "fromSide": "right",
-   "toSide": "left"
-  },
-  {
-   "id": "e14",
-   "from": "g_ref",
-   "to": "r1",
-   "label": "versão fixada",
-   "style": {
-    "dash": "dashed"
-   },
-   "fromSide": "right",
-   "toSide": "left"
-  },
-  {
-   "id": "e15",
-   "from": "sfn",
-   "to": "r1",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e16",
-   "from": "lpu",
-   "to": "mb",
-   "label": "não LPU",
-   "style": {}
-  },
-  {
-   "id": "e17",
-   "from": "mb",
-   "to": "np",
-   "label": "restantes",
-   "style": {}
-  },
-  {
-   "id": "e18",
-   "from": "np",
-   "to": "router",
-   "label": "restantes",
-   "style": {}
-  },
-  {
-   "id": "e19",
-   "from": "router",
-   "to": "fuzzy",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e20",
-   "from": "fuzzy",
-   "to": "nl",
-   "label": "restantes",
-   "style": {}
-  },
-  {
-   "id": "e21",
-   "from": "r1",
-   "to": "msvc",
-   "label": "match em lote",
-   "style": {},
-   "fromSide": "right",
-   "toSide": "left"
-  },
-  {
-   "id": "e22",
-   "from": "msvc",
-   "to": "mcache",
-   "label": "consulta primeiro",
-   "style": {
-    "arrow": "both",
-    "badge": "D"
-   },
-   "stepDesc": "**Resolve D (cascata item a item, top 1)**: um serviço único de match, em lote, que consulta primeiro o cache de equivalências e usa top-k com limiar; só o que não está no cache vai ao LLM.",
-   "stepColor": "#16a34a"
-  },
-  {
-   "id": "e23",
-   "from": "msvc",
-   "to": "ag",
-   "label": "invoca em lote",
-   "style": {
-    "color": "#EC7000"
-   },
-   "fromSide": "top",
-   "toSide": "left",
-   "mid": 195
-  },
-  {
-   "id": "e24",
-   "from": "ag",
-   "to": "kbs",
-   "label": "consulta",
-   "style": {
-    "color": "#EC7000"
-   }
-  },
-  {
-   "id": "e25",
-   "from": "kbs",
-   "to": "embs",
-   "label": "",
-   "style": {
-    "color": "#EC7000"
-   }
-  },
-  {
-   "id": "e26",
-   "from": "ag",
-   "to": "vmm",
-   "label": "casos validados",
-   "style": {
-    "dash": "dashed",
-    "color": "#0d9488"
-   },
-   "fromSide": "right",
-   "toSide": "right",
-   "mid": 3925
-  },
-  {
-   "id": "e27",
-   "from": "r3",
-   "to": "aps",
-   "label": "layouts · só versões novas",
-   "style": {},
-   "fromSide": "bottom",
-   "toSide": "left"
-  },
-  {
-   "id": "e28",
-   "from": "lay",
-   "to": "ext",
-   "label": "",
-   "style": {
-    "badge": "E"
-   },
-   "stepDesc": "**Resolve E (reextração do layout)**: o layout só é extraído quando muda de versão; o JSON fica em cache no S3 e é reaproveitado.",
-   "stepColor": "#16a34a"
-  },
-  {
-   "id": "e29",
-   "from": "ext",
-   "to": "lcache",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e30",
-   "from": "lcache",
-   "to": "qag",
-   "label": "JSON",
-   "style": {}
-  },
-  {
-   "id": "e31",
-   "from": "qag",
-   "to": "iara",
-   "label": "SDK IARA",
-   "style": {
-    "color": "#EC7000"
-   },
-   "fromSide": "bottom",
-   "toSide": "left",
-   "mid": 930
-  },
-  {
-   "id": "e32",
-   "from": "r1",
-   "to": "consol",
-   "label": "resultado",
-   "style": {},
-   "fromSide": "left",
-   "toSide": "left",
-   "mid": 1350
-  },
-  {
-   "id": "e33",
-   "from": "r2",
-   "to": "consol",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e34",
-   "from": "r3",
-   "to": "consol",
-   "label": "",
-   "style": {},
-   "fromSide": "bottom",
-   "toSide": "right"
-  },
-  {
-   "id": "e35",
-   "from": "consol",
-   "to": "aur",
-   "label": "parecer por item",
-   "style": {
-    "animated": true
-   },
-   "fromSide": "bottom",
-   "toSide": "top"
-  },
-  {
-   "id": "e36",
-   "from": "analista",
-   "to": "cf",
-   "label": "analisa e aprova",
-   "style": {
-    "badge": "F"
-   },
-   "stepDesc": "**Resolve F (passos manuais no consumo)**: o painel lê o parecer da API, e as réplicas saem automaticamente para o Autodesk Docs (GPCA) e a Salesforce (GOT).",
-   "stepColor": "#16a34a"
-  },
-  {
-   "id": "e37",
-   "from": "cf",
-   "to": "apigw",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e38",
-   "from": "apigw",
-   "to": "api",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e39",
-   "from": "api",
-   "to": "aur",
-   "label": "parecer · feedback",
-   "style": {
-    "badge": "G"
-   },
-   "stepDesc": "**Resolve G (Microsoft Lists como base)**: parecer, feedback e telemetria ficam no **Aurora** e no S3, sem limite de visualização e ligados a cada item e versão.",
-   "stepColor": "#16a34a"
-  },
-  {
-   "id": "e40",
-   "from": "cf",
-   "to": "cog",
-   "label": "SSO",
-   "style": {
-    "dash": "dashed"
-   }
-  },
-  {
-   "id": "e41",
-   "from": "cog",
-   "to": "idp",
-   "label": "federação",
-   "style": {
-    "dash": "dashed"
-   },
-   "fromSide": "left",
-   "toSide": "bottom"
-  },
-  {
-   "id": "e42",
-   "from": "api",
-   "to": "fh",
-   "label": "eventos de uso",
-   "style": {
-    "dash": "dashed"
-   },
-   "fromSide": "bottom",
-   "toSide": "top"
-  },
-  {
-   "id": "e43",
-   "from": "fh",
-   "to": "ath",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e44",
-   "from": "ath",
-   "to": "qs",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e45",
-   "from": "gestao",
-   "to": "qs",
-   "label": "semanal",
-   "style": {},
-   "fromSide": "bottom",
-   "toSide": "bottom",
-   "mid": 1500
-  },
-  {
-   "id": "e46",
-   "from": "api",
-   "to": "evap",
-   "label": "aprovação",
-   "style": {},
-   "fromSide": "top",
-   "toSide": "top",
-   "mid": 1180
-  },
-  {
-   "id": "e47",
-   "from": "evap",
-   "to": "rep_g",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e48",
-   "from": "evap",
-   "to": "rep_o",
-   "label": "",
-   "style": {},
-   "fromSide": "bottom",
-   "toSide": "left"
-  },
-  {
-   "id": "e49",
-   "from": "rep_g",
-   "to": "adk_rep",
-   "label": "issue",
-   "style": {}
-  },
-  {
-   "id": "e50",
-   "from": "rep_o",
-   "to": "sf_rep",
-   "label": "API",
-   "style": {}
-  },
-  {
-   "id": "e51",
-   "from": "rep_o",
-   "to": "sqsdlq",
-   "label": "falha",
-   "style": {
-    "dash": "dashed"
-   }
-  },
-  {
-   "id": "e52",
-   "from": "kchg",
-   "to": "kbb",
-   "label": "",
-   "style": {}
-  },
-  {
-   "id": "e53",
-   "from": "kbb",
-   "to": "emb",
-   "label": "",
-   "style": {},
-   "fromSide": "bottom",
-   "toSide": "top"
-  },
-  {
-   "id": "e54",
-   "from": "emb",
-   "to": "kbs",
-   "label": "publica KB",
-   "style": {
-    "color": "#EC7000"
-   },
-   "fromSide": "right",
-   "toSide": "left",
-   "mid": 3530
-  },
-  {
-   "id": "e55",
-   "from": "aur",
-   "to": "alpha",
-   "label": "pareceres da semana",
-   "style": {
-    "dash": "dashed",
-    "color": "#0d9488"
-   },
-   "fromSide": "right",
-   "toSide": "top",
-   "mid": 1680
-  },
-  {
-   "id": "e56",
-   "from": "alpha",
-   "to": "cons",
-   "label": "consenso",
-   "style": {
-    "dash": "dashed",
-    "color": "#0d9488"
-   }
-  },
-  {
-   "id": "e57",
-   "from": "cons",
-   "to": "vmm",
-   "label": "publica semanal",
-   "style": {
-    "dash": "dashed",
-    "color": "#0d9488"
-   },
-   "fromSide": "right",
-   "toSide": "bottom"
-  },
-  {
-   "id": "e58",
-   "from": "cons",
-   "to": "togold",
-   "label": "amostra",
-   "style": {
-    "dash": "dashed",
-    "color": "#0d9488"
-   }
-  },
-  {
-   "id": "e59",
-   "from": "togold",
-   "to": "quar",
-   "label": "",
-   "style": {
-    "dash": "dashed",
-    "color": "#0d9488"
-   }
-  },
-  {
-   "id": "e60",
-   "from": "quar",
-   "to": "cons",
-   "label": "filtra a memória",
-   "style": {
-    "dash": "dotted",
-    "color": "#0d9488"
-   },
-   "fromSide": "left",
-   "toSide": "bottom"
-  },
-  {
-   "id": "e61",
-   "from": "drift",
-   "to": "g_gold",
-   "label": "compara cobertura",
-   "style": {
-    "dash": "dashed",
-    "color": "#0d9488"
-   },
-   "fromSide": "bottom",
-   "toSide": "right",
-   "mid": 1950
-  },
-  {
-   "id": "e62",
-   "from": "togold",
-   "to": "g_gold",
-   "label": "renova",
-   "style": {
-    "dash": "dashed",
-    "color": "#0d9488"
-   },
-   "fromSide": "bottom",
-   "toSide": "top"
-  },
-  {
-   "id": "e63",
-   "from": "pr",
-   "to": "cp",
-   "label": "",
-   "style": {
-    "color": "#4338ca"
-   }
-  },
-  {
-   "id": "e64",
-   "from": "cp",
-   "to": "cb",
-   "label": "",
-   "style": {
-    "color": "#4338ca"
-   }
-  },
-  {
-   "id": "e65",
-   "from": "g_gold",
-   "to": "cb",
-   "label": "casos",
-   "style": {
-    "color": "#4338ca"
-   },
-   "fromSide": "top",
-   "toSide": "bottom"
-  },
-  {
-   "id": "e66",
-   "from": "cb",
-   "to": "gate",
-   "label": "",
-   "style": {
-    "color": "#4338ca"
-   }
-  },
-  {
-   "id": "e67",
-   "from": "gate",
-   "to": "dep",
-   "label": "aprovada",
-   "style": {
-    "width": 2,
-    "color": "#16a34a"
-   }
-  },
-  {
-   "id": "e68",
-   "from": "gate",
-   "to": "pr",
-   "label": "reprovada",
-   "style": {
-    "dash": "dashed",
-    "color": "#DD344C"
-   },
-   "fromSide": "bottom",
-   "toSide": "bottom",
-   "mid": 2050
-  },
-  {
-   "id": "e69",
-   "from": "dep",
-   "to": "ecr",
-   "label": "",
-   "style": {
-    "color": "#4338ca"
-   }
-  },
-  {
-   "id": "e70",
-   "from": "dep",
-   "to": "g_proc",
-   "label": "publica",
-   "style": {
-    "dash": "dashed",
-    "color": "#4338ca"
-   },
-   "fromSide": "right",
-   "toSide": "bottom",
-   "mid": 2580
-  }
- ]
 }

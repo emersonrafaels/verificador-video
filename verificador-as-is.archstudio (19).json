@@ -18,7 +18,12 @@
     "badgeShape": "square",
     "badgeColor": "#147EBA"
   },
-  "savedAt": "2026-11-05T11:40:22.096Z",
+  "view": {
+    "x": 218.80205486866623,
+    "y": -1006.4107337368744,
+    "k": 0.6936910126770763
+  },
+  "savedAt": "2026-11-17T11:23:26.843Z",
   "pageTitle": "Página 1",
   "legend": {
     "order": [
@@ -1585,8 +1590,8 @@
       "y": 1935,
       "w": 260,
       "h": 70,
-      "label": "Portão de qualidade",
-      "sub": "não piorar > 1 ponto + piso por Golden",
+      "label": "Gate de qualidade do modelo",
+      "sub": "métrica da nova versão > métrica da versão anterior",
       "kind": "card",
       "style": {
         "badge": "V3",
@@ -1615,7 +1620,7 @@
         }
       ],
       "parent": "g_val",
-      "stepDesc": "O **portão de qualidade** aprova só se a candidata não piorar mais que **1 ponto** em relação à produção e respeitar o **piso** de cada Golden; **reprovada** volta para ajuste.",
+      "stepDesc": "O **portão de qualidade** aprova só se a candidata melhorar mais que **1 ponto** em relação à produção; **reprovada** volta para ajuste.",
       "stepColor": "#4338ca",
       "notes": "Pisos iniciais = desempenho da produção na primeira rodada; sobem conforme os agentes melhoram."
     },
