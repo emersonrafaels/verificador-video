@@ -1,0 +1,257 @@
+{
+  "format": "atlas-study",
+  "version": 1,
+  "packageId": "e397649e-7348-47f1-874c-06e8ac3fe40d",
+  "exportedAt": "2026-11-22T20:51:18.465Z",
+  "author": "Emerson",
+  "app": "Atlas Itaú",
+  "study": {
+    "id": "b509eac9-2ae2-48b6-ad32-97de27e84e29",
+    "name": "Centrão",
+    "description": "",
+    "agencyIds": [
+      "itau-oficial-0064",
+      "itau-oficial-0151",
+      "itau-oficial-8774",
+      "itau-oficial-0177"
+    ],
+    "createdAt": "2026-11-19T01:13:08.320Z",
+    "updatedAt": "2026-11-20T22:09:55.744Z",
+    "scenario": {
+      "version": 1,
+      "baseline": [
+        {
+          "id": "itau-oficial-0064",
+          "name": "Ag. 0064 - SP BAIRRO BOM RETIRO",
+          "num_ponto": "0064",
+          "pointType": "varejo",
+          "address": "R DA GRACA 422, BOM RETIRO, SAO PAULO - SP, 01125-000",
+          "lat": -23.527711,
+          "lng": -46.63948,
+          "active": true,
+          "uf": "SP",
+          "city": "SAO PAULO",
+          "district": "BOM RETIRO"
+        },
+        {
+          "id": "itau-oficial-0151",
+          "name": "Ag. 0151 - SP TAMANDARE",
+          "num_ponto": "0151",
+          "pointType": "varejo",
+          "address": "R TAMANDARE 175, LIBERDADE, SAO PAULO - SP, 01525-001",
+          "lat": -23.561199,
+          "lng": -46.632515,
+          "active": true,
+          "uf": "SP",
+          "city": "SAO PAULO",
+          "district": "LIBERDADE"
+        },
+        {
+          "id": "itau-oficial-8774",
+          "name": "Ag. 8774 - SP 7 DE ABRIL REPUBLICA",
+          "num_ponto": "8774",
+          "pointType": "varejo",
+          "address": "R SETE DE ABRIL 230, REPUBLICA, SAO PAULO - SP, 01044-000",
+          "lat": -23.545547,
+          "lng": -46.641426,
+          "active": true,
+          "uf": "SP",
+          "city": "SAO PAULO",
+          "district": "REPUBLICA"
+        },
+        {
+          "id": "itau-oficial-0177",
+          "name": "Ag. 0177 - SP AV LIBERDADE",
+          "num_ponto": "0177",
+          "pointType": "varejo",
+          "address": "AV LIBERDADE 87, LIBERDADE, SAO PAULO - SP, 01503-000",
+          "lat": -23.554233,
+          "lng": -46.635298,
+          "active": true,
+          "uf": "SP",
+          "city": "SAO PAULO",
+          "district": "LIBERDADE"
+        }
+      ],
+      "actions": [
+        {
+          "pointId": "itau-oficial-0064",
+          "type": "close",
+          "targetId": ""
+        },
+        {
+          "pointId": "itau-oficial-8774",
+          "type": "share",
+          "targetId": "itau-oficial-0151"
+        },
+        {
+          "pointId": "itau-oficial-0177",
+          "type": "custom_948b24b9b3e64ce19cfe6c2c8e4ab407",
+          "targetId": ""
+        }
+      ],
+      "capturedAt": "2026-11-19T13:29:33.861Z",
+      "notes": "",
+      "unavailableIds": []
+    }
+  },
+  "points": [
+    {
+      "id": "itau-oficial-0064",
+      "name": "Ag. 0064 - SP BAIRRO BOM RETIRO",
+      "segment": "varejo",
+      "address": "R DA GRACA 422, BOM RETIRO, SAO PAULO - SP, 01125-000",
+      "lat": -23.527711,
+      "lng": -46.63948,
+      "active": true,
+      "source": "https://www.itau.com.br/mapa-de-agencias",
+      "sourceQuery": "São Paulo, SP — entorno do centro",
+      "consultedAt": "2026-11-17",
+      "num_ponto": "0064",
+      "uf": "SP",
+      "city": "SAO PAULO",
+      "district": "BOM RETIRO",
+      "additionalFields": [],
+      "demo": false,
+      "pointType": "varejo"
+    },
+    {
+      "id": "itau-oficial-0151",
+      "name": "Ag. 0151 - SP TAMANDARE",
+      "segment": "varejo",
+      "address": "R TAMANDARE 175, LIBERDADE, SAO PAULO - SP, 01525-001",
+      "lat": -23.561199,
+      "lng": -46.632515,
+      "active": true,
+      "source": "https://www.itau.com.br/mapa-de-agencias",
+      "sourceQuery": "São Paulo, SP — entorno do centro",
+      "consultedAt": "2026-11-17",
+      "num_ponto": "0151",
+      "uf": "SP",
+      "city": "SAO PAULO",
+      "district": "LIBERDADE",
+      "additionalFields": [],
+      "demo": false,
+      "pointType": "varejo"
+    },
+    {
+      "id": "itau-oficial-8774",
+      "name": "Ag. 8774 - SP 7 DE ABRIL REPUBLICA",
+      "segment": "varejo",
+      "address": "R SETE DE ABRIL 230, REPUBLICA, SAO PAULO - SP, 01044-000",
+      "lat": -23.545547,
+      "lng": -46.641426,
+      "active": true,
+      "source": "https://www.itau.com.br/mapa-de-agencias",
+      "sourceQuery": "São Paulo, SP — entorno do centro",
+      "consultedAt": "2026-11-17",
+      "num_ponto": "8774",
+      "uf": "SP",
+      "city": "SAO PAULO",
+      "district": "REPUBLICA",
+      "additionalFields": [],
+      "demo": false,
+      "pointType": "varejo"
+    },
+    {
+      "id": "itau-oficial-0177",
+      "name": "Ag. 0177 - SP AV LIBERDADE",
+      "segment": "varejo",
+      "address": "AV LIBERDADE 87, LIBERDADE, SAO PAULO - SP, 01503-000",
+      "lat": -23.554233,
+      "lng": -46.635298,
+      "active": true,
+      "source": "https://www.itau.com.br/mapa-de-agencias",
+      "sourceQuery": "São Paulo, SP — entorno do centro",
+      "consultedAt": "2026-11-17",
+      "num_ponto": "0177",
+      "uf": "SP",
+      "city": "SAO PAULO",
+      "district": "LIBERDADE",
+      "additionalFields": [],
+      "demo": false,
+      "pointType": "varejo"
+    }
+  ],
+  "pointTypes": [
+    {
+      "id": "varejo",
+      "label": "Varejo",
+      "color": "#ff6200",
+      "shape": "pin"
+    }
+  ],
+  "actionTypes": [
+    {
+      "id": "custom_948b24b9b3e64ce19cfe6c2c8e4ab407",
+      "label": "Reformar - Plano Diretor",
+      "color": "#b83d3d",
+      "symbol": "renovation",
+      "shape": "square"
+    }
+  ],
+  "appearance": {
+    "pointIcons": {
+      "varejo": {
+        "color": "#ff6200",
+        "shape": "pin"
+      }
+    },
+    "studyVisuals": {
+      "enabled": true,
+      "showBadges": true,
+      "showLabels": true,
+      "showConnections": true,
+      "showDestinations": true,
+      "showConnectionLabels": true,
+      "showLegend": true,
+      "showUnchanged": false,
+      "lineWidth": 3,
+      "lineStyle": "dashed",
+      "actions": {
+        "keep": {
+          "label": "Manter",
+          "color": "#003399",
+          "symbol": "check",
+          "shape": "circle",
+          "visible": true
+        },
+        "close": {
+          "label": "Encerrar",
+          "color": "#c43739",
+          "symbol": "cross",
+          "shape": "circle",
+          "visible": true
+        },
+        "move": {
+          "label": "Remanejar",
+          "color": "#e86600",
+          "symbol": "arrow",
+          "shape": "square",
+          "visible": true
+        },
+        "share": {
+          "label": "Compartilhar",
+          "color": "#087f83",
+          "symbol": "share",
+          "shape": "circle",
+          "visible": true
+        },
+        "activate": {
+          "label": "Ativar",
+          "color": "#228446",
+          "symbol": "plus",
+          "shape": "diamond",
+          "visible": true
+        },
+        "custom_948b24b9b3e64ce19cfe6c2c8e4ab407": {
+          "label": "Reformar - Plano Diretor",
+          "color": "#b83d3d",
+          "symbol": "renovation",
+          "shape": "square",
+          "visible": true
+        }
+      }
+    }
+  }
+}
