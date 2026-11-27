@@ -1317,6 +1317,28 @@ body.flow .al-scen .ghost{grid-column:1/-1}
 .pdfcap .vcen{box-shadow:none}
 body.flow .top-r{flex-wrap:wrap}
 
+/* painel ao vivo: FTE em destaque e VPL único */
+.live .lvk b{font-size:40px}
+.ftek{padding:12px 16px 12px;border-radius:16px;border:1px solid var(--line-b);background:var(--soft-b);border-left:5px solid var(--c-soft);display:flex;flex-direction:column;gap:6px}
+.ftek small{font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--c-soft)}
+.ftek-n{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.ftek-n b{font-size:44px;font-weight:900;letter-spacing:-.03em;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ftek-n span{font-size:13px;font-weight:700;color:var(--body)}
+.ftek-n em{font-style:normal;color:var(--muted);font-weight:600}
+.ftek-p{display:flex;flex-wrap:wrap;gap:3px 2px;min-height:0}
+.ftek-p:empty{display:none}
+.ftek-p i{position:relative;width:24px;height:29px;display:block}
+.ftek-p svg{position:absolute;inset:0;width:24px;height:29px}
+.ftek-p svg:first-child{fill:var(--line-b)}
+.ftek-p svg:last-child{fill:var(--c-soft);clip-path:inset(0 calc((1 - var(--f)) * 100%) 0 0)}
+.ftek-s{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;font-weight:700;color:var(--muted)}
+.ftek-s span:last-child{color:var(--body)}
+.vpl1{padding:10px 16px;border-radius:16px;border:1px solid var(--line-g);background:var(--soft-g);border-left:5px solid var(--ok)}
+.vpl1 > div{display:flex;flex-direction:column;gap:2px}
+.vpl1 small{font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-g)}
+.vpl1 b{font-size:34px;line-height:1.05;font-weight:900;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.vpl1 > span{display:block;font-size:12px;font-weight:600;color:var(--body);margin-top:2px}
+
 </style>
 </head>
 <body>
@@ -1427,13 +1449,15 @@ body.flow .top-r{flex-wrap:wrap}
         <div class="panel-head"><span class="ph">Resultado<button type="button" class="ibtn" data-info="live" aria-label="Saiba mais: Resultado">i</button></span><small data-k="liveLbl"></small></div>
         <div class="panel-body">
           <div class="lvk c-o"><small data-tip-h="Hard money" data-tip="Soma das alavancas de hard money, em R$ por ano em regime (ano 1, captura 100%)." tabindex="0">Hard money por ano</small><b data-k="hmY">–</b><span data-k="hmYs"></span></div>
-          <div class="lvk2">
-            <div class="lvk c-b"><small>Soft money · horas</small><b data-k="hY">–</b><span data-k="fteY"></span></div>
-            <div class="lvk c-b"><small data-tip-h="Valor da capacidade" data-tip="Horas × custo da hora × % da capacidade convertida. Não é somado ao hard money, a menos que as premissas gerais digam." tabindex="0">Valor da capacidade</small><b data-k="rsY">–</b><span>por ano · não somado</span></div>
+          <div class="ftek">
+            <div class="ftek-h"><small data-tip-h="Capacidade liberada" data-tip="Horas liberadas por ano ÷ horas produtivas de 1 pessoa (premissas gerais). É capacidade, não corte de quadro." tabindex="0">Soft money · capacidade liberada</small></div>
+            <div class="ftek-n"><b data-k="fteBig">–</b><span>pessoas em tempo integral<em data-k="fteH"></em></span></div>
+            <div class="ftek-p" id="ftePics" aria-hidden="true"></div>
+            <div class="ftek-s"><span data-k="fteLeg"></span><span data-k="fteRs"></span></div>
           </div>
-          <div class="lvk2">
-            <div class="lvk c-g"><small data-k="vplLbl">VPL hard money</small><b data-k="vplH">–</b><span data-k="vplHs"></span></div>
-            <div class="lvk c-p"><small>VPL do projeto</small><b data-k="vplP">–</b><span data-k="vplPs"></span></div>
+          <div class="vpl1">
+            <div><small data-k="vpl1Lbl" data-tip-h="VPL" data-tip="Um único VPL: o benefício considerado menos o custo do projeto, a valor presente. Sem custo informado, é o VPL do benefício. O detalhe ano a ano fica no slide VPL." tabindex="0">VPL</small><b data-k="vpl1">–</b></div>
+            <span data-k="vpl1S"></span>
           </div>
           <div class="mini" id="miniBars"></div>
         </div>
@@ -2017,6 +2041,18 @@ function render(R,mode,cen){
   setK('vplP',P.capex+P.opex>0?money(R.vplP):(soma?money(R.vplBen):money(R.vplH)));
   setK('vplPs',(P.capex+P.opex>0?'líquido do custo · ':'sem custo informado · ')+(soma?'hard + soft':'só hard'));
   setK('liveLbl','cenário '+CENL[cen]);
+  if(ED){ const fte=R.fteY, sc=fte>40?Math.ceil(fte/40):1, n=Math.ceil(fte/sc-1e-9), full=Math.floor(fte/sc+1e-9), part=fte/sc-full;
+    setK('fteBig',(fte>=10?nf(fte,1):nf(fte,fte>0&&fte<1?2:1)).replace(/,0$/,'')+' FTE');
+    setK('fteH',' · '+hrs(R.hY)+' por ano');
+    setK('fteLeg',R.hY>0?(sc>1?'cada boneco = '+sc+' FTE · ':'')+'1 FTE = '+nf(C.hAno,0)+' h/ano':'sem alavancas de soft money');
+    setK('fteRs',R.hY>0?'≈ '+money(R.rsY)+'/ano em capacidade':'');
+    const pp='<svg viewBox="0 0 20 24"><circle cx="10" cy="5.5" r="4.5"/><path d="M1.5 23v-4.5C1.5 13.8 5.3 11 10 11s8.5 2.8 8.5 7.5V23z"/></svg>';
+    $('#ftePics').innerHTML=Array.from({length:Math.min(n,40)},(_,k)=>`<i style="--f:${k<full?1:Math.max(.08,part)}">${pp}${pp}</i>`).join('');
+    const hasC=P.capex+P.opex>0, ben=R.soma?'hard + soft':'hard money';
+    setK('vpl1Lbl','VPL em '+N+(N===1?' ano':' anos')+(hasC?' · líquido do custo':''));
+    setK('vpl1',money(hasC?R.vplP:R.vplBen));
+    setK('vpl1S',hasC?'benefício '+money(R.vplBen)+' ('+ben+') − custo '+money(R.vplBen-R.vplP)+' · a '+pct(P.taxa)+' a.a.':'benefício em '+ben+' a '+pct(P.taxa)+' a.a. · informe o custo nas premissas para o VPL líquido');
+  }
   $$('[data-tipdyn]').forEach(el=>{ if(!el.dataset.tip0) el.dataset.tip0=el.dataset.tip; const d=el.dataset.tipdyn;
     el.dataset.tip=el.dataset.tip0+'<br><b>No projeto atual:</b> '+(d==='ch'?'R$ '+nf(C.ch,2)+' por hora':d==='k'?pct(P.conv)+' ('+nf(P.conv/100,2)+')':hrs(R.hY)+' por ano'); });
   setK('hAno',nf(C.hAno,0)+' h'); setK('chTxt','R$ '+nf(C.ch,2)+'/h'); setK('custoAnoTxt',money(C.custoAno)+' por pessoa ao ano');
@@ -2037,8 +2073,8 @@ function render(R,mode,cen){
   setK('fimP',P.nome+' · cenário '+CENL[cen]);
   /* barras mini (painel ao vivo) */
   const hl=R.L.filter(x=>!x.soft), sl=R.L.filter(x=>x.soft), mxH=Math.max(1,...hl.map(x=>x.hm)), mxS=Math.max(1,...sl.map(x=>x.h));
-  const bar=(x,soft,mx)=>`<div class="r ${soft?'c-b':'c-o'}" style="--c:${soft?'var(--c-soft)':'var(--c-hard)'}"><span title="${esc(x.a.nome)}">${esc(x.a.nome)}</span><div class="tr"><i style="width:${(soft?x.h:x.hm)/mx*100}%"></i></div><b>${soft?hrs(x.h):money(x.hm)}</b></div>`;
-  if(ED) $('#miniBars').innerHTML=(hl.length?'<div class="mini-h">Hard money por alavanca</div>'+hl.map(x=>bar(x,0,mxH)).join(''):'')+(sl.length?'<div class="mini-h">Soft money por alavanca</div>'+sl.map(x=>bar(x,1,mxS)).join(''):'');
+  const bar=(x,soft,mx)=>`<div class="r ${soft?'c-b':'c-o'}" style="--c:${soft?'var(--c-soft)':'var(--c-hard)'}"><span title="${esc(x.a.nome)}">${esc(x.a.nome)}</span><div class="tr"><i style="width:${(soft?x.h:x.hm)/mx*100}%"></i></div><b>${soft?(nf(C.hAno>0?x.h/C.hAno:0,1).replace(/,0$/,'')+' FTE'):money(x.hm)}</b></div>`;
+  if(ED) $('#miniBars').innerHTML=(hl.length?'<div class="mini-h">Hard money por alavanca</div>'+hl.map(x=>bar(x,0,mxH)).join(''):'')+(sl.length?'<div class="mini-h">Soft money por alavanca · em FTE</div>'+sl.map(x=>bar(x,1,mxS)).join(''):'');
   /* composição */
   if(ED) return;
   const cbar=(x,soft,mx)=>`<div class="r" style="--c:${soft?'var(--c-soft)':'var(--c-hard)'}"><span title="${esc(x.a.nome)}">${esc(x.a.nome)}</span><div class="tr"><i style="width:${(soft?x.h:x.hm)/mx*100}%"></i></div><b>${soft?hrs(x.h):money(x.hm)}</b></div>`;
@@ -2337,10 +2373,10 @@ const INFO={
     <div><i>4</i><div><b>Defina o % só do produto</b><span>Quanto a operação <b>não</b> conseguiria sem o produto. Para horas, normalmente 100%.</span></div></div>
     <div><i>5</i><div><b>Marque a origem e como validar</b><span>Medido, Backtest ou Premissa, e o caminho para provar o número.</span></div></div>
     <div><i>6</i><div><b>Ano 0 próprio, se precisar</b><span>Para alavancas que começam em datas diferentes. Em branco, vale a curva de captura geral.</span></div></div></div>`},
-  live:{k:'Alavancas',t:'O resultado ao vivo',b:`<div class="ib-g"><div><b>Por ano em regime</b><span>Valor de um ano cheio com captura de 100%, sem curva de implantação, variação da base ou desconto.</span></div>
-    <div><b>Valor da capacidade</b><span>Horas × custo da hora × % convertida. Fica fora do VPL do projeto, salvo escolha explícita.</span></div>
-    <div><b>VPL hard</b><span>Hard money do ano 0 ao ano N, com captura e desconto.</span></div>
-    <div><b>VPL do projeto</b><span>Benefício considerado menos construção e operação, a valor presente.</span></div></div>`},
+  live:{k:'Alavancas',t:'O resultado ao vivo',b:`<div class="ib-g"><div><b>Hard money por ano</b><span>Soma das alavancas de hard money em um ano cheio, com captura de 100%, sem curva nem desconto.</span></div>
+    <div><b>Capacidade liberada em FTE</b><span>Horas liberadas por ano ÷ horas produtivas de 1 pessoa. Cada boneco é uma pessoa em tempo integral; o último aparece parcialmente preenchido. É capacidade, não corte de quadro.</span></div>
+    <div><b>Um único VPL</b><span>Com custo informado: benefício − custo, a valor presente. Sem custo: o VPL do benefício. O benefício é só hard money, ou hard + soft se as premissas gerais mandarem somar.</span></div>
+    <div><b>Detalhe</b><span>VPL só do hard money, da capacidade e a conta ano a ano ficam no slide VPL.</span></div></div>`},
   pessoa:{k:'Premissas gerais',t:'Custo da hora e 1 FTE',b:`<div class="m-formula"><small>Custo anual por pessoa</small><b>Salário mensal × fator de encargos × meses de custo por ano</b></div>
     <div class="m-formula"><small>1 FTE</small><b>Horas por dia × dias úteis por mês × meses trabalhados × produtividade</b></div>
     <div class="m-formula"><small>Custo da hora</small><b>Custo anual por pessoa ÷ horas de 1 FTE</b></div>
@@ -2433,7 +2469,9 @@ const TOURS={
     {s:'#alList .al .al-out',t:'Leia a frase',b:'A conta aparece por extenso, com os números do projeto, e logo abaixo a fórmula. À direita, o resultado por ano em regime.'},
     {s:'#alList .al .al-val',t:'Como validar e ano 0',b:'Escreva como o número vai ser provado: aparece no slide Como provar. O <b>ano 0</b> próprio é opcional, para alavancas que começam em outra data.'},
     {s:'#alList .al-add',t:'Adicione alavancas',b:'Uma alavanca por mecanismo de valor. Duplique (⧉) para variar uma existente e evite contar o mesmo ganho duas vezes.'},
-    {s:'#slAlav .live',t:'Acompanhe o resultado',b:'Hard money, horas, valor da capacidade e VPL mudam a cada tecla. As barras mostram quanto pesa cada alavanca.'},
+    {s:'#slAlav .live .lvk',t:'Hard money por ano',b:'Dinheiro que o banco deixa de gastar ou perder em um ano cheio. Muda a cada tecla.'},
+    {s:'#slAlav .ftek',t:'Capacidade em pessoas',b:'As horas liberadas convertidas em <b>FTE</b>: cada boneco é uma pessoa em tempo integral. É capacidade para realocar, não corte de quadro.'},
+    {s:'#slAlav .vpl1',t:'Um VPL só',b:'Benefício menos custo, a valor presente. O detalhe ano a ano e os VPLs separados ficam no slide VPL.'},
     {s:'#slAlav [data-vsave]',x:'#slAlav [data-vimport]',t:'Salve versões',b:'Guarde o projeto para reabrir depois, compartilhar com o time ou baixar em JSON. Em <b>Importar</b> você abre uma versão salva.'}],
   'Premissas':[
     {s:'#slPrem [data-seg="modo"]',t:'Custo da hora',b:'Calcule pelo salário e pela jornada, ou informe um custo da hora já fechado com Finanças.'},
