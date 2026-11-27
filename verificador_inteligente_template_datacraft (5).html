@@ -1,0 +1,1657 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Verificador Inteligente de Orçamentos • GOT e GPCA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+/* Template DataCraft (herdado do deck "Valoração Atest.AI"): canvas 16:9 de 1600×900 escalado para a janela;
+   em telas estreitas vira leitura rolável. Azul Itaú, laranja de destaque, verde para "medido/realizado". */
+:root{
+  --brand:#001E62; --brand2:#06348A; --accent:#FF6200; --accent2:#FF8A2A; --ok:#008A22;
+  --bg:#F7F8FB; --card:#FFFFFF; --card2:#FBFCFF; --line:#DDE3EF;
+  --ink:#0B2E7A; --txt:#101B3D; --body:#40506E; --muted:#62708B;
+  --soft-o:#FFF1E7; --line-o:#FFD4AF; --ink-o:#C85A00;
+  --soft-b:#EEF3FF; --line-b:#D8E2F5;
+  --soft-g:#E3F5E9; --line-g:#BFE3CC; --ink-g:#0E7A3A;
+  --soft-p:#F3EEFC; --line-p:#DCCFF5; --ink-p:#5B2DB0;
+  --head:#001E62; --onhead:#FFFFFF; --onhead-sub:#C9D6F2;
+  --cta1:#001E62; --cta2:#06348A;
+  --frame:#E4E8F0; --glow1:rgba(255,98,0,.10); --glow2:rgba(0,30,98,.10); --grad-end:#EEF2F8;
+  --shadow:0 16px 44px rgba(0,30,98,.10); --chrome:rgba(255,255,255,.88);
+  --veil:rgba(2,12,34,.58);
+  --c-hard:#E85A00; --c-soft:#2E6BD9; --c-neutral:#B9C4D9; --track:#EEF3FF; --grid:#E3E8F2;
+  --tip-bg:#0A1838; --tip-fg:#FFFFFF;
+  --font:"Inter","Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#091324; --card:#0F1B31; --card2:#12203A; --line:#243453;
+    --ink:#F5F8FF; --txt:#F3F7FF; --body:#D4E0F7; --muted:#A7B6D1;
+    --soft-o:#2B1A12; --line-o:#7A4D2B; --ink-o:#FFB577;
+    --soft-b:#13233F; --line-b:#2F4D85;
+    --soft-g:#0E2618; --line-g:#2C7A4C; --ink-g:#7FE0A3;
+    --soft-p:#1E1636; --line-p:#4A3A80; --ink-p:#C9B5FF;
+    --head:#0A2C7A; --cta1:#0A2C7A; --cta2:#0F3A8F; --ok:#49C76B;
+    --frame:#050B16; --glow1:rgba(255,98,0,.14); --glow2:rgba(65,111,255,.16); --grad-end:#08111D;
+    --shadow:0 18px 44px rgba(0,0,0,.35); --chrome:rgba(15,27,49,.92); --veil:rgba(0,4,12,.72);
+    --c-hard:#E85A00; --c-soft:#5B8FEA; --c-neutral:#3A4E74; --track:#13233F; --grid:#243453;
+    --tip-bg:#F3F7FF; --tip-fg:#0A1838;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#091324; --card:#0F1B31; --card2:#12203A; --line:#243453;
+  --ink:#F5F8FF; --txt:#F3F7FF; --body:#D4E0F7; --muted:#A7B6D1;
+  --soft-o:#2B1A12; --line-o:#7A4D2B; --ink-o:#FFB577;
+  --soft-b:#13233F; --line-b:#2F4D85;
+  --soft-g:#0E2618; --line-g:#2C7A4C; --ink-g:#7FE0A3;
+  --soft-p:#1E1636; --line-p:#4A3A80; --ink-p:#C9B5FF;
+  --head:#0A2C7A; --cta1:#0A2C7A; --cta2:#0F3A8F; --ok:#49C76B;
+  --frame:#050B16; --glow1:rgba(255,98,0,.14); --glow2:rgba(65,111,255,.16); --grad-end:#08111D;
+  --shadow:0 18px 44px rgba(0,0,0,.35); --chrome:rgba(15,27,49,.92); --veil:rgba(0,4,12,.72);
+  --c-hard:#E85A00; --c-soft:#5B8FEA; --c-neutral:#3A4E74; --track:#13233F; --grid:#243453;
+  --tip-bg:#F3F7FF; --tip-fg:#0A1838;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--frame);color:var(--txt);font-family:var(--font);-webkit-font-smoothing:antialiased}
+button,input{font-family:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- palco 16:9 ---------- */
+.viewport{position:fixed;inset:0;overflow:hidden}
+.stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;
+  background:var(--bg);box-shadow:0 30px 80px rgba(0,0,0,.25);overflow:hidden;border-radius:6px}
+.stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 8% 8%,var(--glow1),transparent 30%),radial-gradient(circle at 92% 14%,var(--glow2),transparent 28%),linear-gradient(180deg,transparent 0%,transparent 60%,var(--grad-end) 100%)}
+.slide{position:absolute;inset:0;padding:40px 56px 64px;display:flex;flex-direction:column;gap:18px;
+  opacity:0;visibility:hidden;transform:translateX(24px);transition:opacity .42s ease,transform .42s ease,visibility 0s .42s}
+.slide.active{opacity:1;visibility:visible;transform:none;transition:opacity .42s ease,transform .42s ease}
+.foot{position:absolute;left:56px;right:56px;bottom:20px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px;font-weight:600;z-index:2;pointer-events:none}
+.foot .pg{font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:.04em}
+.progress{position:absolute;left:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .42s ease;z-index:3}
+
+/* ---------- cabeçalho ---------- */
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex:none}
+.chap-tag{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;margin-bottom:10px;border-radius:999px;background:var(--soft-o);border:1px solid var(--line-o);color:var(--ink-o);font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.pip{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.title h1{margin:0;color:var(--ink);font-size:36px;line-height:1.06;letter-spacing:-.025em;font-weight:800;text-wrap:balance}
+.title p{margin:8px 0 0;color:var(--accent);font-weight:700;font-size:17px;max-width:95ch;line-height:1.35}
+.logo{flex:none;height:46px;min-width:92px;padding:6px 14px;border-radius:12px;background:#FFFFFF;display:grid;place-items:center;box-shadow:0 10px 24px rgba(0,30,98,.12);border:1px solid rgba(0,0,0,.04)}
+.logo span{color:#EC7000;font-weight:900;font-size:15px;letter-spacing:-.01em}
+.body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:16px}
+
+/* ---------- blocos comuns ---------- */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grow{flex:1 1 auto;min-height:0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.panel-head{background:var(--head);color:var(--onhead);font-weight:800;padding:12px 18px;font-size:17px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.panel-head small{font-size:12px;font-weight:700;color:var(--onhead-sub)}
+.panel-body{padding:16px 18px;display:flex;flex-direction:column;gap:12px;flex:1 1 auto;min-height:0}
+.callout{display:grid;grid-template-columns:52px 1fr auto;gap:16px;align-items:center;padding:16px 22px;border-radius:20px;background:linear-gradient(135deg,var(--cta1),var(--cta2));color:#FFFFFF;box-shadow:0 14px 30px rgba(0,30,98,.16);flex:none}
+.callout .icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--accent);font-size:22px;font-weight:900}
+.callout b{display:block;font-size:18px;margin-bottom:4px}
+.callout span{display:block;font-size:14.5px;line-height:1.5;color:#E6ECFF}
+.callout span b{display:inline;font-size:inherit;color:#FFD4B8;margin:0}
+.mbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 16px;font-size:14px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.18s;white-space:nowrap}
+.mbtn:hover{border-color:var(--accent);background:var(--soft-o);color:var(--ink-o)}
+.mbtn::after{content:"↗";color:var(--accent);font-weight:900}
+.callout .mbtn{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);color:#FFFFFF}
+.callout .mbtn:hover{background:#FFFFFF;color:var(--brand)}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;border:1px solid}
+.tag.med{background:var(--soft-g);border-color:var(--line-g);color:var(--ink-g)}
+.tag.sup{background:var(--soft-o);border-color:var(--line-o);color:var(--ink-o)}
+.tag.hard{background:var(--soft-o);border-color:var(--line-o);color:var(--ink-o)}
+.tag.soft{background:var(--soft-b);border-color:var(--line-b);color:var(--ink)}
+.tag i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.tag.hard i{background:var(--c-hard)}.tag.soft i{background:var(--c-soft)}
+
+/* ---------- capa ---------- */
+.cover{display:grid;grid-template-columns:minmax(0,1fr) 540px;gap:64px;align-items:center;height:100%;padding-top:8px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;width:max-content;max-width:100%;padding:8px 14px;border-radius:999px;background:var(--soft-o);border:1px solid var(--line-o);color:var(--ink-o);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.brand-title{margin:22px 0 0;font-size:128px;line-height:.92;letter-spacing:-.05em;font-weight:900;color:var(--ink)}
+.brand-title .acc{color:var(--accent)}
+.brand-sub{margin:18px 0 0;font-size:30px;line-height:1.18;font-weight:800;color:var(--ink);letter-spacing:-.02em;max-width:24ch;text-wrap:balance}
+.rule{width:96px;height:6px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--brand));margin:24px 0 0}
+.lead{margin:20px 0 0;font-size:18px;line-height:1.55;color:var(--body);max-width:58ch}
+.proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:26px;max-width:760px}
+.proof div{padding:14px 16px;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-top:4px solid var(--accent)}
+.proof b{display:block;color:var(--ink);font-size:28px;line-height:1;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.proof span{display:block;margin-top:6px;color:var(--body);font-size:13.5px;line-height:1.35;font-weight:600}
+.agenda{border:1px solid var(--line);border-radius:26px;padding:24px 28px;background:var(--card);box-shadow:var(--shadow)}
+.agenda-head{font-size:13px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);padding-bottom:12px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+.agb{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:grid;grid-template-columns:52px 1fr 20px;gap:16px;align-items:center;padding:11px 8px;border-radius:14px;font-family:inherit;transition:background .18s}
+.agb + .agb{border-top:1px dashed var(--line);border-radius:0}
+.agb:hover{background:var(--soft-o)}
+.agb:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.agb .n{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:var(--accent);color:#FFFFFF;font-size:16px;font-weight:900}
+.agb b{display:block;color:var(--ink);font-size:18px;line-height:1.2;margin-bottom:2px}
+.agb span{display:block;color:var(--muted);font-size:13.5px;line-height:1.4}
+.agb > i{font-style:normal;font-weight:900;color:var(--accent);font-size:18px;opacity:.5}
+.agb:hover > i{opacity:1}
+.kp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kp > div{padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card2);min-width:0}
+.btag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;background:var(--soft-p);border:1px solid var(--line-p);color:var(--ink-p);font-size:10px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;vertical-align:1px;cursor:help;font-style:normal}
+.lv .nm .btag.ic{display:inline-flex;margin-top:0;align-self:center}
+.m-tbl .btag.ic{width:20px;height:20px;font-size:11px}
+.btag.ic{width:24px;height:24px;padding:0;justify-content:center;font-size:12px;letter-spacing:0}
+.kp > div{position:relative}
+.kp .btag.ic{position:absolute;top:9px;right:9px;display:inline-flex;margin:0}
+.kp .hot small{padding-right:26px}
+.ex-note{position:relative}
+.ex-note .btag.ic{position:absolute;top:8px;right:8px;display:inline-flex;margin:0}
+.ex-note > span{padding-right:22px}
+.mini-h b .btag.ic{margin-left:8px;vertical-align:-5px}
+.bt-leg{display:flex;align-items:center;gap:10px;flex:none;font-size:13.5px;color:var(--body);font-weight:600;line-height:1.4}
+.bt-leg b{color:var(--ink)}
+.kp small{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kp b{display:block;font-size:27px;font-weight:900;color:var(--ink);margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.02em;white-space:nowrap}
+.kp span{display:block;font-size:12.5px;line-height:1.35;color:var(--body);margin-top:2px}
+.kp span span{display:inline;margin:0}
+.kp .miss,.ex-note.miss{background:var(--card);border:1px dashed var(--line)}
+.kp .miss b,.ex-note.miss b.big{color:var(--muted)}
+.kp .miss span{color:var(--muted)}
+.kp .hot{background:var(--soft-o);border-color:var(--line-o)}
+.kp .hot b{color:var(--ink-o)}
+/* ---------- fechamento ---------- */
+.close-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;flex:1 1 auto;min-height:0}
+.tks{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;flex:1 1 auto}
+.tk-item{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:center;padding:16px 18px;border:1px solid var(--line);border-radius:18px;background:var(--card2);font-family:inherit;transition:transform .18s ease,border-color .18s}
+.tk-item:hover{transform:translateY(-2px);border-color:var(--accent)}
+.tk-item:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tk-item .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--soft-o);font-size:22px}
+.tk-item small{display:block;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-o)}
+.tk-item b{display:block;color:var(--ink);font-size:20px;line-height:1.2;margin-top:3px}
+.tk-item span{display:block;color:var(--body);font-size:14.5px;line-height:1.45;margin-top:6px}
+.nx{display:grid;grid-template-columns:6px 1fr;gap:14px;padding:12px 0}
+.nx + .nx{border-top:1px dashed var(--line)}
+.nx > i{border-radius:6px;background:var(--c)}
+.nx small{display:block;font-size:11.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-o)}
+.nx b{display:block;color:var(--ink);font-size:18px;line-height:1.25;margin-top:2px}
+.nx span{display:block;color:var(--body);font-size:14.5px;line-height:1.45;margin-top:3px}
+.thanks{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:22px 30px;border-radius:24px;background:linear-gradient(135deg,var(--cta1),var(--cta2));color:#FFFFFF;box-shadow:0 14px 30px rgba(0,30,98,.16);flex:none;position:relative;overflow:hidden}
+.thanks::after{content:"";position:absolute;right:-60px;top:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,98,0,.45),transparent 70%);pointer-events:none}
+.thanks h2{margin:0;font-size:40px;line-height:1;letter-spacing:-.03em;font-weight:900}
+.thanks h2 span{color:#FFB577}
+.thanks p{margin:8px 0 0;font-size:16px;line-height:1.5;color:#E6ECFF;max-width:76ch}
+.thanks .sig{position:relative;z-index:1;text-align:right}
+.thanks .sig b{display:block;font-size:30px;font-weight:900;letter-spacing:-.03em}
+.thanks .sig b span{color:#FFB577}
+.thanks .sig small{display:block;margin-top:4px;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#C9D6F2}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:24px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
+.modal.open{display:flex}
+.modal-veil{position:absolute;inset:0;background:var(--veil);backdrop-filter:blur(4px)}
+.modal-box{position:relative;z-index:1;width:min(1000px,calc(100vw - 32px));max-height:min(88vh,860px);overflow:auto;border-radius:26px;border:1px solid var(--line);background:var(--card);box-shadow:0 30px 80px rgba(2,12,34,.32);padding:26px 28px;animation:pop .28s ease}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.modal-x{position:absolute;top:16px;right:16px;width:40px;height:40px;border:0;border-radius:50%;background:var(--brand);color:#FFFFFF;font-size:24px;line-height:1;cursor:pointer}
+.modal-x:hover{background:var(--accent)}
+.m-kick{display:inline-flex;gap:.35em;padding:5px 11px;border-radius:999px;font-size:11.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;background:var(--soft-o);border:1px solid var(--line-o);color:var(--ink-o)}
+.modal h3{margin:10px 56px 6px 0;color:var(--ink);font-size:27px;line-height:1.12;letter-spacing:-.02em}
+.m-lead{margin:0 0 16px;color:var(--body);font-size:15.5px;line-height:1.55;max-width:80ch}
+.m-lead b{color:var(--ink)}
+.m-formula{margin:0 0 16px;padding:14px 18px;border-radius:16px;background:var(--soft-g);border:1px solid var(--line-g)}
+.m-formula small{display:block;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-g);margin-bottom:4px}
+.m-formula b{color:var(--ink);font-size:16.5px;line-height:1.45}
+.m-tbl{overflow-x:auto}
+.m-tbl table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;min-width:560px}
+.m-tbl th{text-align:left;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+.m-tbl td{padding:9px 10px;border-bottom:1px solid var(--line);color:var(--body)}
+.m-tbl td .lbl{display:inline-flex;align-items:center;gap:8px}
+.m-tbl .info{width:19px;height:19px;font-size:11px}
+.m-tbl td.n{text-align:right;color:var(--ink);font-weight:800;white-space:nowrap}
+.m-tbl th.n{text-align:right}
+.m-tbl tr.t td{font-weight:900;color:var(--ink);background:var(--soft-b)}
+.m-tbl tr.sec td{padding:10px 10px 6px;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-o);border-bottom:1px solid var(--line-o)}
+.m-tbl tr.ed td{background:var(--soft-o)}
+.m-tbl tr.ed td.n{text-align:center}
+.m-tbl tr.ed td.n{text-align:right}
+.pnote{margin-left:6px;font-size:11px;font-weight:700;color:var(--muted)}
+.pin-both{display:inline-flex;align-items:center;gap:10px}
+.pin-both small{font-size:11.5px;font-weight:700;color:var(--muted)}
+.m-tbl .pin{width:52px;font-size:14px}
+.m-edit{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:13.5px;color:var(--body);font-weight:600}
+.m-edit .pinw{padding:1px 8px}
+.m-sublbl{margin:18px 0 4px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-o)}
+.m-note{margin-top:14px;font-size:13.5px;color:var(--muted);line-height:1.5}
+.m-note b{color:var(--body)}
+
+/* ---------- tooltip ---------- */
+.tip{position:fixed;z-index:60;pointer-events:none;background:var(--tip-bg);color:var(--tip-fg);border-radius:10px;padding:8px 11px;font-size:12.5px;font-weight:700;line-height:1.4;box-shadow:0 10px 24px rgba(0,0,0,.25);max-width:260px;opacity:0;transition:opacity .12s;font-variant-numeric:tabular-nums}
+.tip.on{opacity:1}
+.tip b{font-weight:900}
+.tip.wide{max-width:380px;padding:12px 14px;font-weight:600}
+.tip .ti-h{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:8px}
+.tip .ti{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:start;padding:5px 0}
+.tip .ti + .ti{border-top:1px solid rgba(127,140,170,.3)}
+.tip .ti em{font-style:normal;justify-self:start;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:#FFFFFF}
+.tip .ti em.ref{background:#0E7A3A}.tip .ti em.prx{background:#2E6BD9}.tip .ti em.pre{background:#C85A00}
+.tip .ti span b{display:block}
+.tip .ti span small{display:block;font-size:11.5px;opacity:.8;font-weight:600}
+.tip .ti-p{margin:0 0 6px;font-size:12.5px;font-weight:600;line-height:1.5}
+.tip .ti-p:last-child{margin:0}
+.tip .ti-f{display:block;margin-top:8px;font-size:11px;opacity:.75}
+
+/* ---------- animação de entrada ---------- */
+@keyframes riseIn{from{opacity:.001;transform:translateY(14px)}to{opacity:1;transform:none}}
+.slide.active .rise{animation:riseIn .55s ease both}
+.slide.active .d1{animation-delay:.08s}.slide.active .d2{animation-delay:.16s}.slide.active .d3{animation-delay:.24s}.slide.active .d4{animation-delay:.32s}
+
+/* ---------- controles ---------- */
+.chrome{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:6px;padding:7px;border-radius:999px;background:var(--chrome);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(10px);transition:opacity .3s ease,transform .3s ease}
+.chrome.idle{opacity:0;transform:translate(-50%,12px);pointer-events:none}
+.cbtn{border:0;border-radius:999px;background:var(--brand);color:#FFFFFF;font-weight:900;cursor:pointer;height:36px;min-width:36px;padding:0 12px;display:grid;place-items:center;font-size:15px}
+.cbtn:hover{background:var(--accent)}
+.cbtn:disabled{opacity:.35;cursor:default;background:var(--brand)}
+.cbtn.ghostc{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.cbtn.ghostc:hover{background:var(--soft-o);color:var(--ink-o)}
+.cbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.count{font-size:13px;font-weight:800;color:var(--muted);padding:0 6px;font-variant-numeric:tabular-nums;min-width:52px;text-align:center}
+.dots{display:flex;gap:7px;padding:0 6px}
+.dot{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:var(--line-b);cursor:pointer;position:relative;transition:.2s}
+.dot.on{background:var(--accent);width:24px;border-radius:999px}
+.dot span{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);white-space:nowrap;background:var(--brand);color:#FFFFFF;border-radius:8px;padding:6px 9px;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.15s}
+.dot:hover span,.dot:focus-visible span{opacity:1}
+.sep{width:1px;height:22px;background:var(--line);margin:0 2px}
+
+/* ---------- modo leitura (telas estreitas) ---------- */
+body.flow{overflow:auto}
+body.flow .viewport{position:static;overflow:visible}
+body.flow .stage{position:relative;left:auto;top:auto;width:auto;height:auto;transform:none;border-radius:0;box-shadow:none;overflow:visible;padding-bottom:90px}
+body.flow .slide{position:relative;inset:auto;display:none;padding:22px max(16px,env(safe-area-inset-right,0px)) 30px max(16px,env(safe-area-inset-left,0px));opacity:1;visibility:visible;transform:none}
+body.flow .slide.active{display:flex}
+body.flow .foot{position:static;padding:0 max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+body.flow .progress{position:fixed;top:0;bottom:auto}
+body.flow .title h1{font-size:25px}
+body.flow .top{flex-direction:column-reverse}
+body.flow .g2,body.flow .cover,body.flow .sim,body.flow .vpl,body.flow .close-grid,body.flow .tks,body.flow .f0,body.flow .bn,body.flow .proof,body.flow .sl-grid,body.flow .vk,body.flow .res,body.flow .fin,body.flow .cap-grid{grid-template-columns:1fr}
+body.flow .f0{grid-auto-rows:auto}
+body.flow .kp,body.flow .in-grid{grid-template-columns:1fr 1fr}
+body.flow .brand-title{font-size:64px}
+body.flow .brand-sub{font-size:21px}
+body.flow .cover{gap:24px;padding-top:0}
+body.flow .callout{grid-template-columns:1fr}
+body.flow .callout .icon{display:none}
+body.flow .lv-head{display:none}
+body.flow .lv{grid-template-columns:46px 1fr;gap:10px 14px}
+body.flow .lv .simp,body.flow .lv .tec,body.flow .lv .vcol{grid-column:2}
+body.flow .lv .go{display:none}
+body.flow .stk-row{grid-template-columns:56px 1fr;}
+body.flow .stk-row > em{grid-column:2;text-align:left}
+body.flow .bt .v{font-size:34px}
+body.flow .thanks{grid-template-columns:1fr}
+body.flow .thanks .sig{text-align:left}
+body.flow .dots,body.flow #fsBtn{display:none}
+body.flow .cols{gap:16px;padding-left:48px}
+body.flow .caxis{gap:16px;padding-left:48px}
+body.flow .mbars em{display:none}
+body.flow .sn{grid-template-columns:1fr 90px}
+body.flow .sn .tr{grid-column:1/-1;grid-row:2}
+body.flow .ex-bar > div{font-size:11px;padding:0 6px}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+.src{font-size:12px;color:var(--muted);font-weight:600;line-height:1.4}
+.src b{color:var(--body)}
+.ex-note{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;border:1px dashed var(--line);background:var(--card2)}
+.ex-note b.big{font-size:26px;color:var(--ink);font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ex-note span{font-size:14px;color:var(--body);line-height:1.45}
+.ex-note span strong{color:var(--ink)}
+.sub-h{font-size:11.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-o);display:flex;align-items:center;gap:10px}
+.sub-h::after{content:"";flex:1;height:1px;background:var(--line)}
+.in-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.in{display:flex;flex-direction:column;gap:5px;min-width:0}
+.in label{font-size:12px;font-weight:800;color:var(--body);line-height:1.25}
+.in .hint{font-size:11.5px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.in input{width:100%;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.in input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--soft-o)}
+
+/* =================== componentes deste deck =================== */
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.lead2{font-size:14.5px;line-height:1.5;color:var(--body);margin:0}
+.lead2 b,.lead2 strong{color:var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:800;border:1px solid var(--line-b);background:var(--soft-b);color:var(--ink);white-space:nowrap}
+.chip.o{background:var(--soft-o);border-color:var(--line-o);color:var(--ink-o)}
+.chip.g{background:var(--soft-g);border-color:var(--line-g);color:var(--ink-g)}
+.chip.p{background:var(--soft-p);border-color:var(--line-p);color:var(--ink-p)}
+.chip.x{background:var(--card);border-color:var(--line);color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.kick{font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-o)}
+.kick.g{color:var(--ink-g)}.kick.b{color:var(--c-soft)}.kick.p{color:var(--ink-p)}.kick.m{color:var(--muted)}
+.illu{font-size:11.5px;font-weight:700;color:var(--muted)}
+
+
+/* ---------- logo Itaú ---------- */
+.logo{width:56px;height:56px;min-width:0;padding:0;border:0;border-radius:14px;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJQAAACUCAMAAABC4vDmAAAAllBMVEX/YgD/////WQD/XgD/VgD/kWj/UgD/xrL/wrL//Pn/s5X/9PD/18f/poT/j2z/gVP/dEL/e1L/djj/3NH/6OD/TAD/tKL/7Ob/bSD/e0X/d03/RgD/z8D/vqz/tZ7/qo//lXH/f1n/YRH/bzn/nnz/WxT/qZf/1s7/ilv/jnL/iWn/by7/hl3/ZCn/Zh7/l3j/bEL/oomWRpmJAAAIzElEQVR4nM2ca2OjKhCGCRATV9Nc0LXWa4zb3Fpz+v//3AHjBVCTaNPK+2lXrT4BHZhhGDDpJcNwLEL2e38ehFF0iaeHpetuNq+VNhvXXR6m8SWKwmDu7/eEWI5h9HsKeOwy3TFn0eV4Wru7DEGsaRrGEEJ0FeBUHKInMabXYYiynbs+HS/RzHT0Z0DpDvHn0fSsebamwSbBYyowNc32tPM0mvvkDl03lGFG8XaVYPZj+4N0AtJmxslq+/LH7O7TNijd8sMD8vKmeR6OgMYazkOH0Lfa2qwBpZvp9gzxD9FIbBiet6nZ4JKgSApt+FPt08qF6ANTcgPKmSbw93hqwSR2uqBmcBSkHAvO2qHen/mV9RWCYRtUZI+HxGS/N6Fmo3VdqboHSyjnd4zALSHsSFDT0RuKNtVUhCKjtxNTQgSoVIGGok2V8lA6HpvnKqxzUObI5qCU7XNQavRe1X9XqK0S7zm1CtsaytmpArVzKihfkd6jVGYFFSjy8QGgzSuoWJmWgnEFdVbklaLdd66gvLFZankllKWI6WSyrQIq0MZGqaXNCihV7DkTXBRQJ2Xec/qmn65QxlolqLWRQ1nqWIRioKFQJBmbhBebfVIoX6GPj35+fg6lkkWgUEEO9aWQRbjaBKCGd1WL+VlApeGYiQ3JFEqpV4q+VDmUQnMEJo9BOQrNEZhsh0IR1aAIhZqp9k7NKNQfZbyGq/AfCpUqZRGoTUgp1FE1qCOFUmmKx0SneUBXJY5QCn3owHhTDWptAGelGtTKAdZ5bApZZwtYSk2GmTILEKVmU0yQAKKYQc+h9ooNfXTw2wO1fBkmzQdz9aDmQJ3QYikcgFA9qBBE6pmESE2otogZgmMuJ8MUNMPVGC/jeGOPhgVjEEsPR0lk6Cz15vDT/dqVtIJiMEXSlVU2RfBjvhfFwZoNXl5afzeagqUExSUtXH6grRDEMNm9TUOT9gdpNdzoAFwxJcutmdpCfN9Kg0HY9rJpODfLVXWzHWopQVGnq5Y4fae/ESer4fNUtIsDIuZMdbSUK0FpfMrJ5KU8BzXbfo3/+sRo/3GPCL5PZHVCbR6AytLAutniA6E6uo9CCQdauw+t7t1nIFR7S1EkEQq9tbzovw8lOTPIr/+mDIb+PtSrBKVVxjMq/+RJUF+6Ialj1tuAyocZ9nTrozKdz4EC57WsDvvS6D72kzzgbmxuQH4SVJksy6n9OvlFr/5a+O+ToB5VO5Sku1B5NjFMkixBmvb97LCNZDzZAFWJncnTkv/joDz+bA4EcRaHPiEWE9n/WUp5vdIdbx7Nz8jDDOBTG6lJEDIdReVLlxB+RI2MVj340Oq78vZ4UX08VVYZ1Vz0Xb4BpbO4Fkpbc38nul9nsf46VPdp41Q+qT/UUp7k9YQKuk5PjHJa2R/qIE+HnwY10Yv8p/5QU9lxeB7UpIh89YeKZRfriVDFskFvKOpipQOhcpNQQV13iTiG8C1acBjUQnbbJSgU/6Xi2sN6/1uIDZo5lO6HFxfaTOhjzlPlA25/qEYsQYIC+V6TXX3M9GChvPsDwz98cl4+wi7nG+Tr+EOgpFCQDJU/qXPsQ8tMdu/htO5CMggKB3LQrB9Umx9o1xsWnAwNg5LCiz2hRMBceFFdbLhDoLS5HIgdCEXH/GS3Wm+3H9t1XF2snwZB7eWQ9RAoBO3XaE6swiDU75T+MhCK3P76HoDCuy9hg0mtYVBsxeGbUEiLOpC+ASUtGPWFgm4n0lCozJKX1npCQffWfsJBUOhsyYuQPY0nH856FtTKAVKaYD+oRNzZZZizIAjMb0KtDaB/DIfCKUdEFmy/JPV9sm9CfehyCkAvKM2qTwSouDXafBPq1EiW6AOFlrWdnFWh5FtQdQoLjjqhjo20kntQfPQGftXHa5+We/kbUHWyj8ZNvCSotJGAcw/K4FLA4N/6eB1z59ogh4IL7q8rqE+u50UoHDZSlVqhOLd9ktQNy0PV960DXFcodJlwB0q/i/9ERKg8VUlM6mqDAp+chfRrj5yHiivfU2BgUCdu4m5l+T01wb6JUHlSl3MfSjBHfvYvSbLPVzZv5Z62y6fEdDrMIVyhVvxAZB3YX0eCgyFBOY1EwVYoyZNyqN/CtrWgF+7ezuWs2dAVrsyhAN4Lf20QOf4gQnnNlMp2qJdmGIPtnETCwGc4jiOOhFcomE5uS3qnmsmnrVCCleSgtJu+aAkF7Dv77AWoIvlUSNNth+LtLweFdrcfV0DxRuEuVJGmu7gPBeBcvlO+8bW1ZySTwC7zm1dxhwQoZubk1O8OKIClnd7FblwtnMgitVUroRBsdD/ROqCK1G8fPwAFoPT4YoswP9Rcn5b9a0AB9Cm1FUm8rpbym9sJYFCtC+hiTjh09/y3NS9Owp3PHXYWEH3WSwpV8AvBlGssI4XIqy7SA/45xXYCYXcfcpeVMmkl1159hT6xLGLOwq8qLIm0t6+87IFu+V8Z+9HcHbgWSC4zy2BXzfKrUH0VP/ctN17owtzz1noAi3bAvL6GkLjADvyjKo923KHzKuHxW13dzTyiTRhZ1bYnlfKsqw1iSm6lU2lDQbXpcCIvGo2nq9eRQ/1E/sgwwUsFpU6yIK63/JrqdN++glJyG7mSG+6VsenFHFWxIg4mBzVRpaUmPJQaW5FLD6MsoaJE/r5UQkWJ7ZCwXKuoyvKMmQN7FYJyWZ7JbPRs62YBo8kkHLvUU+3DcUWxQgWLYlGvNBmtC3HCe6tCoTUjzcYoQ4VwlgoxJKkknRUlNv7dknTYTiIp1NCsKEii7Q49tbRhJxDEaPcRyaGTjtqLjhnErx5rsp8rc4ht7zUOzNaFue6CkDoJ09PbJ2IFIZ/GhlimHPp8O6Uh6Q643annaVimH8Yu8tha0MDamUXlTKzZnofcOPRN607R0QeLjE4M4oeL4/G0XhVVRnFeZRTyUYr631CoMbpan47HReiTRwugPgpVSBfrsS7ia0FWl9VkZZVY3Wsx1nghVmN9sOJpqf8BSFGVDQXwr+sAAAAASUVORK5CYII=) center/cover no-repeat;box-shadow:0 10px 24px rgba(236,112,0,.22)}
+.logo span{display:none}
+body.flow .logo{width:44px;height:44px;border-radius:11px}
+
+/* ---------- contracapas ---------- */
+.divider .cover{grid-template-columns:minmax(0,1fr) 540px}
+.dnum{margin-top:18px;font-size:150px;line-height:.82;font-weight:900;letter-spacing:-.05em;color:var(--accent);font-variant-numeric:tabular-nums}
+.dtitle{margin:14px 0 0;font-size:76px;line-height:.98;letter-spacing:-.04em;font-weight:900;color:var(--ink);text-wrap:balance}
+.dtitle .acc{color:var(--accent)}
+.dchips{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:24px}
+.dchips > span{font-size:11.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.dchip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:var(--shadow)}
+.dchip:hover{border-color:var(--accent);background:var(--soft-o);color:var(--ink-o)}
+.agb.dim{opacity:.5}
+.agb.dim:hover{opacity:1}
+.agb.cur{background:var(--soft-o);border-radius:14px;outline:2px solid var(--line-o)}
+.agb.cur + .agb{border-top-color:transparent}
+.agenda .agb{padding:9px 8px}
+.agenda .agb .n{width:42px;height:42px;border-radius:13px;font-size:15px}
+.agenda .agb b{font-size:17px}
+body.flow .dnum{font-size:84px}
+body.flow .dtitle{font-size:44px}
+
+/* fatos em números */
+.facts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.facts > div{padding:12px 14px;border-radius:16px;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);border-top:4px solid var(--accent)}
+.facts b{display:block;font-size:30px;font-weight:900;color:var(--ink);letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.facts span{display:block;font-size:12.5px;line-height:1.35;color:var(--body);font-weight:600;margin-top:6px}
+
+
+/* passos numerados */
+.steps3{display:flex;flex-direction:column;gap:10px}
+.steps3 > div{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start}
+.steps3 > div > i{font-style:normal;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--accent);color:#FFFFFF;font-weight:900;font-size:16px}
+.steps3 b{display:block;color:var(--ink);font-size:15.5px;line-height:1.25}
+.steps3 span{display:block;color:var(--body);font-size:13.2px;line-height:1.45;margin-top:2px}
+
+
+/* ganhos executivos */
+.egs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:14px;flex:1;min-height:0}
+.eg{position:relative;border:1px solid var(--line);border-radius:20px;background:var(--card);box-shadow:var(--shadow);padding:16px 18px 14px;display:flex;flex-direction:column;gap:6px;overflow:hidden;--c:var(--accent);--cs:var(--soft-o)}
+.eg::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c)}
+.eg-soft{--c:#2E6BD9;--cs:rgba(46,107,217,.12)}
+.eg-hard{--c:#16A34A;--cs:rgba(22,163,74,.12)}
+.eg-qual{--c:#0E8A6A;--cs:rgba(14,138,106,.12)}
+.eg-vel{--c:#FF6200;--cs:rgba(255,98,0,.12)}
+.eg-gov{--c:#5B2DB0;--cs:rgba(91,45,176,.12)}
+.eg-esc{--c:#C2410C;--cs:rgba(194,65,12,.12)}
+.eg-h{display:flex;align-items:center;gap:10px}
+.eg-h i{font-style:normal;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--cs);font-size:20px}
+.eg-h small{font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.eg h4{margin:4px 0 0;font-size:20px;line-height:1.2;color:var(--ink)}
+.eg p{margin:0;font-size:13.6px;line-height:1.5;color:var(--body)}
+.eg-k{margin-top:auto;padding:8px 10px;border-radius:12px;background:var(--cs);font-size:12.5px;line-height:1.4;color:var(--ink);font-weight:700}
+.eg-k span{display:block;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--c);margin-bottom:1px}
+.slide.active .eg{animation:riseIn .5s ease both;animation-delay:calc(var(--i) * 90ms)}
+body.flow .egs{grid-template-columns:1fr}
+
+
+
+.fim{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0;position:relative;padding-bottom:60px}
+.fim::before{content:"";position:absolute;left:50%;top:44%;width:760px;height:760px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,98,0,.16),transparent 62%);pointer-events:none;z-index:0}
+.fim > *{position:relative;z-index:1}
+.fim-t{font-size:168px;line-height:.95;margin:0}
+.fim-r{margin:34px auto 30px;width:120px}
+.fim-dc{font-size:54px;font-weight:900;letter-spacing:-.03em;color:var(--ink);line-height:1}
+.fim-dc span{color:var(--accent)}
+.fim-p{margin-top:14px;font-size:22px;font-weight:800;color:var(--body);letter-spacing:-.01em}
+body.flow .fim{padding:60px 0}
+body.flow .fim-t{font-size:72px}
+body.flow .fim-dc{font-size:34px}
+body.flow .fim-p{font-size:17px}
+/* =================== componentes do deck Verificador =================== */
+.c-o{--c:var(--accent);--cs:var(--soft-o);--cl:var(--line-o)}
+.c-b{--c:var(--c-soft);--cs:var(--soft-b);--cl:var(--line-b)}
+.c-g{--c:var(--ok);--cs:var(--soft-g);--cl:var(--line-g)}
+.c-p{--c:var(--ink-p);--cs:var(--soft-p);--cl:var(--line-p)}
+.c-m{--c:var(--muted);--cs:var(--card2);--cl:var(--line)}
+
+/* cartões de métrica */
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.kpis.k4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.kpis.k2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.kc{position:relative;background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px 24px 20px;border-top:5px solid var(--c,var(--accent));display:flex;flex-direction:column;gap:4px;min-width:0}
+.kc small{font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kc .v{font-size:58px;line-height:1.02;font-weight:900;letter-spacing:-.045em;color:var(--c,var(--accent));font-variant-numeric:tabular-nums;white-space:nowrap;margin:4px 0 2px}
+.kc .v.md{font-size:46px}
+.kc span{font-size:14.5px;line-height:1.45;color:var(--body)}
+.kc span b{color:var(--ink)}
+.kc .tg{position:absolute;top:16px;right:16px}
+
+/* fórmula */
+.fml{padding:13px 20px;border-radius:16px;background:var(--soft-o);border:1px solid var(--line-o);border-left:5px solid var(--accent);font-size:19px;line-height:1.45;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.fml small{display:block;font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-o);margin-bottom:2px}
+.fml .acc{color:var(--accent)}
+.fml.sm{font-size:16px;padding:10px 16px}
+.fml.b{background:var(--soft-b);border-color:var(--line-b);border-left-color:var(--c-soft)}
+.fml.b small{color:var(--c-soft)}
+.fml.g{background:var(--soft-g);border-color:var(--line-g);border-left-color:var(--ok)}
+.fml.g small{color:var(--ink-g)}
+
+/* nota */
+.nt{padding:12px 16px;border-radius:14px;background:var(--card2);border:1px dashed var(--line);font-size:14px;line-height:1.5;color:var(--body)}
+.nt b,.nt strong{color:var(--ink)}
+.nts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* texto de apoio */
+.lede{margin:0;font-size:17px;line-height:1.55;color:var(--body);max-width:120ch}
+.lede b,.lede strong{color:var(--ink)}
+.big-msg{margin:0;font-size:38px;line-height:1.25;font-weight:800;letter-spacing:-.02em;color:var(--ink);max-width:40ch;text-wrap:balance}
+.big-msg .acc{color:var(--accent)}
+
+/* barras */
+.bars{display:flex;flex-direction:column;gap:12px}
+.br{display:grid;grid-template-columns:150px 1fr 120px;gap:14px;align-items:center}
+.br > span{font-size:14px;font-weight:800;color:var(--body)}
+.br .tr{height:30px;border-radius:9px;background:var(--track);overflow:hidden}
+.br .tr i{display:block;height:100%;border-radius:9px;background:var(--c);width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.slide.active .br .tr i{width:var(--w)}
+.br b{font-size:17px;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+
+/* fases */
+.phase{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.phase > div{padding:12px 14px;border-radius:14px;border:1px solid var(--cl);background:var(--cs)}
+.phase b{display:block;font-size:30px;font-weight:900;color:var(--c);letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.05}
+.phase span{display:block;font-size:13px;line-height:1.35;color:var(--body);margin-top:4px;font-weight:600}
+
+/* tabela de dados */
+.dt{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:16px}
+.dt th{text-align:left;font-size:11.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--line)}
+.dt td{padding:12px 14px;border-bottom:1px solid var(--line);color:var(--body)}
+.dt td b,.dt td strong{color:var(--ink)}
+.dt .n,.dt th.n{text-align:right;white-space:nowrap}
+.dt td.n{color:var(--ink);font-weight:800}
+.dt tr.sum td{background:var(--soft-b);font-weight:900;color:var(--ink);border-bottom:0}
+.dt tr.sum td.n.acc{color:var(--accent)}
+.dt tr.sub td{color:var(--muted)}
+.dt .s2{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-top:2px}
+
+/* tabela consolidada */
+.ct{width:100%;border-collapse:separate;border-spacing:0 5px;font-variant-numeric:tabular-nums}
+.ct thead th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.12em;text-align:left;padding:0 14px 2px;font-weight:900}
+.ct .r{text-align:right}.ct .ctr{text-align:center}
+.g-got{--g:var(--accent);--gs:var(--soft-o);--gl:var(--line-o)}
+.g-gpca{--g:var(--c-soft);--gs:var(--soft-b);--gl:var(--line-b)}
+.ct tr.gh th{padding:10px 14px 4px;text-align:left;border-bottom:2px solid var(--g)}
+.gname{display:inline-block;background:var(--g);color:#FFFFFF;font-weight:900;letter-spacing:.08em;border-radius:8px;padding:3px 11px;font-size:13px;margin-right:10px}
+.gsub{color:var(--muted);font-weight:700;font-size:13.5px}
+.ct tbody tr:not(.gh) td{background:var(--gs);padding:9px 14px;vertical-align:middle;border-top:1px solid var(--gl);border-bottom:1px solid var(--gl);font-size:15px;color:var(--body)}
+.ct tbody tr:not(.gh) td:first-child{border-left:5px solid var(--g);border-radius:12px 0 0 12px}
+.ct tbody tr:not(.gh) td:last-child{border-right:1px solid var(--gl);border-radius:0 12px 12px 0}
+.ct td.hz{white-space:nowrap}
+.ct td.hz b{display:block;font-size:15.5px;color:var(--ink)}
+.ct td.hz span{color:var(--muted);font-size:12px;font-weight:600}
+.ct td.vl{font-size:24px;font-weight:900;color:var(--g);white-space:nowrap;letter-spacing:-.02em;text-align:right}
+.ct td.tt{text-align:right;color:var(--muted);white-space:nowrap;font-weight:700}
+.ct td.pc{text-align:center}
+.ct td.pc span{display:inline-block;border-radius:999px;padding:3px 10px;font-weight:900;font-size:12.5px;background:var(--card);border:1px solid var(--gl);color:var(--g)}
+.ty{display:inline-grid;place-items:center;min-width:30px;height:24px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:11.5px;font-weight:900;margin-right:10px;padding:0 6px;vertical-align:middle}
+.st{display:inline-block;border-radius:999px;padding:3px 11px;font-size:11.5px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;border:1.5px solid}
+.st-r{background:var(--soft-g);border-color:var(--ok);color:var(--ink-g)}
+.st-p{background:var(--soft-p);border-color:var(--ink-p);color:var(--ink-p)}
+.leg{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--muted);font-size:13px;font-weight:600;align-items:center}
+.leg > span{display:inline-flex;align-items:center;gap:8px}
+.leg .ty{margin-right:0}
+
+/* cartões de premissa (só Verificador) */
+.pc2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pcard{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--g);border-radius:20px;box-shadow:var(--shadow);padding:14px 20px;display:flex;flex-direction:column;gap:6px}
+.pcard h3{margin:0;font-size:20px;color:var(--g);line-height:1.2}
+.pcard h3 .gname{vertical-align:2px}
+.pcard p{margin:0;font-size:13.8px;line-height:1.5;color:var(--body)}
+.pcard p b{color:var(--ink)}
+.pcard .fml{font-size:15.5px;padding:8px 14px;margin-top:2px}
+
+/* ---------- calculadora ---------- */
+.cbar{display:flex;flex-wrap:wrap;gap:10px 26px;align-items:center;flex:none}
+.cbar .sl{color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-right:8px}
+.seg{display:inline-flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.seg button{border:0;background:transparent;color:var(--ink);padding:7px 20px;font-weight:900;font-size:14px;border-radius:999px;cursor:pointer}
+.seg button:hover{background:var(--soft-o);color:var(--ink-o)}
+.seg button.on{background:var(--brand);color:#FFFFFF}
+.seg.sm button{padding:6px 13px;font-size:13px}
+.calc{display:grid;grid-template-columns:1.12fr 1fr;gap:16px;flex:1 1 auto;min-height:0}
+.calc .panel-body{gap:8px;overflow:auto}
+.ctbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.ctbl th{font-size:10.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:4px 8px;border-bottom:1px solid var(--line)}
+.ctbl th.r{text-align:right}
+.ctbl td{padding:4px 8px;border-bottom:1px solid var(--line);font-size:14px;color:var(--body);vertical-align:middle;line-height:1.25}
+.ctbl td .u{display:block;font-size:11.5px;color:var(--muted);font-weight:600}
+.ctbl td.ci{width:132px}
+.ctbl tr.grp td{color:var(--ink-o);font-weight:900;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid var(--line-o);padding-top:9px}
+.ctbl input{width:100%;padding:6px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-size:14.5px;font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
+.ctbl input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--soft-o)}
+.ctbl td.fte{text-align:right;font-weight:900;color:var(--ok)}
+.ckp{display:grid;grid-template-columns:1fr;gap:8px}
+.ckp > div{padding:10px 16px;border-radius:16px;border:1px solid var(--cl);background:var(--cs);border-left:5px solid var(--c)}
+.ckp small{display:block;font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.ckp b{display:block;font-size:34px;font-weight:900;letter-spacing:-.03em;color:var(--ink);line-height:1.1;font-variant-numeric:tabular-nums}
+.ckp span{display:block;font-size:12.5px;color:var(--body);font-weight:600}
+.rtbl td.n,.rtbl th.n{text-align:right;white-space:nowrap}
+.rtbl td.n{font-weight:900;color:var(--ink)}
+.cfoot{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.cbtn2{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 16px;font-size:13.5px;font-weight:900;cursor:pointer}
+.cbtn2:hover{border-color:var(--accent);background:var(--soft-o);color:var(--ink-o)}
+.cbtn2.fx{border-color:var(--accent);color:var(--ink-o)}
+.cbtn2.fx i{font-family:Georgia,serif;font-style:italic;margin-right:4px}
+.cnote{font-size:12.5px;color:var(--muted);line-height:1.45}
+
+/* modal de fórmulas */
+.fxg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fxc{background:var(--card2);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:16px;padding:16px 18px 12px}
+.fxc .tt{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+.fxc .tt b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--c);color:#FFFFFF;font-size:13px;letter-spacing:0}
+.fxc .eq{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:12px 0;font-size:13.5px}
+.fxc .eq .v{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 9px;color:var(--ink);font-weight:700}
+.fxc .eq .o{color:var(--muted);font-weight:900}
+.fxc .eq .r{background:var(--c);color:#FFFFFF;border-radius:8px;padding:4px 9px;font-weight:900}
+.fxc .ln{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline;border-top:1px dashed var(--line);padding-top:9px;margin-top:7px;font-variant-numeric:tabular-nums;font-size:13.5px;color:var(--body)}
+.fxc .ln .y{color:var(--muted);font-weight:900;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.fxc .ln strong{color:var(--c)}
+.fxft{grid-column:1/-1}
+
+body.flow .kpis,body.flow .kpis.k4,body.flow .kpis.k2,body.flow .nts,body.flow .pc2,body.flow .calc,body.flow .fxg,body.flow .phase{grid-template-columns:1fr}
+body.flow .kc .v{font-size:40px}
+body.flow .big-msg{font-size:24px}
+body.flow .br{grid-template-columns:100px 1fr 90px}
+body.flow .ct thead{display:none}
+body.flow .ct td{padding:8px!important;font-size:13px!important}
+body.flow .dt{font-size:13px}
+
+.ct.tight tbody tr:not(.gh) td{padding:6px 14px;font-size:14.5px}
+.ct.tight td.hz b{display:inline;font-size:15px}
+.ct.tight td.hz span{margin-left:8px}
+.ct.tight tr.gh th{padding:6px 14px 3px}
+.ct.tight td.vl{font-size:21px}
+.ct.tight .ty{height:22px}
+
+/* ===== v2: storytelling executivo ===== */
+.mbtn.back{background:var(--brand);border-color:var(--brand);color:#FFFFFF;font-size:14px;padding:9px 18px;box-shadow:0 10px 24px rgba(0,30,98,.25)}
+.mbtn.back:hover{background:var(--accent);border-color:var(--accent);color:#FFFFFF}
+.mbtn.back::after{content:none}
+.extra-bar{display:flex;align-items:center;gap:10px;flex:none;position:absolute;top:44px;right:130px}
+.slide.extra .title{max-width:1100px}
+.dlinks{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;flex:none}
+.dlinks > span{font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.foot-row{display:flex;align-items:center;gap:16px;flex:none}
+.foot-row .nt{flex:1 1 auto}
+.kc .v.sm{font-size:40px}
+
+/* resumo em 3 atos */
+.story{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;flex:1;min-height:0}
+.sc{position:relative;background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:22px 24px 20px;display:flex;flex-direction:column;gap:6px;overflow:hidden;border-top:6px solid var(--c)}
+.sc::after{content:"";position:absolute;right:-70px;bottom:-90px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,var(--cs),transparent 70%);pointer-events:none}
+.sc-h{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center}
+.sc-h > i{font-style:normal;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--c);color:#FFFFFF;font-weight:900;font-size:19px}
+.sc-h small{display:block;font-size:11.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.sc-h b{display:block;font-size:17px;color:var(--ink);line-height:1.2}
+.sc-v{margin-top:16px;font-size:64px;line-height:1;font-weight:900;letter-spacing:-.045em;color:var(--c);font-variant-numeric:tabular-nums;white-space:nowrap}
+.sc-l{font-size:16px;font-weight:700;color:var(--body)}
+.sc-f{list-style:none;margin:14px 0 0;padding:14px 0 0;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:10px}
+.sc-f li{position:relative;padding-left:22px;font-size:16px;line-height:1.35;color:var(--body)}
+.sc-f li::before{content:"";position:absolute;left:2px;top:7px;width:9px;height:9px;border-radius:3px;background:var(--c)}
+.sc-f b{color:var(--ink)}
+.sc .mbtn{margin-top:auto;align-self:flex-start;position:relative;z-index:1}
+
+/* GOT realizado */
+.got-grid{display:grid;grid-template-columns:400px minmax(0,1fr);gap:16px;flex:1;min-height:0}
+.kstack{display:flex;flex-direction:column;gap:12px;min-height:0}
+.kstack .kc{flex:1;justify-content:center;padding:14px 22px}
+.kstack .kc .v{font-size:46px}
+.chart9{flex:1;min-height:0;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));grid-template-rows:auto 1fr;column-gap:12px;row-gap:8px;padding-top:4px}
+.chart9 .ann{grid-row:1;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border-radius:10px;text-align:center}
+.chart9 .a1{grid-column:1/6;background:var(--soft-b);color:var(--c-soft);border:1px solid var(--line-b)}
+.chart9 .a2{grid-column:6/10;background:var(--soft-g);color:var(--ink-g);border:1px solid var(--line-g)}
+.chart9 .col{grid-row:2;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;gap:6px;min-height:0;text-align:center}
+.chart9 .col b{font-size:16px;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums}
+.chart9 .col i{display:block;border-radius:10px 10px 4px 4px;background:var(--c);height:0;transition:height .9s cubic-bezier(.2,.8,.2,1) var(--d)}
+.slide.active .chart9 .col i{height:calc(var(--h) * .78)}
+.chart9 .col span{font-size:12.5px;font-weight:800;color:var(--muted)}
+.chart9 .col{height:100%}
+.chart-k{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;flex:none}
+.chart-k > div{padding:10px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card2)}
+.chart-k small{display:block;font-size:10.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.chart-k b{display:block;font-size:26px;font-weight:900;color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.chart-k span{display:block;font-size:12.5px;color:var(--body);font-weight:600}
+.chart-k .hi{background:var(--soft-g);border-color:var(--line-g)}
+.chart-k .hi b{color:var(--ink-g)}
+
+/* barras horizontais grandes */
+.hb{display:flex;flex-direction:column;gap:8px}
+.hb-t b{font-size:19px;color:var(--ink);margin-right:10px}
+.hb-t span{font-size:14px;color:var(--muted);font-weight:600}
+.hb-r{display:grid;grid-template-columns:1fr 130px;gap:14px;align-items:center}
+.hb-r .tr{height:46px;border-radius:12px;background:var(--track);overflow:hidden}
+.hb-r .tr i{display:block;height:100%;border-radius:12px;background:var(--c);width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.slide.active .hb-r .tr i{width:var(--w)}
+.hb-r em{font-style:normal;font-size:30px;font-weight:900;color:var(--c);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* GPCA: fluxo */
+.flow{display:grid;grid-template-columns:170px 1fr 1.2fr 80px 1.2fr 1fr;gap:12px;align-items:stretch}
+.flow > div{border-radius:16px;padding:14px 18px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.flow b{display:block;font-size:30px;font-weight:900;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;line-height:1.1}
+.flow span{display:block;font-size:13px;color:var(--muted);font-weight:700;margin-top:2px}
+.fl-h span{font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 18px}
+.flow .fy{background:var(--brand);}
+.flow .fy b{color:#FFFFFF}
+.flow .fy span{color:#C9D6F2}
+.flow .fc{background:var(--card2);border:1px solid var(--line)}
+.flow .fo{align-items:center;justify-content:center;font-size:20px;font-weight:900;color:var(--accent);padding:0}
+.flow .fr{background:var(--cs);border:1px solid var(--cl);border-left:5px solid var(--c)}
+.flow .fr b{color:var(--c);font-size:34px}
+.flow.tot{padding-top:12px;border-top:2px solid var(--line)}
+.flow.tot .fy{background:var(--accent)}
+.flow.tot .fy span{color:#FFE3CF}
+.flow.tot .fc{background:transparent;border-style:dashed}
+
+/* composição empilhada */
+.stk-r{display:grid;grid-template-columns:220px 1fr 170px;gap:18px;align-items:center}
+.stk-l b{display:block;font-size:19px;color:var(--ink)}
+.stk-l span{display:block;font-size:13px;color:var(--muted);font-weight:600}
+.stk{display:flex;height:52px;border-radius:14px;overflow:hidden;background:var(--track)}
+.stk i{position:relative;display:flex;align-items:center;height:100%;width:0;background:var(--c);transition:width 1s cubic-bezier(.2,.8,.2,1);min-width:0}
+.slide.active .stk i{width:var(--w)}
+.stk i.c-o{min-width:0}
+.stk-k{display:flex;gap:22px;margin-top:6px;font-size:13.5px;font-weight:700;color:var(--body)}
+.stk-k span{display:inline-flex;align-items:center;gap:7px}
+.stk-k i{width:12px;height:12px;border-radius:3px;background:var(--c);display:inline-block}
+.stk-k b{color:var(--ink)}
+.stk-v{font-size:28px;font-weight:900;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* só Verificador */
+.pstack{display:flex;flex-direction:column;gap:12px;min-height:0}
+.pct{flex:1;display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;padding:14px 20px;border-radius:20px;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--c);box-shadow:var(--shadow)}
+.pct > b{font-size:48px;font-weight:900;letter-spacing:-.04em;color:var(--c);font-variant-numeric:tabular-nums}
+.pct small{display:block;font-size:11.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.pct span{display:block;font-size:14px;line-height:1.45;color:var(--body)}
+.pct span b{color:var(--ink)}
+.cmp-leg{display:flex;gap:22px;font-size:13px;font-weight:700;color:var(--body)}
+.cmp-leg span{display:inline-flex;align-items:center;gap:8px}
+.cmp-leg i{width:14px;height:14px;border-radius:4px;display:inline-block}
+.cmp-leg i.t{background:var(--c-neutral)}.cmp-leg i.s{background:var(--accent)}
+.cmp-r{display:grid;grid-template-columns:150px 1fr 120px;gap:16px;align-items:center}
+.cmp-l{font-size:18px;color:var(--ink)}
+.cmp-b{display:flex;flex-direction:column;gap:6px}
+.cmp-b .tr{position:relative;height:32px;border-radius:10px;background:var(--track);overflow:hidden}
+.cmp-b .tr i{display:block;height:100%;border-radius:10px;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.slide.active .cmp-b .tr i{width:var(--w)}
+.cmp-b .t i{background:var(--c-neutral)}
+.cmp-b .s i{background:var(--accent)}
+.cmp-b em{position:absolute;top:50%;transform:translateY(-50%);font-style:normal;font-size:14px;font-weight:900;color:var(--ink)}
+.cmp-b .t em{right:12px}
+.cmp-b .s em{left:calc(var(--w) + 10px)}
+.cmp-p b{display:block;font-size:30px;font-weight:900;color:var(--accent);text-align:right;letter-spacing:-.02em}
+.cmp-p span{display:block;font-size:12px;color:var(--muted);font-weight:700;text-align:right}
+
+.dt.big{font-size:18px}
+.dt.big td{padding:16px 14px}
+.pcard.big{padding:20px 24px;gap:14px}
+.pcard.big .steps3 b{font-size:16.5px}
+.pcard.big .steps3 span{font-size:14.5px}
+.pcard.big .fml{margin-top:auto;font-size:19px;padding:12px 18px}
+
+body.flow .story,body.flow .got-grid,body.flow .flow,body.flow .stk-r,body.flow .cmp-r,body.flow .chart-k{grid-template-columns:1fr}
+body.flow .foot-row{flex-direction:column;align-items:stretch}
+body.flow .extra-bar{position:static}
+body.flow .chart9{height:260px}
+
+/* ===== v2: preenchimento ===== */
+.mv{margin-top:14px;padding:14px 16px;border-radius:16px;background:var(--card2);border:1px solid var(--line);display:flex;flex-direction:column;gap:10px;position:relative;z-index:1}
+.mv > small{font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.mv .br{grid-template-columns:110px 1fr 112px;gap:10px}
+.mv .br > span{font-size:13px}
+.mv .br .tr{height:22px;border-radius:7px}
+.mv .br .tr i{border-radius:7px}
+.mv .br b{font-size:15px}
+.sc .mbtn{margin-top:14px}
+.sc-v{font-size:70px}
+.sc-f li{font-size:17px}
+.sc{justify-content:space-between}
+
+.proj .panel-body{justify-content:space-evenly!important}
+.proj .hb-t b{font-size:22px}
+.proj .hb-t span{font-size:15px}
+.proj .hb-r .tr{height:64px;border-radius:14px}
+.proj .hb-r .tr i{border-radius:14px}
+.proj .hb-r{grid-template-columns:1fr 160px}
+.proj .hb-r em{font-size:40px}
+.proj .nt{font-size:15.5px}
+.proj .kc .v{font-size:64px}
+.proj .kc .v.md{font-size:52px}
+.proj .kc span{font-size:15.5px}
+.proj .kc{padding:22px 24px}
+
+.gflow .panel-body{justify-content:space-evenly!important;padding:18px 22px}
+.gflow .flow > div{padding:20px 22px}
+.gflow .flow b{font-size:36px}
+.gflow .flow .fr b{font-size:42px}
+.gflow .flow span{font-size:14px}
+.gflow .fl-h span{font-size:12px}
+.gflow .flow .fo{font-size:24px}
+
+.sov .pct{grid-template-columns:170px 1fr;padding:16px 24px}
+.sov .pct > b{font-size:60px}
+.sov .pct span{font-size:15.5px}
+.sov .panel-body{justify-content:space-evenly!important}
+.sov .cmp-r{grid-template-columns:170px 1fr 130px}
+.sov .cmp-l{font-size:20px}
+.sov .cmp-b .tr{height:44px;border-radius:12px}
+.sov .cmp-b .tr i{border-radius:12px}
+.sov .cmp-b em{font-size:16px}
+.sov .cmp-p b{font-size:36px}
+.sov .cmp-leg{font-size:14.5px}
+
+.fill .panel-body{justify-content:space-evenly}
+.fill .lead2{font-size:16.5px}
+.fill .fml.sm{font-size:18px;padding:13px 18px}
+.fill .fml{font-size:20px}
+.fill .phase b{font-size:34px}
+.fill .phase span{font-size:14px}
+.fill.pc2 .pcard{justify-content:space-evenly}
+.fill .steps3{gap:22px}
+.fill .steps3 > div > i{width:46px;height:46px;font-size:19px}
+.fill .steps3 > div{grid-template-columns:50px 1fr}
+.pcard.big .steps3 b{font-size:20px}
+.pcard.big .steps3 span{font-size:16px}
+.pcard.big h3{font-size:24px}
+.pcard.big .fml{font-size:24px;padding:16px 20px}
+
+.stk.big{height:64px;border-radius:16px}
+.stk.big em{font-style:normal;font-size:16px;font-weight:900;color:#FFFFFF;padding:0 18px;white-space:nowrap}
+.stk.big i{align-items:center}
+.ct.roomy tbody tr:not(.gh) td{padding:14px 16px;font-size:16.5px}
+.ct.roomy td.hz b{display:inline;font-size:17px}
+.ct.roomy td.hz span{margin-left:8px;font-size:13px}
+.ct.roomy td.vl{font-size:26px}
+.ct.roomy tr.gh th{padding:12px 16px 6px}
+.dt.big.xl{font-size:21px}
+.dt.big.xl td{padding:20px 16px}
+.dt.big.xl .s2{font-size:14px}
+.fill.pc2 .pcard .fml{margin-top:0}
+.phase b{white-space:nowrap}
+.fill .phase b{font-size:30px}
+.sov .pct{grid-template-columns:200px 1fr}
+.sov .pct > b{font-size:54px;white-space:nowrap}
+.flow .fo{white-space:nowrap}
+.gflow .flow{grid-template-columns:170px 1fr 1.2fr 96px 1.2fr 1fr}
+.dt.big.xl ~ *{font-size:inherit}
+.nts .nt{font-size:15px}
+
+/* ===== tooltips ===== */
+[data-tip]{cursor:help}
+[data-tip]:focus{outline:none}
+[data-tip]:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.sc-v[data-tip],.kc .v[data-tip],.hb-r em[data-tip],.cmp-b em[data-tip],.cmp-p b[data-tip],.pct > b[data-tip],.fr b[data-tip],.chart-k b,.tt,.hb-t b[data-tip],li[data-tip] b,.fc[data-tip] b{text-decoration:underline dotted;text-decoration-thickness:2px;text-underline-offset:.16em;text-decoration-color:color-mix(in srgb,currentColor 40%,transparent)}
+small[data-tip],.fl-h span[data-tip],.cmp-leg span[data-tip]{text-decoration:underline dotted;text-underline-offset:.2em}
+.st[data-tip]:hover,.fo[data-tip]:hover{filter:brightness(1.08)}
+.chart-k > div[data-tip]:hover,.fc[data-tip]:hover{border-color:var(--accent)}
+.tip{max-width:340px}
+.tip .ti-p b{color:inherit}
+
+/* ===== v3: matriz por esteira ===== */
+.st-v{background:var(--soft-o);border-color:var(--accent);color:var(--ink-o)}
+.mx{display:grid;grid-template-columns:230px repeat(4,minmax(0,1fr));grid-template-rows:auto 1fr 1fr;gap:10px;flex:1;min-height:0}
+.mx-corner{background:transparent}
+.mx-h{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:14px 18px 12px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+.mx-h small{font-size:13px;font-weight:700;color:var(--muted)}
+.mx-h .st{font-size:13px;padding:4px 12px}
+.mx-h:not(.mx-kv)::after{content:"";position:absolute;right:-10px;top:50%;width:10px;height:2px;background:var(--line)}
+.mx-h.mx-kv::after{display:none}
+.mx-h.mx-kr{border-top:4px solid var(--ok)}
+.mx-h.mx-k26,.mx-h.mx-k27{border-top:4px solid var(--ink-p)}
+.mx-h.mx-kv{border-top:4px solid var(--accent);background:var(--soft-o);border-color:var(--line-o)}
+.mx-l{display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:center;padding:16px 18px;border-radius:18px;background:var(--brand);color:#FFFFFF}
+.mx-l > i{font-style:normal;width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-weight:900;font-size:20px;background:var(--accent);color:#FFFFFF}
+.mx-l.mx-sm > i{background:var(--c-soft)}
+.mx-l b{display:block;font-size:24px;letter-spacing:-.02em;line-height:1.1}
+.mx-l span{display:block;font-size:13px;color:#C9D6F2;font-weight:600;margin-top:3px;line-height:1.35}
+.mx-v{display:flex;flex-direction:column;justify-content:center;gap:6px;padding:16px 20px;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);min-width:0}
+.mx-v b{font-size:42px;line-height:1.02;font-weight:900;letter-spacing:-.04em;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;align-self:flex-start}
+.mx-v span{font-size:14px;line-height:1.35;color:var(--body);font-weight:600}
+.mx-v.mx-hm b{color:var(--accent)}
+.mx-v.mx-sm b{color:var(--c-soft)}
+.mx-v.mx-kr{background:var(--soft-g);border-color:var(--line-g)}
+.mx-v.mx-kr.mx-hm b,.mx-v.mx-kr.mx-sm b{color:var(--ink-g)}
+.mx-v.mx-kv{background:linear-gradient(135deg,var(--soft-o),var(--card));border-color:var(--line-o);border-width:2px}
+.mx-v.na{background:var(--card2);border-style:dashed;box-shadow:none}
+.mx-v.na b{color:var(--c-neutral)!important}
+.mx-v.na span{color:var(--muted)}
+.mx-v b[data-tip]{text-decoration:underline dotted;text-decoration-thickness:2px;text-underline-offset:.14em;text-decoration-color:color-mix(in srgb,currentColor 35%,transparent)}
+.mx-h[data-tip]{cursor:help}
+.ins{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;flex:none}
+.in2{display:grid;grid-template-columns:54px 1fr;gap:14px;align-items:center;padding:14px 18px;border-radius:18px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);box-shadow:var(--shadow)}
+.in2 > i{font-style:normal;width:54px;height:54px;border-radius:15px;display:grid;place-items:center;background:var(--cs);color:var(--c);font-weight:900;font-size:17px}
+.in2 b{display:block;font-size:16.5px;color:var(--ink);line-height:1.2}
+.in2 span{display:block;font-size:14px;color:var(--body);line-height:1.45;margin-top:3px}
+.in2 span b{display:inline;font-size:inherit}
+.foot-row .dlinks{flex:1;justify-content:flex-end}
+body.flow .mx{grid-template-columns:1fr 1fr;grid-template-rows:none}
+body.flow .mx-corner{display:none}
+body.flow .ins{grid-template-columns:1fr}
+
+.mx-v.mx-kv{box-shadow:0 14px 30px rgba(255,98,0,.14)}
+.mx-v.mx-kv span{color:var(--ink-o)}
+.mx-l{grid-template-columns:44px 1fr;gap:12px;padding:16px 16px}
+.mx-l > i{width:44px;height:44px;border-radius:13px;font-size:17px}
+.mx-l b{font-size:22px;white-space:nowrap}
+.foot-row{justify-content:flex-end}
+.foot-row .dlinks{flex:0 1 auto}
+.in2 .itag{display:inline-block;font-style:normal;font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--c);margin-bottom:2px}
+.in2 > i{font-size:18px}
+
+/* ===== v4: visão só Verificador × total ===== */
+html[data-view="tot"] .vw-sv{display:none!important}
+html:not([data-view="tot"]) .vw-tot{display:none!important}
+.vblock{display:flex;flex-direction:column;gap:14px}
+.vtabs{display:flex;flex-direction:column;gap:6px;width:100%}
+.vtabs small{font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-left:4px}
+.vtabs button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 12px;font-size:14px;font-weight:900;cursor:pointer;text-align:left;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow)}
+.vtabs button::before{content:"";width:14px;height:14px;border-radius:50%;border:2px solid var(--line-b);flex:none}
+.vtabs button.on{background:var(--brand);border-color:var(--brand);color:#FFFFFF}
+.vtabs button.on::before{border-color:#FFFFFF;background:var(--accent)}
+.vtabs button:not(.on):hover{border-color:var(--accent);background:var(--soft-o);color:var(--ink-o)}
+.mx-corner{display:flex;align-items:flex-end}
+.vbar{display:flex;flex:none}
+.vbar .vtabs{flex-direction:row;align-items:center;width:auto;gap:8px}
+.vbar .vtabs small{margin-right:4px}
+.cbar .vtabs{flex-direction:row;align-items:center;width:auto;gap:6px}
+.cbar .vtabs small{margin-right:4px}
+.cbar .vtabs button{padding:6px 12px;font-size:13px;box-shadow:none}
+.title h1 .vw-sv,.title h1 .vw-tot{display:inline}
+
+</style>
+</head>
+<body>
+<div class="viewport" id="viewport">
+<div class="stage" id="stage">
+
+<section class="slide active" data-label="Capa">
+  <div class="top" style="justify-content:flex-end"><div class="logo" role="img" aria-label="Itaú Unibanco"></div></div>
+  <div class="cover">
+    <div>
+      <div class="eyebrow rise"><span class="pip"></span>DataCraft • GOT e GPCA</div>
+      <h1 class="brand-title rise d1" style="font-size:112px">Verificador<br><span class="acc">Inteligente</span></h1>
+      <div class="brand-sub rise d1" style="max-width:28ch">de Orçamentos: benefícios da GOT, da GPCA e o total</div>
+      <div class="rule rise d2"></div>
+      <p class="lead rise d3">Para cada esteira, o mesmo roteiro: <b>hard money</b> e <b>soft money</b>, com o que já foi realizado até 24/11, o previsto para 2026 e 2027 e o VPL em 5 anos.</p>
+    </div>
+    <div class="agenda rise d2">
+  <div class="agenda-head">Roteiro</div>
+  <button class="agb" type="button" data-go="GOT"><span class="n">01</span><div><b>GOT</b><span>Hard e soft money: realizado, 2026, 2027 e VPL</span></div><i>→</i></button>
+  <button class="agb" type="button" data-go="GPCA"><span class="n">02</span><div><b>GPCA</b><span>Previsto para 2026, 2027 e VPL</span></div><i>→</i></button>
+  <button class="agb" type="button" data-go="Total"><span class="n">03</span><div><b>Total GOT + GPCA</b><span>A soma das duas esteiras</span></div><i>→</i></button>
+  <button class="agb" type="button" data-go="Calculadora"><span class="n">04</span><div><b>Calculadora</b><span>Simule hard money, horas e FTE</span></div><i>→</i></button>
+</div>
+  </div>
+</section>
+
+<section class="slide" data-label="GOT">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Capítulo 1 • GOT</div>
+      <h1><span class="vw-sv">GOT: R$ 849,5 mil e 415,6 h gerados pelo Verificador, com VPL de R$ 3,99 MM</span><span class="vw-tot">GOT: R$ 2,48 MM e 415,6 h já realizados, com VPL de R$ 11,6 MM em 5 anos</span></h1>
+      <p><span class="vw-sv">Visão justa: só o que o Verificador gera, descontando o que a análise humana já encontraria</span><span class="vw-tot">Total indicado pelo Verificador, inclusive o que a análise humana também encontraria</span></p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:14px">
+
+    <div class="mx rise">
+<div class="mx-c mx-corner"><div class="vtabs" role="tablist" aria-label="Visão do benefício"><small>Visão do benefício</small><button type="button" data-view="sv" class="on" data-tip-h="Só Verificador" data-tip="Benefício <b>justo</b>: só o que o Verificador gera, descontando o que a análise humana já encontraria. <b>34,3%</b> do hard money na GOT e <b>23,1%</b> na GPCA; horas são 100% do Verificador.">Só Verificador</button><button type="button" data-view="tot" data-tip-h="Total indicado" data-tip="Todo o valor divergente indicado pelo Verificador, inclusive o que a operação humana também encontraria.">Total indicado</button></div></div><div class="mx-h mx-kr" data-tip-h="Realizado" data-tip="Valor <b>já capturado</b> e informado pela operação, com dados até 24/11." tabindex="0"><span class="st st-r" data-tip-h="Realizado" data-tip="Valor <b>já capturado</b> e informado pela operação, com dados até 24/11." tabindex="0">Realizado</span><small>9 meses, até 24/11</small></div><div class="mx-h mx-k26" data-tip-h="Previsto 2026" data-tip="Fechamento do ano: o realizado até 24/11 mais a projeção até 31/12." tabindex="0"><span class="st st-p">Previsto 2026</span><small>fechamento do ano</small></div><div class="mx-h mx-k27" data-tip-h="Previsto 2027" data-tip="Projeção para os 12 meses de 2027." tabindex="0"><span class="st st-p">Previsto 2027</span><small>12 meses</small></div><div class="mx-h mx-kv" data-tip-h="VPL 5 anos" data-tip="<b>Hard money:</b> valor presente líquido, com 2026 no ano 0 e o fluxo de 2027 repetido até 2031, a 25% a.a. (fator 2,689). <b>Soft money:</b> horas acumuladas no mesmo período, sem conversão em reais." tabindex="0"><span class="st st-v">VPL 5 anos</span><small>R$ a 25% a.a. · horas acumuladas</small></div><div class="mx-l mx-hm"><i>R$</i><div><b>Hard money</b><span><span class="vw-sv">R$ · 34,3% atribuível ao Verificador</span><span class="vw-tot">R$ · divergências e custo evitado</span></span></div></div><div class="mx-v mx-kr mx-hm"><b class="vw-sv" data-tip-h="Realizado · só Verificador" data-tip="34,3% dos <b>R$ 2,48 MM</b> detectados em 1.778 orçamentos até 24/11: a parte que a análise humana não encontraria sozinha (17% de volume novo + 30% mais divergências no restante)." tabindex="0">R$ 849,5 mil</b><span class="vw-sv">34,3% de R$ 2,48 MM</span><b class="vw-tot" data-tip-h="Realizado · total indicado" data-tip="Divergências detectadas em <b>1.778 orçamentos</b> nos 9 meses até 24/11. Média de R$ 275,6 mil por mês." tabindex="0">R$ 2,48 MM</b><span class="vw-tot">1.778 orçamentos verificados</span></div><div class="mx-v mx-k26 mx-hm"><b class="vw-sv" data-tip-h="Previsto 2026 · só Verificador" data-tip="34,3% × R$ 2,76 MM (realizado + dezembro pela média) = <b>R$ 943,9 mil</b>." tabindex="0">R$ 943,9 mil</b><span class="vw-sv">34,3% de R$ 2,76 MM</span><b class="vw-tot" data-tip-h="Previsto 2026" data-tip="R$ 2,48 MM realizados + dezembro pela média mensal de <b>R$ 275,6 mil</b> (R$ 2,48 MM ÷ 9)." tabindex="0">R$ 2,76 MM</b><span class="vw-tot">realizado + dezembro</span></div><div class="mx-v mx-k27 mx-hm"><b class="vw-sv" data-tip-h="Previsto 2027 · só Verificador" data-tip="34,3% × R$ 3,31 MM = <b>R$ 1,13 MM</b>." tabindex="0">R$ 1,13 MM</b><span class="vw-sv">34,3% de R$ 3,31 MM</span><b class="vw-tot" data-tip-h="Previsto 2027" data-tip="R$ 275,6 mil × 12 = <b>R$ 3.306.667</b>. Projeção linear pela média dos 9 meses." tabindex="0">R$ 3,31 MM</b><span class="vw-tot">média mensal × 12</span></div><div class="mx-v mx-kv mx-hm"><b class="vw-sv" data-tip-h="VPL · só Verificador" data-tip="R$ 0,94 MM (ano 0) + R$ 1,13 MM × 2,689 = <b>R$ 3,99 MM</b>." tabindex="0">R$ 3,99 MM</b><span class="vw-sv">R$ 0,94 MM + R$ 1,13 MM × 2,689</span><b class="vw-tot" data-tip-h="VPL · total indicado" data-tip="R$ 2,76 MM (ano 0) + R$ 3,31 MM × 2,689 = <b>R$ 11,65 MM</b>." tabindex="0">R$ 11,6 MM</b><span class="vw-tot">R$ 2,76 MM + R$ 3,31 MM × 2,689</span></div><div class="mx-l mx-sm"><i>h</i><div><b>Soft money</b><span>horas desoneradas · 100% Verificador</span></div></div><div class="mx-v mx-kr mx-sm"><b class="vw-all" data-tip-h="Realizado · soft money" data-tip="<b>200,67 h</b> nos 5 meses iniciais (40,13 h/mês) + <b>214,93 h</b> nos 4 meses em que 68 operações passaram a ser feitas sem esforço manual (53,73 h/mês). Horas são <b>100% do Verificador</b> nas duas visões." tabindex="0">415,6 h</b><span class="vw-all">52 jornadas de 8 h</span></div><div class="mx-v mx-k26 mx-sm"><b class="vw-all" data-tip-h="Previsto 2026" data-tip="415,6 h + dezembro no ritmo atual de <b>53,73 h/mês</b>. Horas são <b>100% do Verificador</b> nas duas visões." tabindex="0">469,3 h</b><span class="vw-all">realizado + dezembro</span></div><div class="mx-v mx-k27 mx-sm"><b class="vw-all" data-tip-h="Previsto 2027" data-tip="53,73 h/mês × 12 = <b>644,8 h</b>, mantida a automação das 68 operações. Horas são <b>100% do Verificador</b> nas duas visões." tabindex="0">644,8 h</b><span class="vw-all">ritmo atual × 12</span></div><div class="mx-v mx-kv mx-sm"><b class="vw-all" data-tip-h="Soft money · 5 anos" data-tip="469,3 h (2026) + 644,8 h × 5 (2027 a 2031) = <b>3.693 h</b>. Horas não são convertidas em reais nem somadas ao hard money." tabindex="0">3.693 h</b><span class="vw-all">horas acumuladas de 2026 a 2031</span></div>
+</div>
+    <div class="ins rise d1"><div class="in2 c-o"><i>R$</i><div><em class="itag">Hard money</em><b><span class="vw-sv">Benefício justo: R$ 849,5 mil</span><span class="vw-tot">Valor já comprovado</span></b><span><span class="vw-sv"><b>34,3%</b> dos R$ 2,48 MM detectados: o que a análise humana não acharia sozinha, com 17% de volume novo e 30% mais divergências.</span><span class="vw-tot"><b>R$ 2,48 MM</b> em divergências detectadas em 1.778 orçamentos até 24/11. Projeção pela média de <b>R$ 275,6 mil por mês</b>.</span></span></div></div><div class="in2 c-b"><i>h</i><div><em class="itag">Soft money</em><b>Mais horas liberadas por mês</b><span>Passou de <b>40,1 h</b> para <b>53,7 h por mês</b> quando 68 das 301 operações mensais deixaram de exigir esforço manual. Projeção nesse ritmo.</span></div></div><div class="in2 c-m"><i>≠</i><div><em class="itag">Leitura</em><b><span class="vw-sv">Visão justa e separada</span><span class="vw-tot">Total indicado, separado</span></b><span><span class="vw-sv">Por padrão mostramos só o que o Verificador gera. Hard e soft money <b>nunca são somados</b>.</span><span class="vw-tot">Inclui o que a análise humana também acharia. Hard e soft money <b>nunca são somados</b>.</span></span></div></div></div>
+    <div class="foot-row rise d2"><div class="dlinks"><span>Ver detalhes</span><button class="mbtn" type="button" data-go="Evolução mensal da GOT">Evolução mês a mês</button><button class="mbtn" type="button" data-go="Base do cálculo de horas">Como calculamos as horas</button><button class="mbtn" type="button" data-go="Premissas só Verificador">Por que 34,3%</button><button class="mbtn" type="button" data-go="Cálculo do VPL">Cálculo do VPL</button></div></div>
+  </div>
+</section>
+
+<section class="slide" data-label="GPCA">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Capítulo 2 • GPCA</div>
+      <h1><span class="vw-sv">GPCA: R$ 3,58 mi previstos para 2026 pelo Verificador e VPL de R$ 54,6 MM</span><span class="vw-tot">GPCA: R$ 15,5 mi previstos para 2026 e VPL de R$ 236,6 MM em 5 anos</span></h1>
+      <p><span class="vw-sv">Visão justa: só o que o Verificador gera · realizado a ser calculado, benefício previsto a partir de 2026</span><span class="vw-tot">Total indicado · realizado a ser calculado, com benefício previsto a partir de 2026</span></p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:14px">
+
+    <div class="mx rise">
+<div class="mx-c mx-corner"><div class="vtabs" role="tablist" aria-label="Visão do benefício"><small>Visão do benefício</small><button type="button" data-view="sv" class="on" data-tip-h="Só Verificador" data-tip="Benefício <b>justo</b>: só o que o Verificador gera, descontando o que a análise humana já encontraria. <b>34,3%</b> do hard money na GOT e <b>23,1%</b> na GPCA; horas são 100% do Verificador.">Só Verificador</button><button type="button" data-view="tot" data-tip-h="Total indicado" data-tip="Todo o valor divergente indicado pelo Verificador, inclusive o que a operação humana também encontraria.">Total indicado</button></div></div><div class="mx-h mx-kr" data-tip-h="Realizado" data-tip="Valor <b>já capturado</b> e informado pela operação, com dados até 24/11." tabindex="0"><span class="st st-r" data-tip-h="Realizado" data-tip="Valor <b>já capturado</b> e informado pela operação, com dados até 24/11." tabindex="0">Realizado</span><small>9 meses, até 24/11</small></div><div class="mx-h mx-k26" data-tip-h="Previsto 2026" data-tip="Fechamento do ano: o realizado até 24/11 mais a projeção até 31/12." tabindex="0"><span class="st st-p">Previsto 2026</span><small>fechamento do ano</small></div><div class="mx-h mx-k27" data-tip-h="Previsto 2027" data-tip="Projeção para os 12 meses de 2027." tabindex="0"><span class="st st-p">Previsto 2027</span><small>12 meses</small></div><div class="mx-h mx-kv" data-tip-h="VPL 5 anos" data-tip="<b>Hard money:</b> valor presente líquido, com 2026 no ano 0 e o fluxo de 2027 repetido até 2031, a 25% a.a. (fator 2,689). <b>Soft money:</b> horas acumuladas no mesmo período, sem conversão em reais." tabindex="0"><span class="st st-v">VPL 5 anos</span><small>R$ a 25% a.a. · horas acumuladas</small></div><div class="mx-l mx-hm"><i>R$</i><div><b>Hard money</b><span><span class="vw-sv">R$ · 23,1% atribuível ao Verificador</span><span class="vw-tot">R$ · eficiência sobre o valor orçado</span></span></div></div><div class="mx-v mx-kr mx-hm na"><b class="vw-all" data-tip-h="Realizado · GPCA" data-tip="O benefício realizado da GPCA <b>ainda será calculado</b>." tabindex="0">—</b><span class="vw-all">a ser calculado</span></div><div class="mx-v mx-k26 mx-hm"><b class="vw-sv" data-tip-h="Previsto 2026 · só Verificador" data-tip="23,1% × R$ 15,525 mi = <b>R$ 3,58 mi</b>. De cada 130 divergências, 30 só o Verificador encontra." tabindex="0">R$ 3,58 mi</b><span class="vw-sv">23,1% de R$ 15,5 mi</span><b class="vw-tot" data-tip-h="Previsto 2026" data-tip="40 UPEs no forecast do restante de 2026: R$ 103.500.000 × 15% = <b>R$ 15.525.000</b>." tabindex="0">R$ 15,5 mi</b><span class="vw-tot">15% × R$ 103,5 mi orçados</span></div><div class="mx-v mx-k27 mx-hm"><b class="vw-sv" data-tip-h="Previsto 2027 · só Verificador" data-tip="23,1% × R$ 82,22 mi = <b>R$ 18,97 mi</b>." tabindex="0">R$ 18,97 mi</b><span class="vw-sv">23,1% de R$ 82,2 mi</span><b class="vw-tot" data-tip-h="Previsto 2027" data-tip="218 UPEs no forecast de 2027: R$ 548.148.997,46 × 15% = <b>R$ 82.222.349,62</b>." tabindex="0">R$ 82,2 mi</b><span class="vw-tot">15% × R$ 548,15 mi orçados</span></div><div class="mx-v mx-kv mx-hm"><b class="vw-sv" data-tip-h="VPL · só Verificador" data-tip="R$ 3,58 MM (ano 0) + R$ 18,97 MM × 2,689 = <b>R$ 54,61 MM</b>." tabindex="0">R$ 54,6 MM</b><span class="vw-sv">R$ 3,58 mi + R$ 18,97 mi × 2,689</span><b class="vw-tot" data-tip-h="VPL · total indicado" data-tip="R$ 15,53 MM (ano 0) + R$ 82,22 MM × 2,689 = <b>R$ 236,64 MM</b>." tabindex="0">R$ 236,6 MM</b><span class="vw-tot">R$ 15,5 mi + R$ 82,2 mi × 2,689</span></div><div class="mx-l mx-sm"><i>h</i><div><b>Soft money</b><span>horas desoneradas · 100% Verificador</span></div></div><div class="mx-v mx-kr mx-sm na"><b class="vw-all" data-tip-h="Realizado · GPCA" data-tip="O benefício realizado da GPCA <b>ainda será calculado</b>." tabindex="0">—</b><span class="vw-all">a ser calculado</span></div><div class="mx-v mx-k26 mx-sm"><b class="vw-all" data-tip-h="Previsto 2026" data-tip="Cada UPE consome 8 h de análise; o Verificador desonera <b>30%</b>: 40 × 8 h × 30% = <b>96 h</b>. Horas são <b>100% do Verificador</b> nas duas visões." tabindex="0">96 h</b><span class="vw-all">40 UPEs × 8 h × 30%</span></div><div class="mx-v mx-k27 mx-sm"><b class="vw-all" data-tip-h="Previsto 2027" data-tip="218 × 8 h × 30% = <b>523,2 h</b>, ou 65,4 jornadas de 8 h. Horas são <b>100% do Verificador</b> nas duas visões." tabindex="0">523,2 h</b><span class="vw-all">218 UPEs × 8 h × 30%</span></div><div class="mx-v mx-kv mx-sm"><b class="vw-all" data-tip-h="Soft money · 5 anos" data-tip="96 h (2026) + 523,2 h × 5 (2027 a 2031) = <b>2.712 h</b>. Horas não são convertidas em reais nem somadas ao hard money." tabindex="0">2.712 h</b><span class="vw-all">horas acumuladas de 2026 a 2031</span></div>
+</div>
+    <div class="ins rise d1"><div class="in2 c-o"><i>R$</i><div><em class="itag">Hard money</em><b><span class="vw-sv">23,1% do benefício é só dele</span><span class="vw-tot">15% sobre o valor orçado</span></b><span><span class="vw-sv">De cada 130 divergências, <b>30</b> só o Verificador encontra: R$ 3,58 mi em 2026 e R$ 18,97 mi em 2027.</span><span class="vw-tot">Captura de <b>15%</b> da eficiência sobre R$ 103,5 mi orçados em 2026 e R$ 548,15 mi em 2027.</span></span></div></div><div class="in2 c-b"><i>h</i><div><em class="itag">Soft money</em><b>30% menos tempo por UPE</b><span>Cada UPE leva 8 h de análise; o Verificador desonera <b>30%</b>. São 40 UPEs em 2026 e 218 em 2027.</span></div></div><div class="in2 c-p"><i>!</i><div><em class="itag">Leitura</em><b>É previsão, e separada</b><span>Depende da confirmação do orçamento e da captura efetiva. Hard e soft money <b>não são somados</b>.</span></div></div></div>
+    <div class="foot-row rise d2"><div class="dlinks"><span>Ver detalhes</span><button class="mbtn" type="button" data-go="Do orçado ao benefício">Do orçado ao benefício</button><button class="mbtn" type="button" data-go="Premissas da GPCA">Premissas e fórmulas</button><button class="mbtn" type="button" data-go="Premissas só Verificador">Por que 23,1%</button><button class="mbtn" type="button" data-go="Cálculo do VPL">Cálculo do VPL</button></div></div>
+  </div>
+</section>
+
+<section class="slide" data-label="Total">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Capítulo 3 • Total GOT + GPCA</div>
+      <h1><span class="vw-sv">Total: R$ 849,5 mil já gerados pelo Verificador e VPL de R$ 58,6 MM em 5 anos</span><span class="vw-tot">Total: R$ 2,48 MM já realizados e VPL de R$ 248,3 MM em 5 anos</span></h1>
+      <p><span class="vw-sv">Visão justa da soma GOT + GPCA: só o que o Verificador gera, hard e soft money separados</span><span class="vw-tot">Total indicado da soma GOT + GPCA, hard e soft money separados</span></p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:14px">
+
+    <div class="mx rise">
+<div class="mx-c mx-corner"><div class="vtabs" role="tablist" aria-label="Visão do benefício"><small>Visão do benefício</small><button type="button" data-view="sv" class="on" data-tip-h="Só Verificador" data-tip="Benefício <b>justo</b>: só o que o Verificador gera, descontando o que a análise humana já encontraria. <b>34,3%</b> do hard money na GOT e <b>23,1%</b> na GPCA; horas são 100% do Verificador.">Só Verificador</button><button type="button" data-view="tot" data-tip-h="Total indicado" data-tip="Todo o valor divergente indicado pelo Verificador, inclusive o que a operação humana também encontraria.">Total indicado</button></div></div><div class="mx-h mx-kr" data-tip-h="Realizado" data-tip="Valor <b>já capturado</b> e informado pela operação, com dados até 24/11." tabindex="0"><span class="st st-r" data-tip-h="Realizado" data-tip="Valor <b>já capturado</b> e informado pela operação, com dados até 24/11." tabindex="0">Realizado</span><small>9 meses, até 24/11</small></div><div class="mx-h mx-k26" data-tip-h="Previsto 2026" data-tip="Fechamento do ano: o realizado até 24/11 mais a projeção até 31/12." tabindex="0"><span class="st st-p">Previsto 2026</span><small>fechamento do ano</small></div><div class="mx-h mx-k27" data-tip-h="Previsto 2027" data-tip="Projeção para os 12 meses de 2027." tabindex="0"><span class="st st-p">Previsto 2027</span><small>12 meses</small></div><div class="mx-h mx-kv" data-tip-h="VPL 5 anos" data-tip="<b>Hard money:</b> valor presente líquido, com 2026 no ano 0 e o fluxo de 2027 repetido até 2031, a 25% a.a. (fator 2,689). <b>Soft money:</b> horas acumuladas no mesmo período, sem conversão em reais." tabindex="0"><span class="st st-v">VPL 5 anos</span><small>R$ a 25% a.a. · horas acumuladas</small></div><div class="mx-l mx-hm"><i>R$</i><div><b>Hard money</b><span><span class="vw-sv">R$ · parcela atribuível ao Verificador</span><span class="vw-tot">R$ · divergências e custo evitado</span></span></div></div><div class="mx-v mx-kr mx-hm"><b class="vw-sv" data-tip-h="Realizado · só Verificador" data-tip="Parcela só do Verificador no realizado da GOT até 24/11: <b>R$ 849,5 mil</b>. O realizado da GPCA ainda será calculado." tabindex="0">R$ 849,5 mil</b><span class="vw-sv">GOT R$ 849,5 mil + GPCA a ser calculado</span><b class="vw-tot" data-tip-h="Realizado · total" data-tip="Realizado da GOT até 24/11: <b>R$ 2,48 MM</b>. O realizado da GPCA ainda será calculado." tabindex="0">R$ 2,48 MM</b><span class="vw-tot">GOT R$ 2,48 MM + GPCA a ser calculado</span></div><div class="mx-v mx-k26 mx-hm"><b class="vw-sv" data-tip-h="Previsto 2026 · só Verificador" data-tip="GOT R$ 0,94 MM + GPCA R$ 3,58 MM = <b>R$ 4,53 MM</b>, 24,8% do total indicado." tabindex="0">R$ 4,53 MM</b><span class="vw-sv">GOT R$ 0,94 MM + GPCA R$ 3,58 MM</span><b class="vw-tot" data-tip-h="Previsto 2026" data-tip="GOT R$ 2,76 MM + GPCA R$ 15,53 MM = <b>R$ 18,28 MM</b>." tabindex="0">R$ 18,28 MM</b><span class="vw-tot">GOT R$ 2,76 MM + GPCA R$ 15,53 MM</span></div><div class="mx-v mx-k27 mx-hm"><b class="vw-sv" data-tip-h="Previsto 2027 · só Verificador" data-tip="GOT R$ 1,13 MM + GPCA R$ 18,97 MM = <b>R$ 20,11 MM</b>, 23,5% do total indicado." tabindex="0">R$ 20,11 MM</b><span class="vw-sv">GOT R$ 1,13 MM + GPCA R$ 18,97 MM</span><b class="vw-tot" data-tip-h="Previsto 2027" data-tip="GOT R$ 3,31 MM + GPCA R$ 82,22 MM = <b>R$ 85,53 MM</b>, 4,7 vezes o previsto para 2026." tabindex="0">R$ 85,53 MM</b><span class="vw-tot">GOT R$ 3,31 MM + GPCA R$ 82,22 MM</span></div><div class="mx-v mx-kv mx-hm"><b class="vw-sv" data-tip-h="VPL · só Verificador" data-tip="R$ 4,53 MM + R$ 20,11 MM × 2,689 = <b>R$ 58,6 MM</b>, 23,6% do total indicado de R$ 248,3 MM." tabindex="0">R$ 58,6 MM</b><span class="vw-sv">GOT R$ 3,99 MM + GPCA R$ 54,61 MM</span><b class="vw-tot" data-tip-h="VPL · total indicado" data-tip="R$ 18,28 MM + R$ 85,53 MM × 2,689 = <b>R$ 248,3 MM</b>. A GPCA responde por 95%." tabindex="0">R$ 248,3 MM</b><span class="vw-tot">GOT R$ 11,6 MM + GPCA R$ 236,6 MM</span></div><div class="mx-l mx-sm"><i>h</i><div><b>Soft money</b><span>horas desoneradas · 100% Verificador</span></div></div><div class="mx-v mx-kr mx-sm"><b class="vw-all" data-tip-h="Realizado · total" data-tip="Horas realizadas da GOT até 24/11: <b>415,6 h</b>. O realizado da GPCA ainda será calculado. Horas são <b>100% do Verificador</b> nas duas visões." tabindex="0">415,6 h</b><span class="vw-all">GOT 415,6 h + GPCA a ser calculado</span></div><div class="mx-v mx-k26 mx-sm"><b class="vw-all" data-tip-h="Previsto 2026" data-tip="GOT 469,3 h + GPCA 96 h = <b>565,3 h</b>. Horas são <b>100% do Verificador</b> nas duas visões." tabindex="0">565,3 h</b><span class="vw-all">GOT 469,3 h + GPCA 96 h</span></div><div class="mx-v mx-k27 mx-sm"><b class="vw-all" data-tip-h="Previsto 2027" data-tip="GOT 644,8 h + GPCA 523,2 h = <b>1.168 h</b>. Horas são <b>100% do Verificador</b> nas duas visões." tabindex="0">1.168 h</b><span class="vw-all">GOT 644,8 h + GPCA 523,2 h</span></div><div class="mx-v mx-kv mx-sm"><b class="vw-all" data-tip-h="Soft money · 5 anos" data-tip="GOT 3.693 h + GPCA 2.712 h = <b>6.405 h</b> acumuladas de 2026 a 2031. Horas não são convertidas em reais nem somadas ao hard money." tabindex="0">6.405 h</b><span class="vw-all">GOT 3.693 h + GPCA 2.712 h</span></div>
+</div>
+    <div class="ins rise d1"><div class="in2 c-o"><i>R$</i><div><em class="itag">Hard money</em><b><span class="vw-sv">R$ 58,6 MM de VPL justo</span><span class="vw-tot">R$ 248,3 MM de VPL</span></b><span><span class="vw-sv"><b>23,6%</b> do total indicado de R$ 248,3 MM. A GPCA responde por <b>93%</b>; o realizado de R$ 849,5 mil é da GOT.</span><span class="vw-tot">Realizado de <b>R$ 2,48 MM</b> na GOT (GPCA a ser calculado); a GPCA responde por <b>95%</b> do VPL.</span></span></div></div><div class="in2 c-b"><i>h</i><div><em class="itag">Soft money</em><b>6.405 h em 5 anos</b><span><b>415,6 h</b> já liberadas na GOT; em 2027 as duas esteiras somam <b>1.168 h</b> de análise desoneradas.</span></div></div><div class="in2 c-m"><i>≠</i><div><em class="itag">Leitura</em><b>Sempre separados</b><span>Somamos GOT + GPCA dentro de cada tipo, mas <b>nunca hard money com soft money</b>.</span></div></div></div>
+    <div class="foot-row rise d2"><div class="dlinks"><span>Ver detalhes</span><button class="mbtn" type="button" data-go="De onde vem o valor">GOT × GPCA</button><button class="mbtn" type="button" data-go="Cálculo do VPL">Cálculo do VPL</button><button class="mbtn" type="button" data-go="Soft money em 5 anos">Soft money em 5 anos</button><button class="mbtn" type="button" data-go="Só Verificador">Total × só Verificador</button></div></div>
+  </div>
+</section>
+
+<section class="slide" data-label="Calculadora">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Capítulo 4 • Calculadora</div>
+      <h1>Simule: hard money, soft money e FTE</h1>
+      <p>Premissas editáveis; os resultados e as fórmulas se atualizam a cada mudança</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:12px">
+
+    <div class="cbar rise">
+      <div class="seg" data-grp="mode" aria-label="Esteira"><button type="button" data-v="got">GOT</button><button type="button" data-v="gpca">GPCA</button></div>
+      <div style="display:flex;align-items:center"><span class="sl">Financeiro</span><div class="seg sm" data-grp="fin" aria-label="Unidade financeira"><button type="button" data-v="K">K</button><button type="button" data-v="MM">MM</button></div></div>
+      <div style="display:flex;align-items:center"><span class="sl">Tempo</span><div class="seg sm" data-grp="tu" aria-label="Unidade de tempo"><button type="button" data-v="s">s</button><button type="button" data-v="min">min</button><button type="button" data-v="h">h</button></div></div>
+      <div class="vtabs" role="tablist" aria-label="Visão do benefício"><small>Visão do benefício</small><button type="button" data-view="sv" class="on" data-tip-h="Só Verificador" data-tip="Benefício <b>justo</b>: só o que o Verificador gera, descontando o que a análise humana já encontraria. <b>34,3%</b> do hard money na GOT e <b>23,1%</b> na GPCA; horas são 100% do Verificador.">Só Verificador</button><button type="button" data-view="tot" data-tip-h="Total indicado" data-tip="Todo o valor divergente indicado pelo Verificador, inclusive o que a operação humana também encontraria.">Total indicado</button></div>
+      <p class="lead2" id="c_intro" style="flex:1 1 420px"></p>
+    </div>
+    <div class="calc rise d1" id="calcRoot">
+      <div class="panel">
+        <div class="panel-head">Premissas <small id="c_cols"></small></div>
+        <div class="panel-body">
+          <table class="ctbl"><thead id="c_head"></thead><tbody id="c_body"></tbody></table>
+          <div class="cfoot"><button type="button" class="cbtn2" id="calcReset">Restaurar premissas</button></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">Resultado <small id="c_lbl"></small></div>
+        <div class="panel-body">
+          <div class="ckp">
+            <div class="c-o"><small data-tip-h="Hard money" data-tip="Benefício financeiro direto, em reais: custo evitado na GOT ou eficiência capturada sobre o valor orçado na GPCA." tabindex="0">Hard money · custo evitado</small><b id="k_hm"></b><span id="k_hm_s"></span></div>
+            <div class="c-b"><small data-tip-h="Soft money" data-tip="Tempo de trabalho liberado, medido em horas. <b>Não é convertido em reais</b> nem somado ao hard money." tabindex="0">Soft money · horas desoneradas</small><b id="k_h"></b><span id="k_h_s"></span></div>
+            <div class="c-g"><small data-tip-h="FTE" data-tip="<b>Full-time equivalent</b>: horas desoneradas ÷ horas produtivas de um profissional em tempo integral no ano (jornada × dias × (1 − dispersão) × 12)." tabindex="0">Redução em FTE</small><b id="k_f"></b><span id="k_f_s"></span></div>
+          </div>
+          <table class="ctbl rtbl"><thead id="r_head"></thead><tbody id="r_body"></tbody></table>
+          <div class="cfoot"><button type="button" class="cbtn2 fx" id="fxOpen"><i>ƒx</i>Fórmulas</button><span class="cnote" id="c_note"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-label="Fechamento">
+  <div class="top" style="justify-content:flex-end"><div class="logo" role="img" aria-label="Itaú Unibanco"></div></div>
+  <div class="fim">
+    <h1 class="brand-title fim-t rise">Obrigado<span class="acc">!</span></h1>
+    <div class="rule fim-r rise d1"></div>
+    <div class="fim-dc rise d2">Data<span>Craft</span></div>
+    <div class="fim-p rise d3">Verificador Inteligente de Orçamentos · GOT e GPCA · Itaú Unibanco</div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="Evolução mensal da GOT">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • GOT</div>
+      <h1>A GOT já entregou R$ 2,48 MM e 415,6 horas em nove meses</h1>
+      <p>E o ganho acelerou: desde o 6º mês, 68 das 301 operações mensais deixaram de exigir esforço manual</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:14px">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+    <div class="vbar rise"><div class="vtabs" role="tablist" aria-label="Visão do benefício"><small>Visão do benefício</small><button type="button" data-view="sv" class="on" data-tip-h="Só Verificador" data-tip="Benefício <b>justo</b>: só o que o Verificador gera, descontando o que a análise humana já encontraria. <b>34,3%</b> do hard money na GOT e <b>23,1%</b> na GPCA; horas são 100% do Verificador.">Só Verificador</button><button type="button" data-view="tot" data-tip-h="Total indicado" data-tip="Todo o valor divergente indicado pelo Verificador, inclusive o que a operação humana também encontraria.">Total indicado</button></div></div>
+
+    <div class="got-grid rise">
+      <div class="kstack">
+        <div class="kc c-o"><small><span class="vw-sv">Hard money · só Verificador</span><span class="vw-tot">Hard money · total indicado</span></small><div class="v"><span class="vw-sv">R$ 849,5 mil</span><span class="vw-tot">R$ 2,48 MM</span></div><span>Divergências detectadas em 1.778 orçamentos verificados.</span></div>
+        <div class="kc c-b"><small>Capacidade liberada</small><div class="v" data-tip-h="Capacidade liberada" data-tip="<b>200,67 h</b> na fase inicial (40,13 h × 5 meses) + <b>214,93 h</b> no ritmo atual (53,73 h × 4 meses). Estimativa pelo modelo de 301 operações/mês." tabindex="0">415,6 h</div><span>Equivale a <b>52 jornadas de 8 h</b>. Não representa redução de quadro.</span></div>
+        <div class="kc c-m"><small>Volume verificado</small><div class="v" data-tip-h="Orçamentos verificados" data-tip="Total analisado pelo Verificador até 24/11. Dado informativo: as horas são calculadas pela premissa de <b>301 operações por mês</b>." tabindex="0">1.778</div><span>orçamentos analisados pelo Verificador até 24/11.</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">Horas poupadas por mês <small>modelo de 301 operações/mês</small></div>
+        <div class="panel-body" style="gap:10px">
+          <div class="chart9">
+            <div class="ann a1">Fase inicial · 40,13 h/mês</div>
+            <div class="ann a2">68 operações sem esforço manual · 53,73 h/mês</div>
+            <div class="col c-b"><b>40,1</b><i style="--h:74.7%;--d:60ms"></i><span>Mês 1</span></div><div class="col c-b"><b>40,1</b><i style="--h:74.7%;--d:120ms"></i><span>Mês 2</span></div><div class="col c-b"><b>40,1</b><i style="--h:74.7%;--d:180ms"></i><span>Mês 3</span></div><div class="col c-b"><b>40,1</b><i style="--h:74.7%;--d:240ms"></i><span>Mês 4</span></div><div class="col c-b"><b>40,1</b><i style="--h:74.7%;--d:300ms"></i><span>Mês 5</span></div><div class="col c-g"><b>53,7</b><i style="--h:100%;--d:360ms"></i><span>Mês 6</span></div><div class="col c-g"><b>53,7</b><i style="--h:100%;--d:420ms"></i><span>Mês 7</span></div><div class="col c-g"><b>53,7</b><i style="--h:100%;--d:480ms"></i><span>Mês 8</span></div><div class="col c-g"><b>53,7</b><i style="--h:100%;--d:540ms"></i><span>Mês 9</span></div>
+          </div>
+          <div class="chart-k">
+            <div data-tip-h="Fase inicial" data-tip="30% das operações em 5 min e 70% em 15 min: média de <b>12 min</b> contra 20 min antes. 301 × (20 − 12) ÷ 60 = 40,13 h/mês." tabindex="0"><small>Fase inicial</small><b>200,7 h</b><span>40,13 h × 5 meses</span></div>
+            <div data-tip-h="Ritmo atual" data-tip="68 das 301 operações deixaram de exigir <b>esforço manual</b>; as outras 233 seguem 30% em 5 min e 70% em 15 min. 100,33 − 46,60 = 53,73 h/mês." tabindex="0"><small>Ritmo atual</small><b>214,9 h</b><span>53,73 h × 4 meses</span></div>
+            <div class="hi"><small>Ganho no ritmo</small><b data-tip-h="Ganho no ritmo" data-tip="53,73 h ÷ 40,13 h − 1 = <b>+33,9%</b> de horas poupadas por mês." tabindex="0">+34%</b><span>+13,6 h por mês</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot-row rise d2">
+      <div class="nt"><b>Dinheiro e horas não se somam:</b> os R$ 2,48 MM são benefício capturado; as horas medem capacidade liberada.</div>
+      <div class="dlinks"><span>Ver detalhes</span><button class="mbtn" type="button" data-go="Base do cálculo de horas">Como calculamos as horas</button><button class="mbtn" type="button" data-go="Duas leituras para 12 meses">Média × ritmo atual</button><button class="mbtn" type="button" data-go="Reconciliação das horas">Reconciliação das 415,6 h</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="Base do cálculo de horas">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • GOT</div>
+      <h1>Como calculamos as horas liberadas</h1>
+      <p>Volume e tempo por operação, em duas fases de eficiência</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:14px">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+
+    <div class="kpis k4 rise">
+      <div class="kc c-o"><small>Volume</small><div class="v sm">301</div><span>operações por mês</span></div>
+      <div class="kc c-b"><small>Tempo original</small><div class="v sm">20 min</div><span>por operação, antes do Verificador</span></div>
+      <div class="kc c-g"><small>Esforço original</small><div class="v sm">100,33 h</div><span>por mês: 301 × 20 ÷ 60</span></div>
+      <div class="kc c-m"><small>Informativo</small><div class="v sm">1.778</div><span>orçamentos até 24/11; não substitui a premissa de 301/mês</span></div>
+    </div>
+    <div class="g2 rise d1 fill" style="flex:1;min-height:0">
+      <div class="panel">
+        <div class="panel-head">Fase inicial <small>primeiros 5 meses</small></div>
+        <div class="panel-body">
+          <div class="phase c-b"><div><b>30%</b><span>das 301 operações em 5 min</span></div><div><b>70%</b><span>das 301 operações em 15 min</span></div><div><b>12 min</b><span>tempo médio novo por operação</span></div></div>
+          <div class="fml sm"><small>Tempo médio novo</small>30% × 5 + 70% × 15 = 12 min/operação</div>
+          <div class="fml sm"><small>Economia</small>301 × (20 − 12) ÷ 60 = 40,13 h/mês · acumulado 40,13 × 5 = <span class="acc">200,67 h</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">Evolução do produto <small>últimos 4 meses</small></div>
+        <div class="panel-body">
+          <div class="phase c-g"><div><b>68</b><span>operações × 0 min</span></div><div><b>233 × 30%</b><span>operações × 5 min</span></div><div><b>233 × 70%</b><span>operações × 15 min</span></div></div>
+          <div class="fml sm"><small>Esforço novo</small>[68 × 0 + 233 × (0,30 × 5 + 0,70 × 15)] ÷ 60 = 46,60 h/mês</div>
+          <div class="fml sm"><small>Economia</small>100,33 − 46,60 = 53,73 h/mês · acumulado 53,73 × 4 = <span class="acc">214,93 h</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="nt rise d2"><b>Premissa:</b> as 301 operações e as distribuições de tempo representam um mês típico em cada fase; as contagens de 30% são valores médios esperados.</div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="Reconciliação das horas">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • GOT</div>
+      <h1>Reconciliação: como chegamos a 415,6 horas</h1>
+      <p>Soma das duas fases, sem arredondamento intermediário</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:18px;justify-content:center">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+
+    <div class="panel rise">
+      <div class="panel-body" style="padding:8px 20px 12px">
+        <table class="dt big">
+          <thead><tr><th>Período</th><th class="n">Horas poupadas por mês</th><th class="n">Meses</th><th class="n">Acumulado</th></tr></thead>
+          <tbody>
+            <tr><td>Fase inicial · 30% em 5 min e 70% em 15 min</td><td class="n">40,13 h</td><td class="n">5</td><td class="n">200,67 h</td></tr>
+            <tr><td>Com 68 operações em zero minuto</td><td class="n">53,73 h</td><td class="n">4</td><td class="n">214,93 h</td></tr>
+            <tr class="sum"><td>Total em 9 meses, até 24/11</td><td class="n">—</td><td class="n">9</td><td class="n acc">415,60 h</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="g2 rise d1">
+      <div class="fml"><small>Total</small>200,67 + 214,93 = <span class="acc">415,6 h</span></div>
+      <div class="fml g"><small>Em jornadas de 8 h</small>415,6 ÷ 8 = <span class="acc">51,95 ≈ 52 dias</span></div>
+    </div>
+    <div class="panel rise d2">
+      <div class="panel-head">Composição das 415,6 h <small>por fase</small></div>
+      <div class="panel-body" style="gap:10px;padding:18px 20px">
+        <div class="stk big"><i class="c-b" style="--w:48.3%"><em>Fase inicial · 200,67 h · 48%</em></i><i class="c-g" style="--w:51.7%"><em>Ritmo atual · 214,93 h · 52%</em></i></div>
+        <span class="lead2">Em apenas 4 dos 9 meses, a fase com 68 operações em zero minuto já responde por <b>mais da metade</b> das horas liberadas.</span>
+      </div>
+    </div>
+    <div class="nt rise d3">As horas descrevem produtividade e <b>não são somadas</b> ao benefício financeiro. Não representam redução de quadro.</div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="Duas leituras para 12 meses">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • GOT</div>
+      <h1>As duas leituras para os próximos 12 meses</h1>
+      <p>Por que a média histórica e o ritmo atual dão números diferentes</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:14px">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+
+    <div class="g2 rise fill" style="flex:1;min-height:0">
+      <div class="panel">
+        <div class="panel-head">Leitura 1 · média histórica <small>repete a média dos 9 meses</small></div>
+        <div class="panel-body">
+          <p class="lead2">Divide o realizado por 9 e multiplica por 12. Supõe que os próximos meses serão iguais à média do período, que inclui os 5 meses iniciais, quando todas as operações ainda exigiam esforço manual.</p>
+          <div class="fml"><small>Financeiro</small>R$ 2.480.000 ÷ 9 × 12 = <span class="acc">R$ 3.306.667</span></div>
+          <div class="fml b"><small>Horas</small>415,60 ÷ 9 × 12 = <span class="acc">554,13 h</span></div>
+          <div class="phase c-b"><div><b>R$ 3,31 mi</b><span>financeiro em 12 meses</span></div><div><b>554,1 h</b><span>horas em 12 meses</span></div><div><b>44,0 h</b><span>média por mês</span></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">Leitura 2 · ritmo atual <small>mantém os 4 últimos meses</small></div>
+        <div class="panel-body">
+          <p class="lead2">Desde que 68 das 301 operações mensais deixaram de exigir esforço manual, a economia subiu de 40,13 h para 53,73 h por mês. Se esse nível for mantido, a capacidade liberada em 12 meses é maior.</p>
+          <div class="fml g"><small>Horas</small>53,73 h × 12 = <span class="acc">644,8 h</span></div>
+          <div class="phase c-g"><div><b>644,8 h</b><span>horas em 12 meses</span></div><div><b>53,7 h</b><span>por mês, no patamar atual</span></div><div><b>+90,7 h</b><span>acima da média histórica</span></div></div>
+          <div class="nt">O valor em reais foi projetado apenas pela média histórica, porque não há a série mensal do benefício financeiro.</div>
+        </div>
+      </div>
+    </div>
+    <div class="nt rise d1"><b>Por que 644,8 h é maior que 554,1 h:</b> a média histórica mistura 5 meses a 40,13 h/mês com 4 meses a 53,73 h/mês; o ritmo atual usa só o patamar mais recente. Projeção linear, não benefício já realizado.</div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="Do orçado ao benefício">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • GPCA</div>
+      <h1>GPCA: do valor orçado ao benefício</h1>
+      <p>15% de eficiência sobre o valor orçado e 30% menos tempo na análise de cada UPE</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:14px">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+    <div class="vbar rise"><div class="vtabs" role="tablist" aria-label="Visão do benefício"><small>Visão do benefício</small><button type="button" data-view="sv" class="on" data-tip-h="Só Verificador" data-tip="Benefício <b>justo</b>: só o que o Verificador gera, descontando o que a análise humana já encontraria. <b>34,3%</b> do hard money na GOT e <b>23,1%</b> na GPCA; horas são 100% do Verificador.">Só Verificador</button><button type="button" data-view="tot" data-tip-h="Total indicado" data-tip="Todo o valor divergente indicado pelo Verificador, inclusive o que a operação humana também encontraria.">Total indicado</button></div></div>
+
+    <div class="panel rise gflow" style="flex:1;min-height:0">
+      <div class="panel-head">Do valor orçado ao benefício <small>forecast de UPEs</small></div>
+      <div class="panel-body" style="justify-content:center;gap:14px">
+        <div class="flow fl-h"><span></span><span>Forecast</span><span>Valor orçado</span><span></span><span><span class="vw-sv">Benefício só Verificador</span><span class="vw-tot">Benefício potencial</span></span><span data-tip-h="Horas desoneradas" data-tip="Tempo de análise que deixa de ser gasto: <b>30% das 8 h</b> por UPE. É capacidade liberada, não redução de quadro." tabindex="0">Horas desoneradas</span></div>
+        <div class="flow">
+          <div class="fy c-b"><b>2026</b><span>restante do ano</span></div>
+          <div class="fc" data-tip-h="UPEs · 2026" data-tip="UPEs ainda previstas no forecast do restante de 2026. Hoje cada uma consome <b>8 h</b> de análise." tabindex="0"><b>40 UPEs</b><span>8 h de análise cada</span></div>
+          <div class="fc"><b>R$ 103,5 mi</b><span>orçados</span></div>
+          <div class="fo" data-tip-h="Captura de eficiência" data-tip="Hipótese de que o Verificador captura <b>15%</b> do valor orçado. A mesma premissa vale para 2026 e 2027." tabindex="0">× 15%</div>
+          <div class="fr c-o"><b class="vw-sv">R$ 3,58 mi</b><b class="vw-tot">R$ 15,5 mi</b><span class="vw-sv">23,1% de R$ 15,5 mi</span><span class="vw-tot">R$ 15.525.000</span></div>
+          <div class="fr c-g"><b data-tip-h="Horas · 2026" data-tip="40 UPEs × 8 h × 30% = <b>96 h</b>, ou 12 jornadas de 8 h." tabindex="0">96 h</b><span>40 × 8 h × 30%</span></div>
+        </div>
+        <div class="flow">
+          <div class="fy c-b"><b>2027</b><span>ano cheio</span></div>
+          <div class="fc" data-tip-h="UPEs · 2027" data-tip="UPEs previstas no forecast de 2027, com <b>8 h</b> de análise cada." tabindex="0"><b>218 UPEs</b><span>8 h de análise cada</span></div>
+          <div class="fc"><b>R$ 548,15 mi</b><span>orçados</span></div>
+          <div class="fo" data-tip-h="Captura de eficiência" data-tip="Hipótese de que o Verificador captura <b>15%</b> do valor orçado. A mesma premissa vale para 2026 e 2027." tabindex="0">× 15%</div>
+          <div class="fr c-o"><b class="vw-sv">R$ 18,97 mi</b><b class="vw-tot">R$ 82,2 mi</b><span class="vw-sv">23,1% de R$ 82,2 mi</span><span class="vw-tot">R$ 82.222.349,62</span></div>
+          <div class="fr c-g"><b data-tip-h="Horas · 2027" data-tip="218 UPEs × 8 h × 30% = <b>523,2 h</b>, ou 65,4 jornadas de 8 h." tabindex="0">523,2 h</b><span>218 × 8 h × 30%</span></div>
+        </div>
+        <div class="flow tot">
+          <div class="fy"><b>Total</b><span>2026 + 2027</span></div>
+          <div class="fc"><b>258 UPEs</b><span>&nbsp;</span></div>
+          <div class="fc"><b>R$ 651,6 mi</b><span>orçados</span></div>
+          <div class="fo"></div>
+          <div class="fr c-o"><b class="vw-sv">R$ 22,56 mi</b><b class="vw-tot">R$ 97,7 mi</b><span class="vw-sv">só Verificador</span><span class="vw-tot">potencial</span></div>
+          <div class="fr c-g"><b data-tip-h="Horas · total" data-tip="96 h + 523,2 h = <b>619,2 h</b> de análise desoneradas." tabindex="0">619,2 h</b><span>77 jornadas de 8 h</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="Premissas da GPCA">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • GPCA</div>
+      <h1>Premissas e fórmulas da GPCA</h1>
+      <p>Mesmas hipóteses em 2026 e 2027: 15% de eficiência e 30% de desoneração das 8 h por UPE</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:14px">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+
+    <div class="g2 rise fill" style="flex:1;min-height:0">
+      <div class="panel">
+        <div class="panel-head">Restante de 2026 <small>40 UPEs</small></div>
+        <div class="panel-body">
+          <div class="phase c-b"><div><b>40</b><span>UPEs no forecast</span></div><div><b>R$ 103,5 mi</b><span>valor orçado</span></div><div><b>8 h</b><span>de análise por UPE</span></div></div>
+          <p class="lead2">O forecast dos orçamentos ainda previstos para 2026 inclui <b>40 UPEs</b>, com valor total orçado de <b>R$ 103,5 milhões</b>. Hoje cada UPE consome <b>8 h</b> de análise.</p>
+          <div class="fml"><small>Benefício</small>R$ 103.500.000 × 15% = <span class="acc">R$ 15.525.000</span></div>
+          <div class="fml b"><small>Horas</small>40 UPEs × 8 h × 30% = <span class="acc">96 h</span> · 12 jornadas de 8 h</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">2027 <small>218 UPEs</small></div>
+        <div class="panel-body">
+          <div class="phase c-b"><div><b>218</b><span>UPEs no forecast</span></div><div><b>R$ 548,15 mi</b><span>valor orçado</span></div><div><b>8 h</b><span>de análise por UPE</span></div></div>
+          <p class="lead2">O forecast de 2027 prevê <b>218 UPEs</b>, com <b>R$ 548,15 milhões</b> de valor orçado, mantidas as mesmas hipóteses.</p>
+          <div class="fml"><small>Benefício</small>R$ 548.148.997,46 × 15% = <span class="acc">R$ 82.222.349,62</span></div>
+          <div class="fml b"><small>Horas</small>218 UPEs × 8 h × 30% = <span class="acc">523,2 h</span> · 65,4 jornadas de 8 h</div>
+        </div>
+      </div>
+    </div>
+    <div class="nt rise d1">Projeção condicionada à confirmação do orçamento, à aplicação do Verificador nos casos elegíveis e à captura efetiva da eficiência estimada. <b>Não integra o valor já capturado pela GOT.</b></div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="De onde vem o valor">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • Total</div>
+      <h1><span class="vw-sv">De onde vem o valor: GOT × GPCA, só Verificador</span><span class="vw-tot">De onde vem o valor: GOT × GPCA, total indicado</span></h1>
+      <p>Participação de cada esteira no hard money: 2026, 2027 e VPL em 5 anos</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:14px">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+    <div class="vbar rise"><div class="vtabs" role="tablist" aria-label="Visão do benefício"><small>Visão do benefício</small><button type="button" data-view="sv" class="on" data-tip-h="Só Verificador" data-tip="Benefício <b>justo</b>: só o que o Verificador gera, descontando o que a análise humana já encontraria. <b>34,3%</b> do hard money na GOT e <b>23,1%</b> na GPCA; horas são 100% do Verificador.">Só Verificador</button><button type="button" data-view="tot" data-tip-h="Total indicado" data-tip="Todo o valor divergente indicado pelo Verificador, inclusive o que a operação humana também encontraria.">Total indicado</button></div></div>
+    <div class="kpis rise">
+      <div class="kc c-o"><small>Previsto 2026</small><div class="v"><span class="vw-sv">R$ 4,53 MM</span><span class="vw-tot">R$ 18,28 MM</span></div><span><span class="vw-sv">GOT R$ 0,94 MM + GPCA R$ 3,58 MM</span><span class="vw-tot">GOT R$ 2,76 MM + GPCA R$ 15,53 MM</span></span></div>
+      <div class="kc c-b"><small>Previsto 2027</small><div class="v"><span class="vw-sv">R$ 20,11 MM</span><span class="vw-tot">R$ 85,53 MM</span></div><span><span class="vw-sv">GOT R$ 1,13 MM + GPCA R$ 18,97 MM</span><span class="vw-tot">GOT R$ 3,31 MM + GPCA R$ 82,22 MM</span></span></div>
+      <div class="kc c-g"><small data-tip-h="VPL" data-tip="<b>Valor presente líquido</b>: soma dos benefícios futuros trazidos a valor de hoje, com desconto de 25% ao ano, a mesma taxa do VPL do Verificador." tabindex="0">VPL · 5 anos · 25% a.a.</small><div class="v"><span class="vw-sv">R$ 58,6 MM</span><span class="vw-tot">R$ 248,3 MM</span></div><span><span class="vw-sv">GOT R$ 3,99 MM + GPCA R$ 54,61 MM</span><span class="vw-tot">GOT R$ 11,6 MM + GPCA R$ 236,6 MM</span></span></div>
+    </div>
+    <div class="panel rise d1" style="flex:1;min-height:0">
+      <div class="panel-head">De onde vem o valor <small>participação de cada esteira</small></div>
+      <div class="panel-body" style="justify-content:center;gap:14px">
+        <div class="vw-sv vblock">
+          <div class="stk-r"><div class="stk-l"><b>Previsto 2026</b><span>GOT realizado + dezembro</span></div>
+          <div><div class="stk"><i class="c-o" style="--w:20.9%"></i><i class="c-b" style="--w:79.1%"></i></div>
+          <div class="stk-k"><span class="c-o"><i></i>GOT <b>R$ 0,94 MM</b> · 20,9%</span><span class="c-b"><i></i>GPCA <b>R$ 3,58 MM</b> · 79,1%</span></div></div>
+          <div class="stk-v">R$ 4,53 MM</div></div>
+          <div class="stk-r"><div class="stk-l"><b>2027</b><span>primeiro ano cheio da GPCA</span></div>
+          <div><div class="stk"><i class="c-o" style="--w:5.6%"></i><i class="c-b" style="--w:94.4%"></i></div>
+          <div class="stk-k"><span class="c-o"><i></i>GOT <b>R$ 1,13 MM</b> · 5,6%</span><span class="c-b"><i></i>GPCA <b>R$ 18,97 MM</b> · 94,4%</span></div></div>
+          <div class="stk-v">R$ 20,11 MM</div></div>
+          <div class="stk-r"><div class="stk-l"><b>VPL 5 anos</b><span>desconto de 25% a.a.</span></div>
+          <div><div class="stk"><i class="c-o" style="--w:6.8%"></i><i class="c-b" style="--w:93.2%"></i></div>
+          <div class="stk-k"><span class="c-o"><i></i>GOT <b>R$ 3,99 MM</b> · 6,8%</span><span class="c-b"><i></i>GPCA <b>R$ 54,61 MM</b> · 93,2%</span></div></div>
+          <div class="stk-v">R$ 58,6 MM</div></div>
+        </div>
+        <div class="vw-tot vblock">
+          <div class="stk-r"><div class="stk-l"><b>Previsto 2026</b><span>GOT realizado + dezembro</span></div>
+          <div><div class="stk"><i class="c-o" style="--w:15.1%"></i><i class="c-b" style="--w:84.9%"></i></div>
+          <div class="stk-k"><span class="c-o"><i></i>GOT <b>R$ 2,76 MM</b> · 15,1%</span><span class="c-b"><i></i>GPCA <b>R$ 15,53 MM</b> · 84,9%</span></div></div>
+          <div class="stk-v">R$ 18,28 MM</div></div>
+          <div class="stk-r"><div class="stk-l"><b>2027</b><span>primeiro ano cheio da GPCA</span></div>
+          <div><div class="stk"><i class="c-o" style="--w:3.9%"></i><i class="c-b" style="--w:96.1%"></i></div>
+          <div class="stk-k"><span class="c-o"><i></i>GOT <b>R$ 3,31 MM</b> · 3,9%</span><span class="c-b"><i></i>GPCA <b>R$ 82,22 MM</b> · 96,1%</span></div></div>
+          <div class="stk-v">R$ 85,53 MM</div></div>
+          <div class="stk-r"><div class="stk-l"><b>VPL 5 anos</b><span>desconto de 25% a.a.</span></div>
+          <div><div class="stk"><i class="c-o" style="--w:4.7%"></i><i class="c-b" style="--w:95.3%"></i></div>
+          <div class="stk-k"><span class="c-o"><i></i>GOT <b>R$ 11,6 MM</b> · 4,7%</span><span class="c-b"><i></i>GPCA <b>R$ 236,6 MM</b> · 95,3%</span></div></div>
+          <div class="stk-v">R$ 248,3 MM</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="nt rise d2"><span class="vw-sv"><b>Só Verificador:</b> 34,3% do hard money da GOT e 23,1% do da GPCA. A GPCA responde por <b>93%</b> do VPL justo.</span><span class="vw-tot"><b>Total indicado:</b> inclui o que a análise humana também encontraria. A GPCA responde por <b>95%</b> do VPL.</span> Horas não entram nesta conta.</div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="Cálculo do VPL">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • Total</div>
+      <h1><span class="vw-sv">Cálculo do VPL · só Verificador</span><span class="vw-tot">Cálculo do VPL · total indicado</span></h1>
+      <p>Hard money por esteira: previsto 2026, previsto 2027 e VPL em 5 anos a 25% a.a.</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:18px;justify-content:center">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+    <div class="vbar rise"><div class="vtabs" role="tablist" aria-label="Visão do benefício"><small>Visão do benefício</small><button type="button" data-view="sv" class="on" data-tip-h="Só Verificador" data-tip="Benefício <b>justo</b>: só o que o Verificador gera, descontando o que a análise humana já encontraria. <b>34,3%</b> do hard money na GOT e <b>23,1%</b> na GPCA; horas são 100% do Verificador.">Só Verificador</button><button type="button" data-view="tot" data-tip-h="Total indicado" data-tip="Todo o valor divergente indicado pelo Verificador, inclusive o que a operação humana também encontraria.">Total indicado</button></div></div>
+    <div class="panel rise"><div class="panel-body" style="padding:8px 20px 10px">
+      <table class="dt big xl">
+        <thead><tr><th>Esteira</th><th class="n">Previsto 2026</th><th class="n">Previsto 2027</th><th class="n">VPL 5 anos</th></tr></thead>
+        <tbody>
+          <tr><td><b>GOT</b><span class="s2"><span class="vw-sv">34,3% de: R$ 2,48 MM realizados + dezembro pela média</span><span class="vw-tot">R$ 2,48 MM realizados + dezembro × R$ 275,6 mil (média mensal)</span></span></td><td class="n"><span class="vw-sv">R$ 0,94 MM</span><span class="vw-tot">R$ 2,76 MM</span></td><td class="n"><span class="vw-sv">R$ 1,13 MM</span><span class="vw-tot">R$ 3,31 MM</span></td><td class="n"><span class="vw-sv">R$ 3,99 MM</span><span class="vw-tot">R$ 11,6 MM</span></td></tr>
+          <tr><td><b>GPCA</b><span class="s2"><span class="vw-sv">23,1% de: 15% sobre R$ 103,5 MM (2026) e R$ 548,15 MM (2027)</span><span class="vw-tot">15% sobre R$ 103,5 MM (2026) e R$ 548,15 MM (2027) orçados</span></span></td><td class="n"><span class="vw-sv">R$ 3,58 MM</span><span class="vw-tot">R$ 15,53 MM</span></td><td class="n"><span class="vw-sv">R$ 18,97 MM</span><span class="vw-tot">R$ 82,22 MM</span></td><td class="n"><span class="vw-sv">R$ 54,61 MM</span><span class="vw-tot">R$ 236,6 MM</span></td></tr>
+          <tr class="sum"><td>Total</td><td class="n"><span class="vw-sv">R$ 4,53 MM</span><span class="vw-tot">R$ 18,28 MM</span></td><td class="n"><span class="vw-sv">R$ 20,11 MM</span><span class="vw-tot">R$ 85,53 MM</span></td><td class="n acc"><span class="vw-sv">R$ 58,6 MM</span><span class="vw-tot">R$ 248,3 MM</span></td></tr>
+        </tbody>
+      </table>
+    </div></div>
+    <div class="fml rise d1"><small>VPL</small><span class="vw-sv">R$ 4,53 MM + R$ 20,11 MM × (1/1,25 + 1/1,25² + 1/1,25³ + 1/1,25⁴ + 1/1,25⁵) = R$ 4,53 MM + R$ 20,11 MM × 2,689 = <span class='acc'>R$ 58,6 MM</span></span><span class="vw-tot">R$ 18,28 MM + R$ 85,53 MM × (1/1,25 + 1/1,25² + 1/1,25³ + 1/1,25⁴ + 1/1,25⁵) = R$ 18,28 MM + R$ 85,53 MM × 2,689 = <span class='acc'>R$ 248,3 MM</span></span></div>
+    <div class="nts rise d2">
+      <div class="nt"><b>Premissas:</b> GOT 2026 considera os 9 meses realizados até 24/11 e projeta dezembro pela média mensal. O fluxo de 2027 é mantido constante até 2031, com desconto de 25% a.a., a mesma taxa do VPL do Verificador. Só hard money: horas não entram no VPL.</div>
+      <div class="nt"><span class="vw-sv"><b>Só Verificador:</b> desconta o que a análise humana já encontraria. 34,3% na GOT (17% de volume novo e 30% mais divergências) e 23,1% na GPCA (30 de cada 130).</span><span class="vw-tot"><b>Total indicado:</b> considera todo o valor divergente indicado pelo Verificador, inclusive o que a operação humana também encontraria.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="Soft money em 5 anos">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • Total</div>
+      <h1>Soft money: horas desoneradas em 5 anos</h1>
+      <p>Horas por esteira, do realizado ao acumulado de 2026 a 2031, sempre separadas do hard money</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:18px;justify-content:center">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+    <div class="panel rise"><div class="panel-body" style="padding:8px 20px 10px">
+      <table class="dt big xl">
+        <thead><tr><th>Esteira</th><th class="n">Realizado</th><th class="n">2026</th><th class="n">2027</th><th class="n">5 anos</th></tr></thead>
+        <tbody>
+          <tr><td><b>GOT</b><span class="s2">ritmo atual de 53,73 h/mês a partir de dezembro</span></td><td class="n">415,6 h</td><td class="n">469,3 h</td><td class="n">644,8 h</td><td class="n">3.693 h</td></tr>
+          <tr><td><b>GPCA</b><span class="s2">UPEs × 8 h × 30% de desoneração</span></td><td class="n">a ser calculado</td><td class="n">96 h</td><td class="n">523,2 h</td><td class="n">2.712 h</td></tr>
+          <tr class="sum"><td>Total</td><td class="n">415,6 h</td><td class="n">565,3 h</td><td class="n">1.168 h</td><td class="n acc">6.405 h</td></tr>
+        </tbody>
+      </table>
+    </div></div>
+    <div class="g2 rise d1">
+      <div class="fml b"><small>Horas em 5 anos</small>2026 + 2027 × 5 (fluxo de 2027 repetido até 2031), sem desconto</div>
+      <div class="fml g"><small>Em jornadas de 8 h</small>6.405 h ÷ 8 ≈ <span class="acc">801 jornadas</span> em 5 anos</div>
+    </div>
+    <div class="nt rise d2"><b>Capacidade, não caixa:</b> as horas desoneradas medem capacidade liberada e não representam redução de quadro. Por isso ficam em horas, separadas do hard money: não são convertidas em reais nem somadas ao VPL.</div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="Só Verificador">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • Total</div>
+      <h1>Só do Verificador: R$ 58,6 MM de VPL</h1>
+      <p>A parcela que a operação não obteria sem o Verificador: 34,3% na GOT e 23,1% na GPCA</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:14px">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+
+    <div class="g2 rise sov" style="grid-template-columns:540px 1fr;flex:1;min-height:0">
+      <div class="pstack">
+        <div class="pct c-o"><b data-tip-h="GOT · 34,3%" data-tip="17 ÷ 117 = <b>14,5%</b> de volume novo, todo do Verificador, + 23,1% × 85,5% de divergências extras no restante = <b>34,3%</b>." tabindex="0">34,3%</b><div><small>GOT</small><span>17% de volume novo, todo dele, e 30% a mais de divergências no restante: <b>14,5% + 23,1% × 85,5%</b>.</span></div></div>
+        <div class="pct c-b"><b data-tip-h="GPCA · 23,1%" data-tip="30 ÷ 130: de cada 130 divergências encontradas, <b>30</b> só o Verificador acha." tabindex="0">23,1%</b><div><small>GPCA</small><span>Sem crescimento de volume: encontra 30% a mais que o humano, <b>30 de cada 130</b> divergências.</span></div></div>
+        <div class="pct c-g"><b data-tip-h="Horas · 100%" data-tip="As horas vêm da redução do tempo de análise, então são todas atribuídas ao Verificador." tabindex="0">100%</b><div><small>Horas</small><span>As horas desoneradas vêm da redução do tempo de análise, então são <b>todas do Verificador</b>.</span></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">Total indicado × só Verificador <small>GOT + GPCA</small></div>
+        <div class="panel-body" style="justify-content:center;gap:20px">
+          <div class="cmp-leg"><span><i class="t"></i>Total indicado pelo Verificador</span><span data-tip-h="Só do Verificador" data-tip="Parcela do benefício que a operação humana <b>não obteria</b> sem o Verificador." tabindex="0"><i class="s"></i>Só do Verificador</span></div>
+          <div class="cmp-r"><b class="cmp-l">Até dez/2026</b>
+          <div class="cmp-b"><div class="tr t" style="--w:100%"><i></i><em>R$ 18,28 MM</em></div><div class="tr s" style="--w:24.8%"><i></i><em data-tip-h="Até dez/2026" data-tip="34,3% × R$ 2,76 MM (GOT) + 23,1% × R$ 15,53 MM (GPCA) = <b>R$ 4,53 MM</b>" tabindex="0">R$ 4,53 MM</em></div></div>
+          <div class="cmp-p"><b data-tip-h="Participação" data-tip="R$ 4,53 MM ÷ R$ 18,28 MM = <b>24,8%</b>" tabindex="0">24,8%</b><span>só Verificador</span></div></div>
+          <div class="cmp-r"><b class="cmp-l">2027</b>
+          <div class="cmp-b"><div class="tr t" style="--w:100%"><i></i><em>R$ 85,53 MM</em></div><div class="tr s" style="--w:23.5%"><i></i><em data-tip-h="2027" data-tip="34,3% × R$ 3,31 MM (GOT) + 23,1% × R$ 82,22 MM (GPCA) = <b>R$ 20,11 MM</b>" tabindex="0">R$ 20,11 MM</em></div></div>
+          <div class="cmp-p"><b data-tip-h="Participação" data-tip="R$ 20,11 MM ÷ R$ 85,53 MM = <b>23,5%</b>" tabindex="0">23,5%</b><span>só Verificador</span></div></div>
+          <div class="cmp-r"><b class="cmp-l">VPL 5 anos</b>
+          <div class="cmp-b"><div class="tr t" style="--w:100%"><i></i><em>R$ 248,3 MM</em></div><div class="tr s" style="--w:23.6%"><i></i><em data-tip-h="VPL só Verificador" data-tip="R$ 4,53 MM + R$ 20,11 MM × 2,689 = <b>R$ 58,6 MM</b>" tabindex="0">R$ 58,6 MM</em></div></div>
+          <div class="cmp-p"><b data-tip-h="Participação" data-tip="R$ 58,6 MM ÷ R$ 248,3 MM = <b>23,6%</b>" tabindex="0">23,6%</b><span>só Verificador</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot-row rise d2">
+      <div class="nt"><b>Mesmas premissas</b> de período e desconto do benefício total; horas desoneradas não estão somadas.</div>
+      <div class="dlinks"><span>Ver detalhes</span><button class="mbtn" type="button" data-go="Premissas só Verificador">Como chegamos a 34,3% e 23,1%</button><button class="mbtn" type="button" data-go="Total só Verificador">Tabela só Verificador</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="Premissas só Verificador">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • Só Verificador</div>
+      <h1>Como chegamos a 34,3% e 23,1%</h1>
+      <p>Quanto do benefício a operação humana não obteria sem o Verificador</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:14px">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+
+    <div class="pc2 rise fill" style="flex:1;min-height:0">
+      <div class="pcard g-got big"><h3><span class="gname">GOT</span>34,3% do benefício é só do Verificador</h3>
+        <div class="steps3">
+          <div><i>1</i><div><b>Volume novo: 14,5%</b><span>Com o Verificador a esteira cresceu 17% (de 100 para 117). Esse acréscimo é todo dele: 17 ÷ 117 = 14,5% do volume atual.</span></div></div>
+          <div><i>2</i><div><b>Divergências extras: 23,1%</b><span>Nos 85,5% restantes, feitos por Verificador e humano, ele encontra 30% a mais de divergências: 30 ÷ 130 = 23,1% do que é encontrado.</span></div></div>
+          <div><i>3</i><div><b>Soma ponderada</b><span>As duas parcelas juntas dão a participação exclusiva do Verificador na GOT.</span></div></div>
+        </div>
+        <div class="fml">14,5% + 23,1% × 85,5% = <span class="acc">34,3%</span></div></div>
+      <div class="pcard g-gpca big"><h3><span class="gname">GPCA</span>23,1% do benefício é só do Verificador</h3>
+        <div class="steps3">
+          <div><i>1</i><div><b>Sem volume novo</b><span>A esteira já tinha análise humana e a projeção não considera crescimento de volume.</span></div></div>
+          <div><i>2</i><div><b>Divergências extras</b><span>O Verificador encontra 30% a mais de divergências que o humano: de cada 130 encontradas, 30 são só dele.</span></div></div>
+          <div><i>3</i><div><b>Horas: 100%</b><span>As horas desoneradas vêm da redução do tempo de análise e são todas do Verificador, nas duas esteiras.</span></div></div>
+        </div>
+        <div class="fml b">30 ÷ 130 = <span class="acc">23,1%</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide extra" data-label="Total só Verificador">
+  <div class="top">
+    <div class="title">
+      <div class="chap-tag"><span class="pip"></span>Detalhe • Só Verificador</div>
+      <h1>Tabela: benefício só do Verificador</h1>
+      <p>Percentuais aplicados a cada linha e ao total com VPL</p>
+    </div>
+    <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
+  </div>
+  <div class="body" style="gap:16px;justify-content:center">
+    <div class="extra-bar"><button class="mbtn back" type="button" data-back>← Voltar</button></div>
+
+    <div class="panel rise"><div class="panel-body" style="padding:6px 18px 8px">
+      <table class="ct roomy">
+        <thead><tr><th>Horizonte</th><th>Natureza</th><th class="r">Total indicado</th><th class="ctr">% Verificador</th><th class="r">Só Verificador</th></tr></thead>
+        <tbody class="g-got">
+          <tr class="gh"><th colspan="5"><span class="gname">GOT</span><span class="gsub">34,3% do financeiro</span></th></tr>
+          <tr><td class="hz"><b>9 meses</b><span>realizado até 24/11</span></td><td><span class="ty">R$</span>Benefício financeiro capturado</td><td class="tt">R$ 2,48 MM</td><td class="pc"><span>34,3%</span></td><td class="vl">R$ 849,5 mil</td></tr>
+          <tr><td class="hz"><b>12 meses</b><span>anualizado</span></td><td><span class="ty">R$</span>Financeiro anualizado pela média</td><td class="tt">R$ 3,31 mi</td><td class="pc"><span>34,3%</span></td><td class="vl">R$ 1,13 mi</td></tr>
+        </tbody>
+        <tbody class="g-gpca">
+          <tr class="gh"><th colspan="5"><span class="gname">GPCA</span><span class="gsub">23,1% do financeiro</span></th></tr>
+          <tr><td class="hz"><b>Restante de 2026</b><span>40 UPEs</span></td><td><span class="ty">R$</span>15% de eficiência sobre R$ 103,5 mi</td><td class="tt">R$ 15,525 mi</td><td class="pc"><span>23,1%</span></td><td class="vl">R$ 3,58 mi</td></tr>
+          <tr><td class="hz"><b>2027</b><span>218 UPEs</span></td><td><span class="ty">R$</span>15% de eficiência sobre R$ 548,15 mi</td><td class="tt">R$ 82,22 mi</td><td class="pc"><span>23,1%</span></td><td class="vl">R$ 18,97 mi</td></tr>
+        </tbody>
+      </table>
+    </div></div>
+    <div class="panel rise d1"><div class="panel-body" style="padding:6px 18px 8px">
+      <table class="dt">
+        <thead><tr><th>Esteira</th><th class="n">Até dez/2026</th><th class="n">2027</th><th class="n">VPL 5 anos</th></tr></thead>
+        <tbody>
+          <tr><td><b>GOT · 34,3%</b> <span class="s2" style="display:inline">sobre R$ 2,76 MM e R$ 3,31 MM</span></td><td class="n">R$ 0,944 MM</td><td class="n">R$ 1,133 MM</td><td class="n">R$ 3,99 MM</td></tr>
+          <tr><td><b>GPCA · 23,1%</b> <span class="s2" style="display:inline">sobre R$ 15,525 MM e R$ 82,22 MM</span></td><td class="n">R$ 3,583 MM</td><td class="n">R$ 18,974 MM</td><td class="n">R$ 54,61 MM</td></tr>
+          <tr class="sum"><td>Total só Verificador</td><td class="n">R$ 4,527 MM</td><td class="n">R$ 20,107 MM</td><td class="n acc">R$ 58,60 MM</td></tr>
+        </tbody>
+      </table>
+    </div></div>
+    <div class="fml sm rise d2"><small>VPL</small>R$ 4,53 MM + R$ 20,11 MM × 2,689 = <span class="acc">R$ 58,6 MM</span> · 24,8% do total até dez/2026 e 23,5% em 2027</div>
+  </div>
+</section>
+<div class="foot"><span>Corporativo | Interno</span><span class="pg" id="pg">1 / 6</span></div>
+<div class="progress" id="progress"></div>
+</div>
+</div>
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-veil" data-close></div>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-label="Fórmulas da calculadora">
+    <button class="modal-x" id="mClose" type="button" aria-label="Fechar">×</button>
+    <div id="mBody"></div>
+  </div>
+</div>
+<nav class="chrome" id="chrome" aria-label="Navegação dos slides">
+  <button class="cbtn" id="prev" aria-label="Slide anterior">←</button>
+  <div class="dots" id="dots"></div>
+  <span class="count" id="count">1 / 6</span>
+  <button class="cbtn" id="next" aria-label="Próximo slide">→</button>
+  <span class="sep"></span>
+  <button class="cbtn ghostc" id="themeBtn" aria-label="Alternar tema claro e escuro" title="Alternar tema">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M8.7 13.6C9.4 14.3 10 15.1 10 16v1h4v-1c0-.9.6-1.7 1.3-2.4A5.8 5.8 0 1 0 8.7 13.6z"/></svg>
+  </button>
+  <button class="cbtn ghostc" id="fsBtn" aria-label="Tela cheia" title="Tela cheia (atalho F) • setas para navegar">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></svg>
+  </button>
+</nav>
+<script>
+(function(){
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+  /* ---------- modal ---------- */
+  const modal=$('#modal'), mBody=$('#mBody');
+  let opener=null;
+  function openM(html,btn){ opener=btn||null; mBody.innerHTML=html; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); $('#mClose').focus(); }
+  function closeM(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); mBody.innerHTML=''; if(opener) opener.focus(); }
+  $('#mClose').onclick=closeM; modal.querySelector('[data-close]').onclick=closeM;
+
+  /* ---------- calculadora ---------- */
+  const SVF=p=>document.documentElement.dataset.view==='tot'?1:p/100;
+  const FIN={K:1e3,MM:1e6},TU={s:1/3600,min:1/60,h:1};let fin='MM',tu='h',mode='gpca';
+  const REF=[{k:'hd',t:'time',l:'Jornada por dia',s:'por FTE',v:8},{k:'dm',l:'Dias úteis por mês',s:'dias/mês',v:20},{k:'disp',l:'Dispersão',s:'% da jornada não produtiva',v:15}];
+  const MODES={
+   got:{intro:'GOT: próximos 12 meses ao ritmo atual. Hard money pela média mensal realizada (R$ 2,48 MM ÷ 9 meses, até 24/11) e tempo pela automação atual das 301 operações/mês.',cols:['12 meses'],
+    rows:[{g:'Hard money · custo evitado'},{k:'bm',t:'money',l:'Benefício financeiro médio por mês',s:'R$ 2,48 MM ÷ 9 · total indicado',v:[2480000/9]},{k:'svp',l:'Parcela só do Verificador',s:'% do hard money · usada na visão Só Verificador',v:[34.25]},{k:'mes',l:'Meses no horizonte',s:'meses',v:[12]},
+     {g:'Soft money · horas desoneradas'},{k:'vol',l:'Operações por mês',s:'volume mensal',v:[301]},{k:'hu',t:'time',l:'Tempo atual por operação',s:'20 min',v:[1/3]},{k:'des',l:'Desoneração esperada',s:'% · ritmo atual: 53,73 ÷ 100,33',v:[53.55]}],
+    calc:g=>({hm:g('bm')*g('mes')*SVF(g('svp')),h:g('vol')*g('mes')*g('hu')*g('des')/100}),
+    note:'Os R$ 2,48 MM são divergências detectadas até 24/11. Hard money e horas são calculados e mostrados separadamente.'},
+   gpca:{intro:'GPCA: forecast de UPEs a orçar em 2026 e 2027. Hard money como captura de eficiência sobre o valor orçado; tempo pela desoneração da análise de cada UPE.',cols:['2026','2027'],
+    rows:[{g:'Hard money · custo evitado'},{k:'orc',t:'money',l:'Valor orçado',s:'forecast',v:[103.5e6,548148997.46]},{k:'cap',l:'Captura de eficiência',s:'% sobre o valor orçado',v:[15,15]},{k:'svp',l:'Parcela só do Verificador',s:'% do hard money · usada na visão Só Verificador',v:[23.08,23.08]},
+     {g:'Soft money · horas desoneradas'},{k:'vol',l:'UPEs orçadas',s:'forecast',v:[40,218]},{k:'hu',t:'time',l:'Tempo atual para analisar uma UPE',s:'8 h por UPE',v:[8,8]},{k:'des',l:'Desoneração esperada',s:'% do tempo por UPE',v:[30,30]}],
+    calc:g=>({hm:g('orc')*g('cap')/100*SVF(g('svp')),h:g('vol')*g('hu')*g('des')/100}),
+    note:'Projeção, não benefício realizado. Hard money e horas ficam separados; horas indicam capacidade liberada e não representam redução de quadro.'}};
+  const state={};const defaults=m=>{const o={};MODES[m].rows.forEach(r=>{if(r.k)r.v.forEach((v,i)=>o[r.k+i]=v)});REF.forEach(r=>o[r.k]=r.v);return o};for(const m in MODES)state[m]=defaults(m);
+  const num=v=>{v=String(v).trim().replace(/\s/g,'');if(v.includes(','))v=v.replace(/\./g,'').replace(',','.');else if(/^\d{1,3}(\.\d{3})+$/.test(v))v=v.replace(/\./g,'');const n=parseFloat(v);return isFinite(n)?n:0};
+  const f=(n,d)=>n.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+  const fx=n=>n.toLocaleString('pt-BR',{maximumFractionDigits:Math.abs(n)>=100?2:4});
+  const factor=t=>t==='money'?FIN[fin]:t==='time'?TU[tu]:1;
+  const unit=t=>t==='money'?'R$ '+fin:t==='time'?tu:t==='brl'?'R$/mês':'';
+  const money=v=>{const x=v/FIN[fin];return 'R$ '+f(x,Math.abs(x)>=100?0:Math.abs(x)>=10?1:2)+' '+fin};
+  const time=h=>{const x=h/TU[tu];return f(x,Math.abs(x)>=100?0:1)+' '+tu};
+  const root=$('.slide[data-label="Calculadora"]');
+  function syncSeg(){const cur={mode,fin,tu};root.querySelectorAll('.seg[data-grp]').forEach(g=>g.querySelectorAll('button').forEach(b=>{const on=b.dataset.v===cur[g.dataset.grp];b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)}))}
+  function build(){const M=MODES[mode],n=M.cols.length,st=state[mode];syncSeg();
+    $('#c_intro').textContent=M.intro;$('#c_cols').textContent=mode==='gpca'?'GPCA · 2026 e 2027':'GOT · 12 meses';
+    $('#c_head').innerHTML='<tr><th>Premissa</th>'+M.cols.map(c=>`<th class="r">${c}</th>`).join('')+'</tr>';
+    const inp=(k,t,lab,span)=>`<td class="ci"${span>1?` colspan="${span}"`:''}><input data-k="${k}" data-t="${t||''}" value="${fx(st[k]/factor(t))}" inputmode="decimal" aria-label="${lab}"></td>`;
+    const sub=r=>[unit(r.t),r.s].filter(Boolean).join(' · ');
+    let h='';for(const r of M.rows){if(r.g){h+=`<tr class="grp"><td colspan="${n+1}">${r.g}</td></tr>`;continue}h+=`<tr><td>${r.l}<span class="u">${sub(r)}</span></td>`+M.cols.map((c,i)=>inp(r.k+i,r.t,r.l+' '+c,1)).join('')+'</tr>'}
+    h+=`<tr class="grp"><td colspan="${n+1}">Referências para FTE</td></tr>`;for(const r of REF)h+=`<tr><td>${r.l}<span class="u">${sub(r)}</span></td>${inp(r.k,r.t,r.l,n)}</tr>`;
+    h+=`<tr><td><b>Tempo de um FTE no mês</b><span class="u">jornada × dias × (1 − dispersão)</span></td><td colspan="${n}" class="fte" id="c_hfte"></td></tr>`;
+    $('#c_body').innerHTML=h;$('#r_head').innerHTML='<tr><th>Resultado</th>'+M.cols.map(c=>`<th class="n">${c}</th>`).join('')+'</tr>';
+    root.querySelectorAll('input[data-k]').forEach(i=>{i.addEventListener('input',()=>{st[i.dataset.k]=num(i.value)*factor(i.dataset.t);calc()});i.addEventListener('keydown',e=>e.stopPropagation())});calc()}
+  function results(){const M=MODES[mode],st=state[mode],hfte=(st.hd*st.dm*(1-st.disp/100))||1;return {M,st,hfte,res:M.cols.map((c,i)=>{const r=M.calc(k=>st[k+i]);r.f=r.h/(hfte*12);return r})}}
+  function calc(){const {M,hfte,res}=results();$('#c_hfte').textContent=fx(hfte/TU[tu])+' '+tu;
+    const T=res.reduce((a,r)=>({hm:a.hm+r.hm,h:a.h+r.h,f:a.f+r.f}),{hm:0,h:0,f:0});const lbl=M.cols.length>1?'Total '+M.cols.join(' + '):M.cols[0];
+    $('#c_lbl').textContent=lbl+(isSV()?' · só Verificador':' · total indicado');
+    $('#k_hm').textContent=money(T.hm);$('#k_hm_s').textContent=lbl+(isSV()?' · só Verificador':' · total indicado');$('#k_h').textContent=time(T.h);$('#k_h_s').textContent=lbl+' · em horas, separado do hard money';$('#k_f').textContent=f(T.f,2)+' FTE';$('#k_f_s').textContent=M.cols.length>1?'soma das reduções anuais de '+M.cols.join(' e '):'capacidade liberada no horizonte de 12 meses';
+    const row=(l,fn)=>`<tr><td>${l}</td>${res.map(r=>`<td class="n">${fn(r)}</td>`).join('')}</tr>`;
+    $('#r_body').innerHTML=row('Hard money (custo evitado)',r=>money(r.hm))+row('Soft money (horas desoneradas)',r=>time(r.h))+row('Redução em FTE',r=>f(r.f,2));
+    $('#c_note').textContent=M.note}
+  const isSV=()=>document.documentElement.dataset.view!=='tot';
+  const pct=v=>f(v,Math.round(v)===v?0:2)+'%',int=v=>f(v,Math.round(v)===v?0:1);
+  const pm=v=>'R$ '+fx(v/FIN[fin])+' '+fin,pt=h=>fx(h/TU[tu])+' '+tu;const V=t=>`<span class="v">${t}</span>`,O=t=>`<span class="o">${t}</span>`,Rr=t=>`<span class="r">${t}</span>`;
+  function openFx(btn){const {M,st,hfte,res}=results();const gpca=mode==='gpca';
+    const cards=[
+     {c:'var(--accent)',n:'1',t:'Hard money · custo evitado',eq:(gpca?[V('Valor orçado'),O('×'),V('Captura de eficiência')]:[V('Benefício médio por mês'),O('×'),V('Meses')]).concat(isSV()?[O('×'),V('Parcela só Verificador')]:[]).concat([O('='),Rr('Hard money')]),
+      ln:i=>(gpca?`${pm(st['orc'+i])} × ${pct(st['cap'+i])}`:`${pm(st['bm'+i])} × ${int(st['mes'+i])}`)+(isSV()?` × ${pct(st['svp'+i])}`:'')+` = <strong>${pm(res[i].hm)}</strong>`},
+     {c:'var(--c-soft)',n:'2',t:'Soft money · horas desoneradas',eq:gpca?[V('UPEs'),O('×'),V('Tempo por UPE'),O('×'),V('Desoneração'),O('='),Rr('Horas desoneradas')]:[V('Operações/mês'),O('×'),V('Meses'),O('×'),V('Tempo por operação'),O('×'),V('Desoneração'),O('='),Rr('Horas desoneradas')],
+      ln:i=>gpca?`${int(st['vol'+i])} × ${pt(st['hu'+i])} × ${pct(st['des'+i])} = <strong>${pt(res[i].h)}</strong>`:`${int(st['vol'+i])} × ${int(st['mes'+i])} × ${pt(st['hu'+i])} × ${pct(st['des'+i])} = <strong>${pt(res[i].h)}</strong>`},
+     {c:'var(--ok)',n:'3',t:'Redução em FTE',eq:[V('Horas desoneradas'),O('÷'),O('('),V('Jornada/dia'),O('×'),V('Dias/mês'),O('×'),V('(1 − Dispersão)'),O('×'),V('12'),O(')'),O('='),Rr('FTE')],
+      ln:i=>`${pt(res[i].h)} ÷ (${pt(st.hd)} × ${int(st.dm)} × (1 − ${pct(st.disp)}) × 12) = ${pt(res[i].h)} ÷ ${pt(hfte*12)} = <strong>${f(res[i].f,2)} FTE</strong>`}
+    ];
+    const html=`<span class="m-kick">Calculadora · ${gpca?'GPCA':'GOT'}</span><h3>Fórmulas da calculadora</h3><p class="m-lead">Valores atuais da calculadora, em R$ ${fin} e ${tu}. Os números abaixo mudam conforme as premissas editadas.</p><div class="fxg">`+
+      cards.map(k=>`<div class="fxc" style="--c:${k.c}"><div class="tt"><b>${k.n}</b>${k.t}</div><div class="eq">${k.eq.join('')}</div>${M.cols.map((c,i)=>`<div class="ln"><span class="y">${c}</span><span>${k.ln(i)}</span></div>`).join('')}</div>`).join('')+
+      `<div class="nt fxft"><b>Tempo de um FTE no mês:</b> ${pt(st.hd)}/dia × ${int(st.dm)} dias/mês × (1 − ${pct(st.disp)} de dispersão) = <b>${pt(hfte)}</b>.</div><div class="nt fxft"><b>Leitura:</b> hard money e soft money são sempre separados: não são somados nem convertidos um no outro. Horas desoneradas medem capacidade liberada e não representam redução de quadro. ${gpca?'Hard money da GPCA é projeção sobre o forecast de valor orçado.':'O benefício médio da GOT parte dos R$ 2,48 MM realizados em 9 meses, até 24/11.'}</div></div>`;
+    openM(html,btn)}
+  $('#fxOpen').onclick=e=>openFx(e.currentTarget);
+  root.querySelectorAll('.seg[data-grp] button').forEach(b=>b.onclick=()=>{const g=b.parentElement.dataset.grp;if(g==='mode')mode=b.dataset.v;else if(g==='fin')fin=b.dataset.v;else tu=b.dataset.v;build()});
+  $('#calcReset').onclick=()=>{state[mode]=defaults(mode);build()};build();
+  document.addEventListener('viewchange',()=>calc());
+
+  /* ---------- navegação (slides principais + detalhes) ---------- */
+  const slides=$$('.slide:not(.extra)'), extras=$$('.slide.extra'), stage=$('#stage'), dots=$('#dots'), count=$('#count'), pg=$('#pg'), bar=$('#progress'), prev=$('#prev'), next=$('#next');
+  let idx=0, extra=null;
+  slides.forEach((s,i)=>{ const b=document.createElement('button'); b.className='dot'; b.setAttribute('aria-label','Ir para o slide '+(i+1)+': '+s.dataset.label); b.innerHTML='<span>'+(i+1)+'. '+s.dataset.label+'</span>'; b.onclick=()=>go(i); dots.appendChild(b); });
+  function openExtra(el){
+    extra=el; slides.forEach(s=>s.classList.remove('active')); extras.forEach(x=>x.classList.toggle('active',x===el));
+    count.textContent=pg.textContent='Detalhe · '+(idx+1)+' / '+slides.length;
+    if(document.body.classList.contains('flow')) window.scrollTo(0,0);
+  }
+  function go(n){
+    extra=null; extras.forEach(x=>x.classList.remove('active'));
+    idx=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,i)=>s.classList.toggle('active',i===idx));
+    [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===idx));
+    const t=(idx+1)+' / '+slides.length; count.textContent=t; pg.textContent=t;
+    bar.style.width=((idx+1)/slides.length*100)+'%';
+    prev.disabled=idx===0; next.disabled=idx===slides.length-1;
+    if(document.body.classList.contains('flow')) window.scrollTo(0,0);
+    try{ history.replaceState(null,'','#'+(idx+1)); }catch(e){}
+  }
+  prev.onclick=()=>go(extra?idx:idx-1); next.onclick=()=>go(extra?idx:idx+1);
+  $$('[data-go]').forEach(b=>b.addEventListener('click',()=>{ const t=b.dataset.go, x=extras.find(s=>s.dataset.label===t);
+    if(x){ openExtra(x); return; }
+    go(slides.findIndex(s=>s.dataset.label===t)); }));
+  $$('button[data-back]').forEach(b=>b.addEventListener('click',()=>go(idx)));
+  document.addEventListener('keydown',e=>{
+    if(modal.classList.contains('open')){ if(e.key==='Escape') closeM(); return; }
+    if(e.target.closest('input')) return;
+    if((e.key===' '||e.key==='Enter')&&e.target.closest('button,[role="button"]')) return;
+    if(extra&&(e.key==='Escape'||e.key==='ArrowLeft'||e.key==='PageUp'||e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')){ e.preventDefault(); go(idx); return; }
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); go(idx+1); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(idx-1); }
+    else if(e.key==='Home') go(0); else if(e.key==='End') go(slides.length-1);
+    else if(e.key==='f'||e.key==='F') toggleFs();
+  });
+  function fit(){
+    const W=window.innerWidth,Hh=window.innerHeight, flow=W<760;
+    document.body.classList.toggle('flow',flow);
+    if(flow){ stage.style.removeProperty('--s'); } else stage.style.setProperty('--s',Math.min(W/1600,Hh/900).toFixed(4));
+  }
+  window.addEventListener('resize',fit); fit();
+
+  const fsBtn=$('#fsBtn');
+  if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled)) fsBtn.hidden=true;
+  const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+  function toggleFs(){ try{ if(isFs()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);} else { const el=document.documentElement; const r=(el.requestFullscreen||el.webkitRequestFullscreen).call(el); if(r&&r.catch) r.catch(()=>{}); } }catch(e){} }
+  fsBtn.onclick=toggleFs;
+  ['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,()=>setTimeout(fit,60)));
+
+  const chrome=$('#chrome'); let idleT;
+  function wake(){ chrome.classList.remove('idle'); clearTimeout(idleT); idleT=setTimeout(()=>{ if(!chrome.matches(':hover')&&!chrome.contains(document.activeElement)) chrome.classList.add('idle'); },2600); }
+  ['mousemove','pointerdown','touchstart','keydown'].forEach(ev=>window.addEventListener(ev,wake,{passive:true})); wake();
+
+  const rootEl=document.documentElement;
+  const current=()=>rootEl.getAttribute('data-theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  try{ const sv=localStorage.getItem('verificadorDeckTheme'); if(sv) rootEl.setAttribute('data-theme',sv); }catch(e){}
+  $('#themeBtn').onclick=()=>{ const n=current()==='dark'?'light':'dark'; rootEl.setAttribute('data-theme',n); try{ localStorage.setItem('verificadorDeckTheme',n); }catch(e){} };
+
+  const h=parseInt((location.hash||'').replace('#',''),10);
+  go(isFinite(h)?h-1:0);
+})();
+/* ---------- tooltips ---------- */
+(function(){
+  const tip=document.createElement('div'); tip.className='tip wide'; tip.setAttribute('role','tooltip'); document.body.appendChild(tip);
+  let cur=null;
+  function place(x,y){ const w=tip.offsetWidth,h=tip.offsetHeight,W=innerWidth,H=innerHeight;
+    let l=x+16, t=y+18; if(l+w>W-8) l=Math.max(8,x-w-16); if(t+h>H-8) t=Math.max(8,y-h-14);
+    tip.style.left=l+'px'; tip.style.top=t+'px'; }
+  function show(el,x,y){ cur=el; tip.innerHTML=(el.dataset.tipH?'<span class="ti-h">'+el.dataset.tipH+'</span>':'')+'<p class="ti-p">'+el.dataset.tip+'</p>'; tip.classList.add('on'); place(x,y); }
+  function hide(){ cur=null; tip.classList.remove('on'); }
+  document.addEventListener('pointerover',e=>{ const el=e.target.closest('[data-tip]'); if(el&&el!==cur&&e.pointerType!=='touch') show(el,e.clientX,e.clientY); });
+  document.addEventListener('pointermove',e=>{ if(cur&&e.pointerType!=='touch'){ if(!cur.contains(e.target)) hide(); else place(e.clientX,e.clientY); } });
+  document.addEventListener('pointerdown',e=>{ const el=e.target.closest('[data-tip]'); if(e.pointerType==='touch'&&el){ if(cur===el) hide(); else { const r=el.getBoundingClientRect(); show(el,r.left,r.bottom); } } else if(!el) hide(); });
+  let ptrT=0; document.addEventListener('pointerdown',()=>{ ptrT=Date.now(); },true);
+  document.addEventListener('click',e=>{ if(e.target.closest('button')) hide(); });
+  document.addEventListener('focusin',e=>{ if(Date.now()-ptrT<500) return; const el=e.target.closest&&e.target.closest('[data-tip]'); if(el){ const r=el.getBoundingClientRect(); show(el,r.left,r.bottom); } });
+  document.addEventListener('focusout',hide);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hide(); });
+  window.addEventListener('scroll',hide,true);
+})();
+
+/* ---------- visão: só Verificador × total indicado ---------- */
+(function(){
+  function setView(v){
+    if(v==='tot') document.documentElement.dataset.view='tot'; else delete document.documentElement.dataset.view;
+    document.querySelectorAll('button[data-view]').forEach(b=>{ const on=b.dataset.view===v; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); });
+    document.dispatchEvent(new Event('viewchange'));
+  }
+  document.addEventListener('click',e=>{ const b=e.target.closest('button[data-view]'); if(b) setView(b.dataset.view); });
+  setView('sv');
+})();
+
+</script>
+</body>
+</html>
