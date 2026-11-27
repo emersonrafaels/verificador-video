@@ -862,6 +862,12 @@ html:not([data-view="tot"]) .vw-tot{display:none!important}
 .cbar .vtabs button{padding:6px 12px;font-size:13px;box-shadow:none}
 .title h1 .vw-sv,.title h1 .vw-tot{display:inline}
 
+/* variantes de visão aninhadas herdam o estilo do elemento pai */
+:is(span,small,b,em,h1,p,td,.v,.nt,.fml,.stk-l,.sc-l) > :is(span.vw-sv,span.vw-tot){font:inherit;color:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;margin:0;padding:0;display:inline;background:none;border:0}
+.foot-row .nt{flex:1 1 0;min-width:0}
+.foot-row .dlinks{flex-wrap:nowrap}
+.slide.extra .title{max-width:1260px}
+
 </style>
 </head>
 <body>
@@ -1001,7 +1007,7 @@ html:not([data-view="tot"]) .vw-tot{display:none!important}
   <div class="top">
     <div class="title">
       <div class="chap-tag"><span class="pip"></span>Detalhe • GOT</div>
-      <h1>A GOT já entregou R$ 2,48 MM e 415,6 horas em nove meses</h1>
+      <h1><span class="vw-sv">A GOT já gerou R$ 849,5 mil pelo Verificador e 415,6 h em 9 meses</span><span class="vw-tot">A GOT já entregou R$ 2,48 MM e 415,6 horas em nove meses</span></h1>
       <p>E o ganho acelerou: desde o 6º mês, 68 das 301 operações mensais deixaram de exigir esforço manual</p>
     </div>
     <div class="logo" role="img" aria-label="Itaú Unibanco"></div>
@@ -1012,7 +1018,7 @@ html:not([data-view="tot"]) .vw-tot{display:none!important}
 
     <div class="got-grid rise">
       <div class="kstack">
-        <div class="kc c-o"><small><span class="vw-sv">Hard money · só Verificador</span><span class="vw-tot">Hard money · total indicado</span></small><div class="v"><span class="vw-sv">R$ 849,5 mil</span><span class="vw-tot">R$ 2,48 MM</span></div><span>Divergências detectadas em 1.778 orçamentos verificados.</span></div>
+        <div class="kc c-o"><small><span class="vw-sv">Hard money · só Verificador</span><span class="vw-tot">Hard money · total indicado</span></small><div class="v"><span class="vw-sv">R$ 849,5 mil</span><span class="vw-tot">R$ 2,48 MM</span></div><span><span class="vw-sv">34,3% dos <b>R$ 2,48 MM</b> em divergências detectadas em 1.778 orçamentos.</span><span class="vw-tot">Divergências detectadas em <b>1.778 orçamentos</b> verificados.</span></span></div>
         <div class="kc c-b"><small>Capacidade liberada</small><div class="v" data-tip-h="Capacidade liberada" data-tip="<b>200,67 h</b> na fase inicial (40,13 h × 5 meses) + <b>214,93 h</b> no ritmo atual (53,73 h × 4 meses). Estimativa pelo modelo de 301 operações/mês." tabindex="0">415,6 h</div><span>Equivale a <b>52 jornadas de 8 h</b>. Não representa redução de quadro.</span></div>
         <div class="kc c-m"><small>Volume verificado</small><div class="v" data-tip-h="Orçamentos verificados" data-tip="Total analisado pelo Verificador até 24/11. Dado informativo: as horas são calculadas pela premissa de <b>301 operações por mês</b>." tabindex="0">1.778</div><span>orçamentos analisados pelo Verificador até 24/11.</span></div>
       </div>
@@ -1033,7 +1039,7 @@ html:not([data-view="tot"]) .vw-tot{display:none!important}
       </div>
     </div>
     <div class="foot-row rise d2">
-      <div class="nt"><b>Dinheiro e horas não se somam:</b> os R$ 2,48 MM são benefício capturado; as horas medem capacidade liberada.</div>
+      <div class="nt"><b>Hard e soft money não se somam:</b> reais são benefício; horas, capacidade liberada.</div>
       <div class="dlinks"><span>Ver detalhes</span><button class="mbtn" type="button" data-go="Base do cálculo de horas">Como calculamos as horas</button><button class="mbtn" type="button" data-go="Duas leituras para 12 meses">Média × ritmo atual</button><button class="mbtn" type="button" data-go="Reconciliação das horas">Reconciliação das 415,6 h</button></div>
     </div>
   </div>
@@ -1097,7 +1103,7 @@ html:not([data-view="tot"]) .vw-tot{display:none!important}
           <thead><tr><th>Período</th><th class="n">Horas poupadas por mês</th><th class="n">Meses</th><th class="n">Acumulado</th></tr></thead>
           <tbody>
             <tr><td>Fase inicial · 30% em 5 min e 70% em 15 min</td><td class="n">40,13 h</td><td class="n">5</td><td class="n">200,67 h</td></tr>
-            <tr><td>Com 68 operações em zero minuto</td><td class="n">53,73 h</td><td class="n">4</td><td class="n">214,93 h</td></tr>
+            <tr><td>Com 68 operações sem esforço manual</td><td class="n">53,73 h</td><td class="n">4</td><td class="n">214,93 h</td></tr>
             <tr class="sum"><td>Total em 9 meses, até 24/11</td><td class="n">—</td><td class="n">9</td><td class="n acc">415,60 h</td></tr>
           </tbody>
         </table>
@@ -1111,7 +1117,7 @@ html:not([data-view="tot"]) .vw-tot{display:none!important}
       <div class="panel-head">Composição das 415,6 h <small>por fase</small></div>
       <div class="panel-body" style="gap:10px;padding:18px 20px">
         <div class="stk big"><i class="c-b" style="--w:48.3%"><em>Fase inicial · 200,67 h · 48%</em></i><i class="c-g" style="--w:51.7%"><em>Ritmo atual · 214,93 h · 52%</em></i></div>
-        <span class="lead2">Em apenas 4 dos 9 meses, a fase com 68 operações em zero minuto já responde por <b>mais da metade</b> das horas liberadas.</span>
+        <span class="lead2">Em apenas 4 dos 9 meses, a fase com 68 operações sem esforço manual já responde por <b>mais da metade</b> das horas liberadas.</span>
       </div>
     </div>
     <div class="nt rise d3">As horas descrevem produtividade e <b>não são somadas</b> ao benefício financeiro. Não representam redução de quadro.</div>
@@ -1137,7 +1143,7 @@ html:not([data-view="tot"]) .vw-tot{display:none!important}
           <p class="lead2">Divide o realizado por 9 e multiplica por 12. Supõe que os próximos meses serão iguais à média do período, que inclui os 5 meses iniciais, quando todas as operações ainda exigiam esforço manual.</p>
           <div class="fml"><small>Financeiro</small>R$ 2.480.000 ÷ 9 × 12 = <span class="acc">R$ 3.306.667</span></div>
           <div class="fml b"><small>Horas</small>415,60 ÷ 9 × 12 = <span class="acc">554,13 h</span></div>
-          <div class="phase c-b"><div><b>R$ 3,31 mi</b><span>financeiro em 12 meses</span></div><div><b>554,1 h</b><span>horas em 12 meses</span></div><div><b>44,0 h</b><span>média por mês</span></div></div>
+          <div class="phase c-b"><div><b>R$ 3,31 mi</b><span>financeiro em 12 meses · total indicado</span></div><div><b>554,1 h</b><span>horas em 12 meses</span></div><div><b>44,0 h</b><span>média por mês</span></div></div>
         </div>
       </div>
       <div class="panel">
@@ -1371,7 +1377,7 @@ html:not([data-view="tot"]) .vw-tot{display:none!important}
         <div class="panel-head">Total indicado × só Verificador <small>GOT + GPCA</small></div>
         <div class="panel-body" style="justify-content:center;gap:20px">
           <div class="cmp-leg"><span><i class="t"></i>Total indicado pelo Verificador</span><span data-tip-h="Só do Verificador" data-tip="Parcela do benefício que a operação humana <b>não obteria</b> sem o Verificador." tabindex="0"><i class="s"></i>Só do Verificador</span></div>
-          <div class="cmp-r"><b class="cmp-l">Até dez/2026</b>
+          <div class="cmp-r"><b class="cmp-l">Previsto 2026</b>
           <div class="cmp-b"><div class="tr t" style="--w:100%"><i></i><em>R$ 18,28 MM</em></div><div class="tr s" style="--w:24.8%"><i></i><em data-tip-h="Até dez/2026" data-tip="34,3% × R$ 2,76 MM (GOT) + 23,1% × R$ 15,53 MM (GPCA) = <b>R$ 4,53 MM</b>" tabindex="0">R$ 4,53 MM</em></div></div>
           <div class="cmp-p"><b data-tip-h="Participação" data-tip="R$ 4,53 MM ÷ R$ 18,28 MM = <b>24,8%</b>" tabindex="0">24,8%</b><span>só Verificador</span></div></div>
           <div class="cmp-r"><b class="cmp-l">2027</b>
